@@ -114,6 +114,7 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (vowelsInWord.length === 1) return vowelsInWord[0];
 
   let actualVowels = [...vowelsInWord];
+  // Logic xử lý 'qu' và 'gi'
   if (simple.startsWith('qu') && vowelsInWord[0] === 1) {
     actualVowels.shift();
   } else if (simple.startsWith('gi') && vowelsInWord[0] === 1 && vowelsInWord.length > 1) {
@@ -125,6 +126,11 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   const vStr = actualVowels.map(i => simple[i]).join('');
 
+  // Sửa lỗi 'luyện' - Nucleus is 'yê', tone on 'ê'
+  if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
+    return actualVowels[1]; // Middle vowel
+  }
+
   if (actualVowels.length === 2) {
     if (isModern && (vStr === 'oa' || vStr === 'oe' || vStr === 'uy')) {
       return actualVowels[1];
@@ -132,13 +138,6 @@ function getTonePosition(word: string, isModern: boolean): number {
     const lastCharIndex = clean.length - 1;
     if (!isVowel(clean[lastCharIndex])) return actualVowels[1];
     return actualVowels[0];
-  }
-
-  if (actualVowels.length === 3) {
-    if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
-      return actualVowels[1];
-    }
-    return actualVowels[1];
   }
 
   return actualVowels[1];
@@ -185,6 +184,7 @@ export function removeLastMark(text: string): string | null {
     }
   }
 
+  // Nếu từ có dấu thanh HOẶC dấu phụ (móc), thực hiện xóa dấu
   if (currentTone !== 0 || wordHasHook) {
     return prefix + unhooked;
   }
@@ -289,12 +289,14 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     const baseWord = word.slice(0, -1);
     if (!hasVowel(baseWord)) return text;
     const currentTone = getWordToneIndex(baseWord);
+    // Toggle tone: gõ lại dấu sắc khi đang có dấu sắc thì xóa dấu
     if (currentTone === toneIndexFromKey && toneIndexFromKey !== 0) {
       return prefix + removeToneOnly(baseWord);
     }
     return prefix + applyTone(baseWord, toneIndexFromKey, isModern);
   }
 
+  // Tự động sửa lỗi đặt dấu khi gõ xong từ (Smart Fix)
   if (isSmartFix && hasVowel(word)) {
     const currentTone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);
