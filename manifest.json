@@ -1,3 +1,4 @@
+
 {
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
@@ -8,10 +9,10 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "index.html",
-    "default_title": "Mở Bảng điều khiển VietFlex"
+    "default_popup": "out/index.html",
+    "default_title": "VietFlex Control Panel"
   },
-  "options_page": "index.html",
+  "options_page": "out/index.html",
   "input_components": [
     {
       "name": "VietFlex Telex",
@@ -19,8 +20,5 @@
       "language": "vi",
       "layouts": ["us"]
     }
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  ]
 }
