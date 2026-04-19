@@ -1,7 +1,8 @@
 
 /**
  * VietFlex Engine 2.1.6 - Precision Orthography & Chrome OS Flex Optimized
- * Hỗ trợ các quy tắc gõ nâng cao: hw -> hư, sonw -> sơn, và cơ chế xóa dấu trước.
+ * Tuân thủ quy tắc đặt dấu của Bộ Giáo dục & Đào tạo.
+ * Hỗ trợ Smart Backspace: Xóa dấu trước, xóa chữ sau.
  */
 
 export type InputMethod = 'Telex' | 'VNI';
@@ -101,43 +102,59 @@ function getWordToneIndex(word: string): number {
   return 0;
 }
 
+/**
+ * Thuật toán xác định vị trí đặt dấu chuẩn 2.1.6
+ */
 function getTonePosition(word: string, isModern: boolean): number {
   const clean = removeToneOnly(word);
-  const simple = simplifyVowels(clean).toLowerCase();
-  const vowelsInWord: number[] = [];
+  const lowerClean = clean.toLowerCase();
+  const vowelIndices: number[] = [];
   
   for (let i = 0; i < clean.length; i++) {
-    if (isVowel(clean[i])) vowelsInWord.push(i);
+    if (isVowel(clean[i])) vowelIndices.push(i);
   }
 
-  if (vowelsInWord.length === 0) return -1;
-  if (vowelsInWord.length === 1) return vowelsInWord[0];
+  if (vowelIndices.length === 0) return -1;
+  if (vowelIndices.length === 1) return vowelIndices[0];
 
-  let actualVowels = [...vowelsInWord];
-  // Logic xử lý 'qu' và 'gi'
-  if (simple.startsWith('qu') && vowelsInWord[0] === 1) {
-    actualVowels.shift();
-  } else if (simple.startsWith('gi') && vowelsInWord[0] === 1 && vowelsInWord.length > 1) {
-    actualVowels.shift();
+  // Logic đặc biệt cho 'qu' và 'gi'
+  let actualVowels = [...vowelIndices];
+  if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) {
+    actualVowels.shift(); // 'u' trong 'qu' là âm đệm
+  } else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) {
+    actualVowels.shift(); // 'i' trong 'gi' là âm đệm
   }
 
-  if (actualVowels.length === 0) return vowelsInWord[vowelsInWord.length - 1];
+  if (actualVowels.length === 0) return vowelIndices[vowelIndices.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
 
-  const vStr = actualVowels.map(i => simple[i]).join('');
+  const vowelString = actualVowels.map(i => lowerClean[i]).join('');
 
-  // Sửa lỗi 'luyện' - Nucleus is 'yê', tone on 'ê'
-  if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
-    return actualVowels[1]; // Middle vowel
+  // Ưu tiên nguyên âm có dấu phụ (ă, â, ê, ô, ơ, ư)
+  for (const idx of actualVowels) {
+    if ('ăâêôơư'.includes(lowerClean[idx])) return idx;
+  }
+
+  // Nguyên âm đôi (ia, iê, ua, uô, ươ...)
+  const hasFinalConsonant = !isVowel(clean[clean.length - 1]);
+  
+  // Trường hợp 'uyên', 'iêu', 'uôi'...
+  if (vowelString === 'uye' || vowelString === 'uôi' || vowelString === 'iêu' || vowelString === 'uou') {
+    return actualVowels[1];
   }
 
   if (actualVowels.length === 2) {
-    if (isModern && (vStr === 'oa' || vStr === 'oe' || vStr === 'uy')) {
+    // Kiểu mới vs Kiểu cũ cho 'oa', 'oe', 'uy'
+    if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) {
       return actualVowels[1];
     }
-    const lastCharIndex = clean.length - 1;
-    if (!isVowel(clean[lastCharIndex])) return actualVowels[1];
-    return actualVowels[0];
+    
+    if (hasFinalConsonant) return actualVowels[1]; // Có âm cuối đặt ở âm thứ 2
+    return actualVowels[0]; // Không âm cuối đặt ở âm thứ 1 (mía, tủa)
+  }
+
+  if (actualVowels.length === 3) {
+    return actualVowels[1]; // Miếng, thưởng...
   }
 
   return actualVowels[1];
@@ -152,9 +169,10 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
     const baseVowel = charAtPos.toLowerCase();
     
     for (const [base, variants] of Object.entries(VOWEL_MAP)) {
-      if (base === baseVowel) {
-        const mappedVowel = variants[toneIndex];
-        return cleanWord.substring(0, pos) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + cleanWord.substring(pos + 1);
+      if (base === baseVowel || (base === 'ă' && variants.includes(baseVowel)) || (base === 'â' && variants.includes(baseVowel))) {
+          // Fix for diacritics being stripped
+          const mappedVowel = variants[toneIndex];
+          return cleanWord.substring(0, pos) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + cleanWord.substring(pos + 1);
       }
     }
   }
@@ -162,30 +180,30 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
 }
 
 /**
- * Loại bỏ dấu thanh và dấu phụ (móc) của từ cuối cùng.
+ * Smart Backspace: Xóa dấu/móc trước khi xóa ký tự
  */
 export function removeLastMark(text: string): string | null {
+  if (!text) return null;
   const lastSpaceIndex = text.lastIndexOf(' ');
   const prefix = text.substring(0, lastSpaceIndex + 1);
   const word = text.substring(lastSpaceIndex + 1);
   if (!word) return null;
 
-  const currentTone = getWordToneIndex(word);
-  let simplified = removeToneOnly(word);
+  const toneIdx = getWordToneIndex(word);
+  const cleanTone = removeToneOnly(word);
   
-  let wordHasHook = false;
+  let hasHook = false;
   let unhooked = '';
-  for (const char of simplified) {
+  for (const char of cleanTone) {
     if (UNHOOK_MAP[char]) {
       unhooked += UNHOOK_MAP[char];
-      wordHasHook = true;
+      hasHook = true;
     } else {
       unhooked += char;
     }
   }
 
-  // Nếu từ có dấu thanh HOẶC dấu phụ (móc), thực hiện xóa dấu
-  if (currentTone !== 0 || wordHasHook) {
+  if (toneIdx !== 0 || hasHook) {
     return prefix + unhooked;
   }
 
@@ -203,48 +221,33 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   const lastChar = word.slice(-1).toLowerCase();
 
   if (method === 'Telex') {
+    // Xử lý phím W
     if (lastChar === 'w') {
       const baseWord = word.slice(0, -1);
       const isLastUpper = word.slice(-1) === word.slice(-1).toUpperCase();
 
-      // Case 1: Toggle logic (Xóa móc nếu đã có)
-      let wordHasHook = false;
-      let newWord = '';
-      for (const char of baseWord) {
-        if (UNHOOK_MAP[char]) {
-          newWord += UNHOOK_MAP[char];
-          wordHasHook = true;
-        } else {
-          newWord += char;
-        }
+      // Toggle W
+      if (baseWord.toLowerCase().endsWith('w') || baseWord.toLowerCase().endsWith('ư')) {
+         const stripped = removeToneOnly(baseWord.slice(0, -1));
+         return prefix + stripped + (isLastUpper ? 'W' : 'w');
       }
-      if (wordHasHook) return prefix + newWord;
 
-      // Case 2: hw -> hư, tw -> tư
+      // hw -> hư
       if (baseWord.length > 0 && !isVowel(baseWord.slice(-1))) {
         return prefix + baseWord + (isLastUpper ? 'Ư' : 'ư');
       }
 
-      // Case 3: Standing alone or ww -> w
-      if (word.length >= 2) {
-        const prevChar = word.slice(-2, -1).toLowerCase();
-        if (prevChar === 'w' || prevChar === 'ư') {
-          return prefix + removeToneOnly(word.slice(0, -2)) + (isLastUpper ? 'W' : 'w');
-        }
-      }
-      if (word.length === 1) return prefix + (isLastUpper ? 'Ư' : 'ư');
-
-      // Case 4: Smart Hook (sonw -> sơn)
+      // Smart Hook (sonw -> sơn)
       let currentBase = removeToneOnly(baseWord);
       let currentTone = getWordToneIndex(baseWord);
       let handled = false;
       const lowerBase = currentBase.toLowerCase();
 
       if (lowerBase.includes('uo')) {
-        const index = lowerBase.lastIndexOf('uo');
-        const isUUpper = currentBase[index] === currentBase[index].toUpperCase();
-        const isOUpper = currentBase[index+1] === currentBase[index+1].toUpperCase();
-        currentBase = currentBase.substring(0, index) + (isUUpper ? 'Ư' : 'ư') + (isOUpper ? 'Ơ' : 'ơ') + currentBase.substring(index + 2);
+        const idx = lowerBase.lastIndexOf('uo');
+        const isUUpper = currentBase[idx] === currentBase[idx].toUpperCase();
+        const isOUpper = currentBase[idx+1] === currentBase[idx+1].toUpperCase();
+        currentBase = currentBase.substring(0, idx) + (isUUpper ? 'Ư' : 'ư') + (isOUpper ? 'Ơ' : 'ơ') + currentBase.substring(idx + 2);
         handled = true;
       } else {
         for (let i = currentBase.length - 1; i >= 0; i--) {
@@ -260,9 +263,10 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
       }
 
       if (handled) return prefix + applyTone(currentBase, currentTone, isModern);
-      return prefix + baseWord + (isLastUpper ? 'Ư' : 'ư');
+      if (word.length === 1) return prefix + (isLastUpper ? 'Ư' : 'ư');
     }
 
+    // Xử lý ee, aa, oo, dd
     const modifiers: Record<string, string> = { 'e': 'ê', 'a': 'â', 'o': 'ô', 'd': 'đ' };
     if (modifiers[lastChar] && word.length >= 2) {
       const prevChar = word.slice(-2, -1).toLowerCase();
@@ -282,25 +286,27 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
+  // Xử lý dấu thanh
   const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
-  const toneIndexFromKey = tones[lastChar];
+  const toneIdx = tones[lastChar];
 
-  if (toneIndexFromKey !== undefined) {
+  if (toneIdx !== undefined) {
     const baseWord = word.slice(0, -1);
     if (!hasVowel(baseWord)) return text;
     const currentTone = getWordToneIndex(baseWord);
-    // Toggle tone: gõ lại dấu sắc khi đang có dấu sắc thì xóa dấu
-    if (currentTone === toneIndexFromKey && toneIndexFromKey !== 0) {
+    
+    // Toggle tone (lyss -> lys)
+    if (currentTone === toneIdx && toneIdx !== 0) {
       return prefix + removeToneOnly(baseWord);
     }
-    return prefix + applyTone(baseWord, toneIndexFromKey, isModern);
+    return prefix + applyTone(baseWord, toneIdx, isModern);
   }
 
-  // Tự động sửa lỗi đặt dấu khi gõ xong từ (Smart Fix)
+  // Smart Fix: Tự sửa lỗi đặt dấu khi gõ xong
   if (isSmartFix && hasVowel(word)) {
-    const currentTone = getWordToneIndex(word);
+    const tone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);
-    return prefix + applyTone(cleaned, currentTone, isModern);
+    return prefix + applyTone(cleaned, tone, isModern);
   }
 
   return text;

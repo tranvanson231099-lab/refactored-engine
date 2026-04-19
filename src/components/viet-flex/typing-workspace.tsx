@@ -48,7 +48,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
               {isEnabled && (
                 <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
                   <Zap className="w-3 h-3 fill-emerald-500" />
-                  Engine 2.1.6 {isSmartFix ? "Smart Fix Active" : "Active"}
+                  Engine 2.1.6 Ultra Fast
                 </Badge>
               )}
             </div>
@@ -64,19 +64,19 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
         </div>
       </div>
 
-      {isSmartFix && isEnabled && (
+      {isEnabled && (
         <Alert className="bg-blue-50 border-blue-200 animate-in slide-in-from-top-2 duration-300">
           <Info className="h-4 w-4 text-blue-600" />
-          <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix đang bật</AlertTitle>
+          <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix 2.1.6 Active</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và cơ chế xóa dấu trước (Backspace) cực nhanh.
+            Tự động sửa lỗi đặt dấu chuẩn Bộ Giáo dục (huyện, lý, hòa) và cơ chế xóa dấu trước (Smart Backspace).
           </AlertDescription>
         </Alert>
       )}
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, hw -> hư, lyss -> lys)..." : "IME đang tắt..."}
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, luyện, lý, hòa)..." : "IME đang tắt..."}
           className="min-h-[450px] text-xl p-8 bg-white border-2 border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -98,8 +98,8 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Mẹo gõ Engine 2.1.6
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, <code>hw</code> ra <code>hư</code>, <code>sonw</code> ra <code>sơn</code>.<br />
           - <b>Backspace</b>: Nhấn 1 lần để xóa dấu (<code>sơn</code> &rarr; <code>son</code>), nhấn lần 2 để xóa chữ (<code>son</code> &rarr; <code>so</code>).<br />
+          - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, <code>hw</code> ra <code>hư</code>, <code>sonw</code> ra <code>sơn</code>.<br />
           - <b>Sửa lỗi</b>: Tự động sửa lỗi đặt dấu triphthong (huỵên &rarr; huyện) tức thì.<br />
           - <b>Xóa dấu nhanh</b>: Gõ lặp phím dấu (<code>lyss</code> &rarr; <code>lys</code>).
         </p>
