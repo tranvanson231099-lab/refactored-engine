@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, HelpCircle, Zap, Monitor, Download } from 'lucide-react';
+import { Power, Keyboard, Settings2, Monitor, Download, ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -16,6 +16,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -60,10 +67,17 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           />
         </div>
 
-        <div className="space-y-3">
-          <div className="p-3 bg-secondary/20 rounded-lg flex items-center justify-between">
-            <Label className="text-xs font-bold uppercase text-muted-foreground">Kiểu gõ mặc định</Label>
-            <Badge variant="outline" className="font-bold border-primary/20">TELEX</Badge>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Phương thức nhập</Label>
+            <Select defaultValue="telex" disabled={!isEnabled}>
+              <SelectTrigger className="w-full h-9 text-xs font-bold border-primary/20 bg-secondary/10">
+                <SelectValue placeholder="Chọn kiểu gõ" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="telex" className="text-xs font-bold">TELEX (Mặc định)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           <div className="space-y-2 pt-1">

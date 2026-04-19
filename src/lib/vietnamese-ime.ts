@@ -1,6 +1,6 @@
 /**
  * VietFlex Engine 2.1.6 - Precision Orthography & Chrome OS Flex Optimized
- * Tuân thủ tuyệt đối 5 quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
+ * Tuân thủ tuyệt đối các quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
  * Cơ chế Smart Backspace 3 bước: Xóa dấu thanh -> Xóa dấu phụ -> Xóa chữ.
  */
 
@@ -103,7 +103,7 @@ function getTonePosition(word: string, isModern: boolean): number {
   const vowelString = actualVowels.map(i => lowerClean[i]).join('');
   const hasFinalConsonant = !isVowel(clean[clean.length - 1]);
 
-  // Quy tắc tam âm phức tạp (uyê, uôi, iêu, ươu)
+  // Quy tắc tam âm (uyê, uôi, iêu, ươu)
   if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
   if (vowelString.includes('uôi')) return actualVowels[vowelString.indexOf('uôi') + 1];
   if (vowelString.includes('iêu')) return actualVowels[vowelString.indexOf('iêu') + 1];
@@ -183,13 +183,18 @@ function applySmartFix(word: string, isModern: boolean): string {
   const cleaned = removeToneOnly(result);
   const lowerClean = cleaned.toLowerCase();
   
-  // Quy tắc 2 & 5: Đứng đầu âm đôi (yêu, yến, yên) - Không phụ âm đầu
-  if (lowerClean.startsWith('ie') && !hasVowel(cleaned[0])) {
-      result = cleaned.replace(/i/g, 'y').replace(/I/g, 'Y');
-      return applyTone(result, tone, isModern);
+  // 1. Đứng một mình: i (ầm ĩ) hoặc y (y tế, ý nghĩa)
+  if (lowerClean === 'i') {
+    return result.replace(/i/g, 'y').replace(/I/g, 'Y');
   }
 
-  // Quy tắc 4: Sau âm đệm 'u' bắt buộc viết y (quy, quý, thúy)
+  // 2. Đứng đầu từ: y nếu là nguyên âm đơn hoặc đầu âm đôi (yêu, yến, yên)
+  if (lowerClean.startsWith('ie') && !hasVowel(cleaned[0])) {
+    result = cleaned.replace(/i/g, 'y').replace(/I/g, 'Y');
+    return applyTone(result, tone, isModern);
+  }
+
+  // 4. Sau âm đệm "u": Bắt buộc viết y (quý, quy, thúy)
   if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.startsWith('th') || lowerClean.startsWith('h'))) {
       if (lowerClean.startsWith('qu') || lowerClean.startsWith('thu') || lowerClean.startsWith('hu')) {
           result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
@@ -197,7 +202,7 @@ function applySmartFix(word: string, isModern: boolean): string {
       }
   }
 
-  // Quy tắc 3: Sau phụ âm đầu ưu tiên i (lí, kĩ, mĩ)
+  // 3. Sau phụ âm đầu: Ưu tiên viết i (lí, kĩ, mĩ)
   const consonants = 'bcdghklmnpqrstvx';
   for (const c of consonants) {
     if (lowerClean.startsWith(c) && lowerClean.endsWith('y') && !lowerClean.includes('uy')) {
@@ -206,11 +211,6 @@ function applySmartFix(word: string, isModern: boolean): string {
       result = result.substring(0, result.length - 1) + newI;
       return result;
     }
-  }
-
-  // Quy tắc 1: Từ Hán Việt đứng một mình viết y
-  if (lowerClean === 'i') {
-      return result.replace(/i/g, 'y').replace(/I/g, 'Y');
   }
 
   return result;
@@ -243,7 +243,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     let currentTone = getWordToneIndex(baseWord);
     const lowerBase = currentBase.toLowerCase();
 
-    // Hook 'uo' -> 'ươ' (được, trường)
+    // Hook 'uo' -> 'ươ'
     if (lowerBase.includes('uo')) {
       const idx = lowerBase.lastIndexOf('uo');
       const isUUpper = currentBase[idx] === currentBase[idx].toUpperCase();
@@ -260,7 +260,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
       return prefix + applyTone(currentBase, currentTone, isModern);
     }
 
-    // Hook lửng 'hw' -> 'hư'
     const priority = ['u', 'o', 'a'];
     let hooked = false;
     for (const charToHook of priority) {
@@ -280,7 +279,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
-  // Dấu phụ lặp (ee, aa, oo, dd)
   const modifiers: Record<string, string> = { 'e': 'ê', 'a': 'â', 'o': 'ô', 'd': 'đ' };
   if (modifiers[lastChar] && word.length >= 2) {
     const prevChar = word.slice(-2, -1).toLowerCase();
@@ -292,18 +290,15 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
-  // Dấu thanh Telex
   const toneIdx = TONES_TELEX[lastChar];
   if (toneIdx !== undefined) {
     const baseWord = word.slice(0, -1);
     if (!hasVowel(baseWord)) return text;
     const currentTone = getWordToneIndex(baseWord);
-    // Gõ lặp dấu để hủy
     if (currentTone === toneIdx && toneIdx !== 0) return prefix + removeToneOnly(baseWord);
     return prefix + applyTone(baseWord, toneIdx, isModern);
   }
 
-  // Smart i/y & Đặt dấu chuẩn
   if (hasVowel(word)) {
     const tone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);
