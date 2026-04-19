@@ -6,44 +6,42 @@ import { useIme } from '@/hooks/use-ime';
 import { UnikeyWindow } from '@/components/viet-flex/unikey-window';
 import { TypingWorkspace } from '@/components/viet-flex/typing-workspace';
 import { Toaster } from '@/components/ui/toaster';
-import { Command, Layout, Monitor, Wifi, WifiOff } from 'lucide-react';
+import { Command, Layout, Monitor, Zap } from 'lucide-react';
 
 export default function Home() {
   const { 
     isEnabled, setIsEnabled, 
-    isAiEnabled, setIsAiEnabled,
     isModernStyle, setIsModernStyle,
-    isOnline,
     method, setMethod, 
     text, setText, rawSetText 
   } = useIme();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-accent/30">
-      <header className="h-14 border-b bg-white/50 backdrop-blur-md flex items-center px-6 sticky top-0 z-20">
+    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-primary/20">
+      <header className="h-14 border-b bg-white flex items-center px-6 sticky top-0 z-20 shadow-sm">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg">
             <Command className="w-5 h-5" />
           </div>
-          <h1 className="text-base font-bold tracking-tight">VietFlex <span className="text-accent">Input</span></h1>
+          <h1 className="text-base font-bold tracking-tight">VietFlex <span className="text-primary/70">Engine 2.0</span></h1>
         </div>
         
         <div className="ml-auto flex items-center gap-6">
           <div className="hidden md:flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-            <div className="flex items-center gap-1.5">
-              {isOnline ? <Wifi className="w-3.5 h-3.5 text-accent" /> : <WifiOff className="w-3.5 h-3.5 text-destructive" />}
-              {isOnline ? 'Online' : 'Offline Mode'}
+            <div className="flex items-center gap-1.5 text-emerald-600">
+              <Zap className="w-3.5 h-3.5 fill-emerald-600" />
+              Siêu tốc (Zero Latency)
             </div>
             <div className="flex items-center gap-1.5">
               <Monitor className="w-3.5 h-3.5" />
-              Chrome OS Flex
+              Windows / Chrome OS
             </div>
           </div>
           <div className="h-6 w-px bg-border" />
           <div className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${isEnabled ? 'bg-accent animate-pulse' : 'bg-muted'}`} />
+            <span className={`w-2 h-2 rounded-full ${isEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
             <span className="text-xs font-bold uppercase tracking-wider">
-              {isEnabled ? `System Ready (${method})` : 'IME Standby'}
+              {isEnabled ? `Sẵn sàng (${method})` : 'IME Đã Tắt'}
             </span>
           </div>
         </div>
@@ -57,8 +55,6 @@ export default function Home() {
             rawSetText={rawSetText}
             method={method}
             isEnabled={isEnabled}
-            isAiEnabled={isAiEnabled}
-            isOnline={isOnline}
           />
         </section>
 
@@ -66,38 +62,35 @@ export default function Home() {
           <div className="sticky top-20">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
               <Layout className="w-4 h-4" />
-              Control Center
+              Bảng điều khiển
             </div>
             <UnikeyWindow 
               isEnabled={isEnabled} 
               setIsEnabled={setIsEnabled} 
-              isAiEnabled={isAiEnabled}
-              setIsAiEnabled={setIsAiEnabled}
               isModernStyle={isModernStyle}
               setIsModernStyle={setIsModernStyle}
-              isOnline={isOnline}
               method={method} 
               setMethod={setMethod} 
             />
             
-            <div className="mt-8 p-6 bg-white rounded-xl border-2 border-primary/5 shadow-sm">
-              <h3 className="text-sm font-bold mb-3">About VietFlex</h3>
+            <div className="mt-8 p-6 bg-white rounded-xl border border-primary/5 shadow-sm">
+              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.0</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Smart Vietnamese IME with integrated Gemini AI support. 
-                Optimized for mixed English/Vietnamese environments.
+                Bộ gõ tiếng Việt siêu nhẹ, tối ưu hóa cho Windows và Chrome OS Flex. 
+                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả ngay lập tức mà không cần AI.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Version 1.7.0</span>
-                <span className="text-[10px] font-bold text-accent uppercase">AI Powered</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.0.0</span>
+                <span className="text-[10px] font-bold text-emerald-600 uppercase italic">Ultra Fast</span>
               </div>
             </div>
           </div>
         </aside>
       </main>
 
-      <footer className="py-6 border-t bg-white/50 text-center">
+      <footer className="py-6 border-t bg-white text-center">
         <p className="text-xs text-muted-foreground font-medium">
-          &copy; {new Date().getFullYear()} VietFlex Input. Efficiency. Precision. Vietnamese.
+          &copy; {new Date().getFullYear()} VietFlex Engine. Hiệu quả. Chính xác. Không độ trễ.
         </p>
       </footer>
       <Toaster />

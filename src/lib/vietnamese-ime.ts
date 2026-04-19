@@ -1,7 +1,7 @@
 
 /**
- * VietFlex Core 1.7 - Ultra-Fast Local Smart Engine
- * Xử lý thông minh chuẩn hóa dấu và tổ hợp phím tức thì (Offline First).
+ * VietFlex Engine 2.0 - Ultra-Fast Local Smart Processor
+ * Tối ưu hóa tốc độ gõ, sửa lỗi chính tả và đặt dấu chuẩn Unicode tức thì (Zero Latency).
  */
 
 export type InputMethod = 'Telex' | 'VNI';
@@ -58,6 +58,9 @@ function getWordToneIndex(word: string): number {
   return 0;
 }
 
+/**
+ * Thuật toán đặt dấu chuẩn xác theo Unicode và Quy tắc Tiếng Việt
+ */
 function getTonePosition(word: string, isModern: boolean): number {
   const clean = removeTone(word).toLowerCase();
   const vowelsInWord: number[] = [];
@@ -70,33 +73,31 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   const vowelChars = vowelsInWord.map(i => clean[i]).join('');
   
+  // Xử lý âm đệm qu, gi
   let actualVowels = [...vowelsInWord];
-  let actualVowelChars = vowelChars;
-
   if (clean.startsWith('qu') && vowelsInWord[0] === 1) {
     actualVowels.shift();
-    actualVowelChars = actualVowelChars.slice(1);
   } else if (clean.startsWith('gi') && vowelsInWord[0] === 1 && vowelsInWord.length > 1) {
     actualVowels.shift();
-    actualVowelChars = actualVowelChars.slice(1);
   }
 
   if (actualVowels.length === 0) return vowelsInWord[vowelsInWord.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
 
+  // Quy tắc đặt dấu 2 nguyên âm
   if (actualVowels.length === 2) {
-    if (isModern && (actualVowelChars === 'oa' || actualVowelChars === 'oe' || actualVowelChars === 'uy')) {
+    const vowelStr = actualVowels.map(i => clean[i]).join('');
+    if (isModern && (vowelStr === 'oa' || vowelStr === 'oe' || vowelStr === 'uy')) {
       return actualVowels[1];
     }
+    // Nếu có âm cuối thì đặt ở âm thứ 2, không thì âm thứ 1
     const lastChar = clean[clean.length - 1];
     if (isVowel(lastChar)) return actualVowels[0];
     return actualVowels[1];
   }
 
+  // Quy tắc đặt dấu 3 nguyên âm (luôn ở giữa)
   if (actualVowels.length === 3) {
-    if (actualVowelChars === 'uyê' || actualVowelChars === 'iêu' || actualVowelChars === 'uôi' || actualVowelChars === 'oai') {
-      return actualVowels[1];
-    }
     return actualVowels[1];
   }
 
@@ -121,6 +122,15 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
   return word;
 }
 
+/**
+ * Hàm chuẩn hóa từ gõ sai (Smart Fix Offline)
+ */
+function smartNormalize(word: string, isModern: boolean): string {
+  const tone = getWordToneIndex(word);
+  if (tone === 0) return word;
+  return applyTone(word, tone, isModern);
+}
+
 export function convertText(text: string, method: InputMethod, isModern: boolean): string {
   if (!text) return '';
   
@@ -129,9 +139,21 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   let word = text.substring(lastSpaceIndex + 1);
   if (!word) return text;
 
+  // Xử lý dấu cách (tự động chuẩn hóa từ trước đó)
+  if (text.endsWith(' ')) {
+    const words = text.trimEnd().split(' ');
+    const lastWord = words[words.length - 1];
+    if (lastWord) {
+      words[words.length - 1] = smartNormalize(lastWord, isModern);
+      return words.join(' ') + ' ';
+    }
+    return text;
+  }
+
   const lastChar = word.slice(-1).toLowerCase();
   const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
 
+  // 1. Xử lý gõ lặp (ww -> w, aa -> a, dd -> d)
   if (method === 'Telex' && word.length >= 2) {
     const lastTwo = word.slice(-2).toLowerCase();
     const restoreMap: Record<string, string> = { 
@@ -148,6 +170,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
+  // 2. Xử lý phím W (Móc tự động)
   if (method === 'Telex' && lastChar === 'w') {
     let cleanBase = removeTone(word.slice(0, -1));
     let toneIdx = getWordToneIndex(word.slice(0, -1));
@@ -167,11 +190,16 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
           break;
         }
       }
-      if (!found) return prefix + word;
+      if (!found) {
+        // Gõ w đứng riêng lẻ hoặc ở đầu
+        const isUpper = word.slice(-1) === 'W';
+        return prefix + baseWord(word.slice(0,-1)) + (isUpper ? 'Ư' : 'ư');
+      }
     }
     return prefix + applyTone(cleanBase, toneIdx, isModern);
   }
 
+  // 3. Xử lý phím mũ (aa, ee, oo, dd, aw)
   const telexMap: Record<string, string> = { 'aa': 'â', 'ee': 'ê', 'oo': 'ô', 'dd': 'đ', 'aw': 'ă' };
   if (method === 'Telex' && word.length >= 2) {
     const lastTwo = word.slice(-2).toLowerCase();
@@ -184,17 +212,24 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
+  // 4. Xử lý phím dấu (s, f, r, x, j)
   const toneIndexFromKey = tones[lastChar];
   if (toneIndexFromKey !== undefined) {
-    const baseWord = word.slice(0, -1);
-    const currentTone = getWordToneIndex(baseWord);
+    const baseWordStr = word.slice(0, -1);
+    const currentTone = getWordToneIndex(baseWordStr);
+    // Nếu gõ cùng phím dấu cũ -> xóa dấu
     if (currentTone === toneIndexFromKey) {
-      return prefix + applyTone(baseWord, 0, isModern);
+      return prefix + applyTone(baseWordStr, 0, isModern);
     }
-    return prefix + applyTone(baseWord, toneIndexFromKey, isModern);
+    // Đặt dấu mới (luôn tự động sửa lỗi vị trí dấu - Smart Fix)
+    return prefix + applyTone(baseWordStr, toneIndexFromKey, isModern);
   }
 
+  // 5. Mặc định: Luôn tự động chuẩn hóa dấu khi gõ bất kỳ phím nào
   const currentTone = getWordToneIndex(word);
-  const cleanNormalizedWord = removeTone(word);
-  return prefix + applyTone(cleanNormalizedWord, currentTone, isModern);
+  return prefix + applyTone(removeTone(word), currentTone, isModern);
+}
+
+function baseWord(w: string) {
+  return w;
 }
