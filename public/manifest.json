@@ -3,8 +3,8 @@
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Bộ gõ tiếng Việt thông minh tối ưu cho Chrome OS Flex",
-  "permissions": ["input", "storage", "notifications"],
+  "description": "Bộ gõ tiếng Việt thông minh cho Chrome OS Flex",
+  "permissions": ["input", "notifications", "storage"],
   "background": {
     "service_worker": "background.js"
   },
@@ -20,8 +20,5 @@
       "language": "vi",
       "layouts": ["us"]
     }
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  ]
 }

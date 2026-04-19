@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Power, Settings2, ExternalLink, CheckCircle2, MoreVertical, AlertTriangle, Settings } from 'lucide-react';
+import { Power, Settings2, ExternalLink, CheckCircle2, MoreVertical, AlertTriangle, Settings, Info } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -59,14 +59,18 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       </CardHeader>
       
       <CardContent className="p-3 space-y-3">
-        {/* Hướng dẫn sửa lỗi khẩn cấp */}
-        <Alert variant="destructive" className="bg-red-50 border-red-200 py-2 animate-pulse">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertTitle className="text-[10px] font-black uppercase text-red-700">Lưu ý cài đặt (Fix lỗi CSP/404)</AlertTitle>
-          <AlertDescription className="text-[9px] text-red-600 font-bold leading-tight">
-            1. Chạy lệnh: <code className="bg-red-100 px-1">npm run build</code> trong Terminal.<br/>
-            2. Vào <code className="bg-red-100 px-1">chrome://extensions</code> nhấn <span className="underline">Load Unpacked</span>.<br/>
-            3. <strong>BẮT BUỘC:</strong> Chọn thư mục <strong>out</strong> bên trong vietflex.
+        {/* Hướng dẫn sửa lỗi khẩn cấp - Cực kỳ nổi bật */}
+        <Alert variant="destructive" className="bg-red-50 border-red-500 border-2 py-3 shadow-lg animate-pulse">
+          <AlertTriangle className="h-5 w-5 text-red-600" />
+          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">FIX LỖI 100% (FILE_NOT_FOUND / CSP)</AlertTitle>
+          <AlertDescription className="text-[10px] text-red-800 font-bold space-y-2">
+            <p>Bản cài đặt của bạn đang bị lỗi thư mục. Hãy làm đúng 3 bước này:</p>
+            <div className="bg-white/90 p-2 rounded border border-red-200 text-slate-900 shadow-inner">
+              1. Mở Terminal, gõ: <code className="bg-slate-200 px-1 rounded">npm run build</code> rồi đợi nó chạy xong.<br/>
+              2. Vào <code className="bg-blue-100 px-1">chrome://extensions</code>, nhấn <strong>Load Unpacked</strong>.<br/>
+              3. <strong className="text-red-600 underline text-sm uppercase">Quan trọng nhất:</strong> Bạn phải đi <strong>VÀO TRONG</strong> thư mục vietflex và chọn thư mục tên là <strong className="text-blue-600">out</strong>.
+            </div>
+            <p className="italic text-[9px] text-red-600">Lưu ý: Nếu bạn chọn thư mục 'vietflex' (gốc), Chrome sẽ không tìm thấy file và báo lỗi CSP ngay lập tức!</p>
           </AlertDescription>
         </Alert>
 
@@ -119,14 +123,19 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <span className="text-[9px] font-bold text-emerald-700">Telex Engine Sẵn sàng</span>
         </div>
 
-        <Button 
-          variant="outline" 
-          className="w-full h-8 gap-2 font-black text-[10px] uppercase border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
-          onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          Kích hoạt hệ thống
-        </Button>
+        <div className="pt-1">
+          <Button 
+            variant="outline" 
+            className="w-full h-8 gap-2 font-black text-[10px] uppercase border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+            onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Kích hoạt hệ thống
+          </Button>
+          <p className="text-[8px] text-muted-foreground text-center mt-1 font-bold italic">
+            *Bắt buộc để gõ được trong mọi ứng dụng Chrome OS
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
