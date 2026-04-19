@@ -78,10 +78,10 @@ export default function Home() {
             />
             
             <div className="mt-8 p-6 bg-white rounded-xl border border-primary/5 shadow-sm">
-              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.0</h3>
+              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.0.0</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Bộ gõ tiếng Việt siêu nhẹ, tối ưu hóa cho Windows và Chrome OS Flex. 
-                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả ngay lập tức mà không cần AI.
+                Bộ gõ tiếng Việt siêu nhẹ, chuyên biệt cho Chrome OS Flex. 
+                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả tức thì, không độ trễ.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
                 <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.0.0</span>
@@ -94,7 +94,7 @@ export default function Home() {
 
       <footer className="py-6 border-t bg-white text-center">
         <p className="text-xs text-muted-foreground font-medium">
-          &copy; {new Date().getFullYear()} VietFlex Engine. Hiệu quả. Chính xác. Không độ trễ.
+          &copy; {new Date().getFullYear()} VietFlex Engine. Hiệu quả. Chính xác. Zero Latency.
         </p>
       </footer>
       <Toaster />
