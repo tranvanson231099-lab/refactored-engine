@@ -2,10 +2,8 @@
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Smart Vietnamese IME Optimized for Chrome OS Flex. Rules: i/y & Smart Backspace.",
-  "permissions": [
-    "input"
-  ],
+  "description": "Bộ gõ tiếng Việt siêu tốc cho Chrome OS Flex",
+  "permissions": ["input"],
   "background": {
     "service_worker": "background.js"
   },
@@ -14,7 +12,8 @@
       "name": "VietFlex Telex",
       "id": "vietflex_telex",
       "language": "vi",
-      "layouts": ["us"]
+      "layouts": ["us"],
+      "type": "ime"
     }
   ],
   "icons": {

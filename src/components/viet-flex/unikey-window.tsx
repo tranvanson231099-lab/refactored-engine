@@ -117,7 +117,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <Alert className="bg-blue-50 border-blue-200">
-                    <AlertTitle className="text-xs font-bold uppercase text-blue-800">Bước 1: Build mã nguồn</AlertTitle>
+                    <AlertTitle className="text-xs font-bold uppercase text-blue-800">Bước 1: Sửa lỗi EACCES & Build</AlertTitle>
                     <AlertDescription className="text-[11px] text-blue-700">
                       Mở Terminal Linux, chạy lệnh sau để tránh lỗi quyền:
                       <div className="mt-2 bg-slate-900 p-3 rounded font-mono text-[10px] text-white relative">
@@ -132,7 +132,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                   <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
                     <p><b>Bước 2:</b> Mở Chrome, truy cập <code>chrome://extensions</code></p>
                     <p><b>Bước 3:</b> Bật <b>Developer Mode</b> ở góc phải.</p>
-                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b>, chọn thư mục <b>out</b> nằm trong thư mục dự án.</p>
+                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b>, chọn thư mục <b>out</b> (phải nằm trong <code>~/vietflex</code>).</p>
                     <p><b>Bước 5:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
                     <p><b>Bước 6:</b> Nhấn <b>Thêm phương thức nhập</b> và tìm chọn <b>VietFlex Telex</b>.</p>
                   </div>
