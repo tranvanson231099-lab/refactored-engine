@@ -1,11 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "VietFlex Telex IME",
+  "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Smart Vietnamese Input Method for Chrome OS Flex",
-  "permissions": [
-    "inputMethodPrivate"
-  ],
+  "description": "Bộ gõ tiếng Việt siêu tốc tối ưu cho Chrome OS Flex",
   "background": {
     "service_worker": "background.js"
   },
@@ -17,7 +14,5 @@
       "layouts": ["us"]
     }
   ],
-  "action": {
-    "default_popup": "index.html"
-  }
+  "permissions": ["input"]
 }

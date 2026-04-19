@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key, Info } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key, Info, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -103,55 +103,51 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full h-10 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 gap-2 font-bold text-[10px] uppercase animate-pulse">
-              <Download className="w-4 h-4" />
-              SỬA LỖI ĐÓNG GÓI / PEM KEY
+            <Button variant="outline" size="sm" className="w-full h-10 border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 gap-2 font-bold text-[10px] uppercase">
+              <CheckCircle2 className="w-4 h-4" />
+              HƯỚNG DẪN KÍCH HOẠT HỆ THỐNG
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-red-600 font-bold uppercase tracking-tight">
-                <AlertTriangle className="w-5 h-5" />
-                XỬ LÝ LỖI KHOÁ CÁ NHÂN (PEM)
+              <DialogTitle className="flex items-center gap-2 text-emerald-600 font-bold uppercase tracking-tight">
+                <CheckCircle2 className="w-5 h-5" />
+                KÍCH HOẠT BỘ GÕ HỆ THỐNG
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <Alert variant="destructive" className="border-2 shadow-lg bg-red-600 text-white">
-                  <Key className="h-5 w-5" />
-                  <AlertTitle className="text-sm font-black uppercase">LỖI: KHOÁ CÁ NHÂN ĐÃ TỒN TẠI</AlertTitle>
-                  <AlertDescription className="text-xs font-bold leading-relaxed">
-                    Bạn thấy lỗi này vì tệp <b>out.pem</b> đã có sẵn. Trong bảng "Đóng gói tiện ích", bạn có 2 lựa chọn:
-                  </AlertDescription>
-                </Alert>
-
+                <p className="font-bold text-sm">Bạn đã đóng gói xong! Giờ hãy làm theo 3 bước cuối:</p>
+                
                 <div className="space-y-4 pt-2">
-                  <div className="p-4 bg-slate-50 border-2 border-dashed border-primary/30 rounded-lg">
-                    <p className="font-bold text-sm mb-2 text-primary">LỰA CHỌN 1: Sử dụng lại khoá (Khuyên dùng)</p>
+                  <div className="p-4 bg-slate-50 border-l-4 border-primary rounded-r-lg">
+                    <p className="font-bold text-xs text-primary mb-2 uppercase">Bước 1: Tải tiện ích vào Chrome</p>
                     <p className="text-xs leading-relaxed">
-                      Trong cửa sổ <b>Đóng gói tiện ích</b> (như ảnh bạn chụp):<br/>
-                      1. Ô 1 (Thư mục gốc): Chọn thư mục <code>out</code>.<br/>
-                      2. Ô 2 (Tệp khoá cá nhân): Nhấn <b>Duyệt qua</b> và chọn tệp <code>out.pem</code> nằm ở thư mục <code>~/vietflex</code>.
+                      1. Mở Chrome, vào <code>chrome://extensions</code>.<br/>
+                      2. Bật <b>Developer Mode</b> (Chế độ nhà phát triển).<br/>
+                      3. Nhấn <b>Load Unpacked</b> (Tải tiện ích đã giải nén).<br/>
+                      4. Chọn đúng thư mục <b>out</b> nằm trong <code>~/vietflex</code>.
                     </p>
                   </div>
 
-                  <div className="p-4 bg-red-50 border-2 border-dashed border-red-300 rounded-lg">
-                    <p className="font-bold text-sm mb-2 text-red-700">LỰA CHỌN 2: Xoá khoá cũ để tạo mới</p>
-                    <p className="text-xs leading-relaxed mb-2">Chạy lệnh này trong Terminal để xoá tệp PEM cũ:</p>
-                    <div className="bg-slate-900 p-2 rounded font-mono text-white text-[10px] flex justify-between items-center mb-2">
-                      <code>rm ~/vietflex/out.pem</code>
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyCommand("rm ~/vietflex/out.pem")}>
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                    </div>
-                    <p className="text-xs text-red-600 italic">* Lưu ý: Xoá khoá cũ sẽ làm thay đổi ID của Extension.</p>
+                  <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+                    <p className="font-bold text-xs text-blue-700 mb-2 uppercase">Bước 2: Thêm vào Phương thức nhập</p>
+                    <p className="text-xs leading-relaxed">
+                      1. Mở <b>Cài đặt Chrome OS</b> (Settings).<br/>
+                      2. Chọn <b>Thiết bị (Device) &gt; Bàn phím (Keyboard)</b>.<br/>
+                      3. Nhấn <b>Thay đổi phương thức nhập</b>.<br/>
+                      4. Nhấn <b>Thêm phương thức nhập</b>, tìm và chọn <b>VietFlex Telex</b>.
+                    </p>
                   </div>
 
-                  <div className="space-y-2">
-                    <p className="font-bold text-emerald-700 flex items-center gap-2">
-                      <Info className="w-4 h-4" /> 
-                      MẸO: Dùng "Tải tiện ích đã giải nén"
+                  <div className="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg">
+                    <p className="font-bold text-xs text-emerald-700 mb-2 uppercase">Bước 3: Sử dụng</p>
+                    <p className="text-xs leading-relaxed">
+                      Nhấn <b>Ctrl + Space</b> để chuyển đổi giữa tiếng Anh và <b>VietFlex Telex</b>. Giờ bạn có thể gõ tiếng Việt ở bất cứ đâu!
                     </p>
-                    <p className="text-[12px]">Để phát triển nhanh, bạn không cần "Đóng gói". Chỉ cần nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> là đủ.</p>
                   </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-[10px] text-red-600 italic">
+                  * Lưu ý: Nếu gõ chưa ra tiếng Việt trong Word/Docs, hãy kiểm tra xem biểu tượng VietFlex ở khay hệ thống (góc dưới bên phải) đã được chọn chưa.
                 </div>
               </DialogDescription>
             </DialogHeader>
