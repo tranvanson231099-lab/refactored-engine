@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -42,91 +41,55 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
     setCopied(true);
     toast({
       title: "Đã sao chép!",
-      description: "Văn bản đã được lưu vào bộ nhớ tạm.",
+      description: "Đã lưu vào bộ nhớ tạm.",
     });
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="flex-1 flex flex-col gap-4">
-      <div className="flex items-center justify-between mb-2">
+    <div className="w-full flex flex-col gap-3">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-primary rounded-lg text-white shadow-md">
-            <MousePointer2 className="w-5 h-5" />
+          <div className="p-1.5 bg-primary rounded text-white shadow-sm">
+            <Keyboard className="w-3.5 h-3.5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold">Workspace Siêu Tốc</h2>
-              {isEnabled && (
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
-                  <Zap className="w-3 h-3 fill-emerald-500" />
-                  Engine 2.1.6 Active
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground font-medium">Trạm trung chuyển soạn thảo chuẩn chính tả Bộ GD&ĐT</p>
-          </div>
+          <h2 className="text-sm font-bold">Workspace</h2>
         </div>
-        <div className="flex items-center gap-3">
-            <Button 
-                variant="outline" 
-                size="sm" 
-                className="h-9 gap-2 font-bold text-xs"
-                onClick={copyToClipboard}
-                disabled={!text}
-            >
-                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                SAO CHÉP TẤT CẢ
-            </Button>
-            <div className="h-8 w-px bg-border hidden sm:block" />
-            <div className="text-right hidden sm:block">
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Phương thức</p>
-                <p className="text-sm font-bold text-primary">{isEnabled ? "TELEX" : "OFF"}</p>
-            </div>
-        </div>
+        <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-7 px-2 gap-1.5 font-bold text-[9px]"
+            onClick={copyToClipboard}
+            disabled={!text}
+        >
+            {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+            SAO CHÉP
+        </Button>
       </div>
-
-      {isEnabled && (
-        <Alert className="bg-blue-50 border-blue-200 animate-in slide-in-from-top-2 duration-300">
-          <Info className="h-4 w-4 text-blue-600" />
-          <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Cơ chế xóa dấu 3 bước</AlertTitle>
-          <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Gỡ dấu thanh &rarr; gỡ móc &rarr; xóa chữ. Tự động chuẩn hóa i/y và dấu câu sát chữ. Soạn thảo tại đây và dán vào nơi khác.
-          </AlertDescription>
-        </Alert>
-      )}
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: luyen -> luyện, chữa, lí)..." : "IME đang tắt..."}
-          className="min-h-[450px] text-xl p-8 bg-white border-2 border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
+          placeholder={isEnabled ? "Gõ telex tại đây..." : "IME đang tắt..."}
+          className="min-h-[180px] text-base p-4 bg-white border border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={onKeyDown}
           spellCheck={false}
           autoFocus
         />
-        <div className="absolute bottom-4 right-4 flex items-center gap-2 text-muted-foreground">
-            <Keyboard className="w-4 h-4" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-                {text.length} ký tự
-            </span>
+        <div className="absolute bottom-2 right-2 text-[9px] font-bold text-muted-foreground uppercase opacity-50">
+            {text.length} ký tự
         </div>
       </div>
-      
-      <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5" />
-          Quy tắc Engine 2.1.6
-        </h3>
-        <div className="text-xs text-muted-foreground leading-relaxed space-y-2">
-          <p>
-            - <b>Smart i/y</b>: Tự động dùng `i` sau phụ âm (`lí, kĩ`) và `y` sau `u` (`quý`).<br />
-            - <b>Xóa dấu 3 bước</b>: Gỡ dấu thanh &rarr; gỡ móc &rarr; xóa chữ. Hoàn hảo để sửa lỗi nhanh.<br />
-            - <b>Chuẩn chính tả</b>: Đặt dấu chuẩn nguyên âm chính cho cụm `ia, iê, ua, uô, ươ`.
-          </p>
-        </div>
-      </div>
+
+      {isEnabled && (
+        <Alert className="bg-blue-50/50 border-blue-100 py-2">
+          <Info className="h-3.5 w-3.5 text-blue-600" />
+          <AlertDescription className="text-[10px] text-blue-700 font-medium pl-1">
+            Gõ chuẩn i/y & gỡ dấu 3 bước chuẩn v2.1.6
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 };

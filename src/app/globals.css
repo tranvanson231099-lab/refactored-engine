@@ -25,35 +25,17 @@
     --ring: 210 61% 47%;
     --radius: 0.5rem;
   }
-  .dark {
-    --background: 210 20% 10%;
-    --foreground: 210 20% 98%;
-    --card: 210 20% 12%;
-    --card-foreground: 210 20% 98%;
-    --popover: 210 20% 12%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 61% 55%;
-    --primary-foreground: 210 20% 10%;
-    --secondary: 210 20% 20%;
-    --secondary-foreground: 210 61% 55%;
-    --muted: 210 20% 25%;
-    --muted-foreground: 210 10% 70%;
-    --accent: 180 60% 45%;
-    --accent-foreground: 180 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 210 20% 25%;
-    --input: 210 20% 25%;
-    --ring: 210 61% 55%;
-  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground font-body;
+    min-width: 450px;
+    min-height: 600px;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
