@@ -37,21 +37,16 @@ export function useIme() {
     setText(converted);
   }, [isEnabled, method, isModernStyle, isSmartFix]);
 
-  /**
-   * Cơ chế Backspace thông minh:
-   * Nhấn lần 1: Xóa dấu/móc (nếu có).
-   * Nhấn lần 2: Xóa ký tự.
-   */
   const handleBackspace = useCallback(() => {
     if (!isEnabled || !text) return false;
     
     const unMarked = removeLastMark(text);
     if (unMarked) {
       setText(unMarked);
-      return true; // Ngăn chặn sự kiện mặc định để không xóa chữ
+      return true;
     }
     
-    return false; // Cho phép sự kiện mặc định để xóa chữ
+    return false;
   }, [isEnabled, text]);
 
   return {
