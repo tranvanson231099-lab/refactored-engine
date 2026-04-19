@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Monitor, Download, ChevronDown } from 'lucide-react';
+import { Power, Keyboard, Settings2, Monitor, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -16,13 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -68,16 +61,12 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
 
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Phương thức nhập</Label>
-            <Select defaultValue="telex" disabled={!isEnabled}>
-              <SelectTrigger className="w-full h-9 text-xs font-bold border-primary/20 bg-secondary/10">
-                <SelectValue placeholder="Chọn kiểu gõ" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="telex" className="text-xs font-bold">TELEX (Mặc định)</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="p-3 bg-secondary/10 rounded-lg border border-primary/10">
+            <Label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1 block">Phương thức nhập</Label>
+            <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-white border-primary/20 text-primary font-bold">TELEX (Mặc định)</Badge>
+                <span className="text-[10px] text-muted-foreground italic">Chrome OS Flex Ready</span>
+            </div>
           </div>
           
           <div className="space-y-2 pt-1">
@@ -119,7 +108,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
               Cài vào Chrome OS Flex
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Download className="w-5 h-5 text-primary" />
@@ -128,11 +117,11 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
               <DialogDescription className="space-y-4 pt-4">
                 <div className="p-4 bg-primary/5 rounded-lg border border-primary/10 text-sm text-foreground space-y-3">
                   <p><b>Bước 1:</b> Nhìn lên thanh địa chỉ (Address Bar) của trình duyệt Chrome.</p>
-                  <p><b>Bước 2:</b> Nhấn vào biểu tượng <b>Cài đặt ứng dụng</b> (hình máy tính có mũi tên xuống).</p>
-                  <p><b>Bước 3:</b> Nhấn <b>Cài đặt</b>. Ứng dụng sẽ xuất hiện trong Menu App của Chrome OS Flex.</p>
+                  <p><b>Bước 2:</b> Nhấn vào biểu tượng <b>Cài đặt ứng dụng</b> (Install App) - hình máy tính có mũi tên xuống.</p>
+                  <p><b>Bước 3:</b> Nhấn <b>Cài đặt</b>. VietFlex sẽ hoạt động như một App độc lập trên máy của bạn.</p>
                 </div>
                 <p className="text-xs italic text-muted-foreground">
-                  * Sau khi cài đặt, bạn có thể ghim ứng dụng vào thanh Taskbar để mở nhanh bất cứ lúc nào.
+                  * Sau khi cài đặt, bạn có thể ghim ứng dụng vào Shelf (Taskbar) để mở nhanh. Soạn thảo tại đây và Copy sang các ứng dụng khác.
                 </p>
               </DialogDescription>
             </DialogHeader>

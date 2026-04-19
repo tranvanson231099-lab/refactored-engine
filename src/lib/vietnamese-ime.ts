@@ -101,7 +101,8 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (actualVowels.length === 1) return actualVowels[0];
 
   const vowelString = actualVowels.map(i => lowerClean[i]).join('');
-  const hasFinalConsonant = !isVowel(clean[clean.length - 1]);
+  const lastChar = clean[clean.length - 1].toLowerCase();
+  const hasFinalConsonant = !isVowel(lastChar);
 
   // Quy tắc tam âm (uyê, uôi, iêu, ươu)
   if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
@@ -110,12 +111,19 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (vowelString.includes('ươu')) return actualVowels[vowelString.indexOf('ươu') + 1];
 
   // Quy tắc nguyên âm đôi (ia, iê, ua, uô, ưa, ươ)
-  const diphthongs = ['ia', 'iê', 'ua', 'uô', 'ưa', 'ươ'];
-  for (const d of diphthongs) {
+  const diphthongsWithFinal = ['iê', 'uô', 'ươ'];
+  for (const d of diphthongsWithFinal) {
     if (vowelString.includes(d)) {
       const startIdx = vowelString.indexOf(d);
-      // Quy tắc cốt lõi: Có âm cuối -> âm thứ 2. Không âm cuối -> âm thứ 1.
       return hasFinalConsonant ? actualVowels[startIdx + 1] : actualVowels[startIdx];
+    }
+  }
+  
+  const diphthongsNoFinal = ['ia', 'ua', 'ưa'];
+  for (const d of diphthongsNoFinal) {
+    if (vowelString.includes(d)) {
+      const startIdx = vowelString.indexOf(d);
+      return actualVowels[startIdx]; // Luôn là âm 1 vì ia, ua, ưa không có phụ âm cuối tiếng Việt chuẩn
     }
   }
 
@@ -184,25 +192,31 @@ function applySmartFix(word: string, isModern: boolean): string {
   const lowerClean = cleaned.toLowerCase();
   
   // 1. Đứng một mình: i (ầm ĩ) hoặc y (y tế, ý nghĩa)
-  if (lowerClean === 'i') {
-    return result.replace(/i/g, 'y').replace(/I/g, 'Y');
+  // Trong Hán Việt: y tế, y phục, ý nghĩa, y đức, y học
+  if (lowerClean === 'i' || lowerClean === 'y') {
+    // Thường đứng một mình là Y trong từ Hán Việt
+    if (lowerClean === 'i' && (tone === 0 || tone === 1)) {
+        return result.replace(/i/g, 'y').replace(/I/g, 'Y');
+    }
   }
 
   // 2. Đứng đầu từ: y nếu là nguyên âm đơn hoặc đầu âm đôi (yêu, yến, yên)
-  if (lowerClean.startsWith('ie') && !hasVowel(cleaned[0])) {
-    result = cleaned.replace(/i/g, 'y').replace(/I/g, 'Y');
-    return applyTone(result, tone, isModern);
+  if (lowerClean.startsWith('ie') && !'bcdghklmnpqrstvx'.includes(lowerClean[0])) {
+     // Không có phụ âm đầu -> dùng Yê
+     const final = cleaned.substring(2);
+     const newBase = (result[0] === result[0].toUpperCase() ? 'Y' : 'y') + (result[1] === result[1].toUpperCase() ? 'Ê' : 'ê') + final;
+     return applyTone(newBase, tone, isModern);
   }
 
-  // 4. Sau âm đệm "u": Bắt buộc viết y (quý, quy, thúy)
-  if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.startsWith('th') || lowerClean.startsWith('h'))) {
-      if (lowerClean.startsWith('qu') || lowerClean.startsWith('thu') || lowerClean.startsWith('hu')) {
+  // 4. Sau âm đệm "u": Bắt buộc viết y (quý, quy, thủy)
+  if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.startsWith('th') || lowerClean.startsWith('h') || lowerClean.startsWith('l'))) {
+      if (lowerClean.includes('qui') || lowerClean.includes('thui') || lowerClean.includes('hui') || lowerClean.includes('lui')) {
           result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
           return applyTone(removeToneOnly(result), tone, isModern);
       }
   }
 
-  // 3. Sau phụ âm đầu: Ưu tiên viết i (lí, kĩ, mĩ)
+  // 3. Sau phụ âm đầu: Ưu tiên viết i (lí, kĩ, mĩ, sĩ, vị, di)
   const consonants = 'bcdghklmnpqrstvx';
   for (const c of consonants) {
     if (lowerClean.startsWith(c) && lowerClean.endsWith('y') && !lowerClean.includes('uy')) {
