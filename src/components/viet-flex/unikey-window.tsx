@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Power, Settings2, ExternalLink, CheckCircle2, MoreVertical, AlertTriangle, Settings, Info } from 'lucide-react';
+import { Power, Settings2, ExternalLink, CheckCircle2, MoreVertical, AlertTriangle, Settings } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -59,18 +59,18 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       </CardHeader>
       
       <CardContent className="p-3 space-y-3">
-        {/* Hướng dẫn sửa lỗi khẩn cấp - Cực kỳ nổi bật */}
-        <Alert variant="destructive" className="bg-red-50 border-red-500 border-2 py-3 shadow-lg animate-pulse">
+        {/* Hướng dẫn khẩn cấp - NỔI BẬT NHẤT */}
+        <Alert variant="destructive" className="bg-red-50 border-red-500 border-2 py-3 shadow-lg">
           <AlertTriangle className="h-5 w-5 text-red-600" />
-          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">CÁCH SỬA LỖI 100% (FIX CSP / FILE_NOT_FOUND)</AlertTitle>
+          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">CÁCH SỬA LỖI 100%</AlertTitle>
           <AlertDescription className="text-[10px] text-red-800 font-bold space-y-2">
-            <p>Hãy làm đúng 3 bước này để hết sạch lỗi đỏ:</p>
+            <p>Lỗi CSP và ERR_FILE_NOT_FOUND chỉ có 1 cách sửa duy nhất:</p>
             <div className="bg-white/90 p-2 rounded border border-red-200 text-slate-900 shadow-inner">
-              1. **XÓA tệp out.pem** khỏi thư mục vietflex ngay lập tức.<br/>
-              2. Mở Terminal, gõ: <code className="bg-slate-200 px-1 rounded">npm run build</code>.<br/>
-              3. **QUAN TRỌNG NHẤT:** Trong Chrome, hãy **CHỌN THƯ MỤC &apos;out&apos;** (nằm bên trong thư mục vietflex) để nạp.
+              1. Chạy lệnh: <code className="bg-slate-200 px-1 rounded">npm run build</code><br/>
+              2. Mở Chrome Extensions, nhấn <b>Tải tiện ích đã giải nén</b>.<br/>
+              3. <b>QUAN TRỌNG:</b> Đi vào thư mục vietflex, sau đó <b>CHỌN THƯ MỤC 'out'</b>.
             </div>
-            <p className="italic text-[9px] text-red-600 text-center">Nếu nạp thư mục gốc &apos;vietflex&apos; sẽ bị lỗi File Not Found và CSP!</p>
+            <p className="italic text-[9px] text-red-600">Tuyệt đối không chọn thư mục gốc 'vietflex'!</p>
           </AlertDescription>
         </Alert>
 
@@ -92,9 +92,6 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 onClick={() => setIsEnabled(!isEnabled)}
             >
                 <Power className="w-3 h-3" /> {isEnabled ? "Tắt" : "Bật"}
-            </Button>
-            <Button variant="outline" className="h-7 text-[9px] font-bold uppercase gap-1">
-                <Settings2 className="w-3 h-3" /> Tùy chọn
             </Button>
           </div>
         </div>
@@ -132,9 +129,6 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <ExternalLink className="w-3.5 h-3.5" />
             Kích hoạt hệ thống
           </Button>
-          <p className="text-[8px] text-muted-foreground text-center mt-1 font-bold italic">
-            *Bắt buộc để gõ được trong mọi ứng dụng Chrome OS
-          </p>
         </div>
       </CardContent>
     </Card>

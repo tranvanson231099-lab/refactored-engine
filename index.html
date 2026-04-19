@@ -3,20 +3,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>VietFlex Redirect</title>
-    <!-- Sử dụng meta refresh thay vì script để tránh lỗi CSP -->
-    <meta http-equiv="refresh" content="0; url=out/index.html">
+    <title>SAI THƯ MỤC - ERROR</title>
     <style>
-        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f8fafc; }
-        .card { padding: 2rem; border-radius: 1rem; background: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); text-align: center; border: 1px solid #e2e8f0; }
-        h2 { color: #2563eb; margin-top: 0; }
+        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #fef2f2; }
+        .card { padding: 2rem; border-radius: 1rem; background: white; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); text-align: center; border: 4px solid #ef4444; max-width: 400px; }
+        h1 { color: #dc2626; margin-top: 0; font-size: 24px; }
+        p { color: #475569; font-weight: bold; line-height: 1.6; }
+        .code { background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-family: monospace; color: #1e293b; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>VietFlex Engine</h2>
-        <p>Đang chuyển hướng đến thư mục build...</p>
-        <p style="font-size: 12px; color: #64748b;">Nếu không thấy gì, hãy nạp thư mục <b>'out'</b> thay vì thư mục gốc.</p>
+        <h1>BẠN ĐÃ CHỌN SAI THƯ MỤC!</h1>
+        <p>Lỗi "Tệp kê khai bị thiếu" hoặc "CSP" xảy ra do bạn chọn thư mục gốc.</p>
+        <p>Hãy chọn thư mục: <br><span class="code">vietflex/out</span></p>
+        <p style="font-size: 12px; color: #ef4444;">(Lưu ý: Phải chạy lệnh npm run build trước khi nạp)</p>
     </div>
 </body>
 </html>
