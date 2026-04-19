@@ -14,7 +14,8 @@ export default function Home() {
     isModernStyle, setIsModernStyle,
     isSmartFix, setIsSmartFix,
     method, setMethod, 
-    text, setText, rawSetText 
+    text, setText, rawSetText,
+    handleBackspace
   } = useIme();
 
   return (
@@ -54,6 +55,7 @@ export default function Home() {
             text={text} 
             setText={setText} 
             rawSetText={rawSetText}
+            handleBackspace={handleBackspace}
             method={method}
             isEnabled={isEnabled}
             isSmartFix={isSmartFix}
@@ -81,7 +83,7 @@ export default function Home() {
               <h3 className="text-sm font-bold mb-3">Về VietFlex 2.1.6</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Bộ gõ tiếng Việt siêu nhẹ, chuyên biệt cho Chrome OS Flex. 
-                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả tức thì, không độ trễ.
+                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả tức thì và xóa dấu thông minh.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
                 <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.1.6</span>

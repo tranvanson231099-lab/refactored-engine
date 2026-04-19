@@ -12,6 +12,7 @@ interface TypingWorkspaceProps {
   text: string;
   setText: (val: string) => void;
   rawSetText: (val: string) => void;
+  handleBackspace: () => boolean;
   method: InputMethod;
   isEnabled: boolean;
   isSmartFix: boolean;
@@ -20,10 +21,20 @@ interface TypingWorkspaceProps {
 export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
   text,
   setText,
+  handleBackspace,
   method,
   isEnabled,
   isSmartFix,
 }) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Backspace') {
+      const handled = handleBackspace();
+      if (handled) {
+        e.preventDefault();
+      }
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col gap-4">
       <div className="flex items-center justify-between mb-2">
@@ -58,17 +69,18 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Info className="h-4 w-4 text-blue-600" />
           <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix đang bật</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và cụm phức tạp (huỵên &rarr; huyện) tức thì.
+            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và cơ chế xóa dấu trước (Backspace) cực nhanh.
           </AlertDescription>
         </Alert>
       )}
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, huw -> hư, lyss -> lys)..." : "IME đang tắt..."}
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, hw -> hư, lyss -> lys)..." : "IME đang tắt..."}
           className="min-h-[450px] text-xl p-8 bg-white border-2 border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={onKeyDown}
           spellCheck={false}
           autoFocus
         />
@@ -86,10 +98,10 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Mẹo gõ Engine 2.1.6
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, gõ lặp <code>ww</code> ra <code>w</code>.<br />
-          - <b>Xóa dấu</b>: Gõ lặp phím dấu (Ví dụ: <code>lys</code> &rarr; lý, gõ tiếp <code>s</code> &rarr; lys).<br />
-          - <b>Sơn/Hư</b>: Gõ <code>sonw</code>, <code>huw</code> (phím <code>w</code> tự thêm móc chuẩn).<br />
-          - <b>Smart Fix</b>: Tự động sửa lỗi đặt dấu triphthong (huỵên &rarr; huyện) tức thì.
+          - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, <code>hw</code> ra <code>hư</code>, <code>sonw</code> ra <code>sơn</code>.<br />
+          - <b>Backspace</b>: Nhấn 1 lần để xóa dấu (<code>sơn</code> &rarr; <code>son</code>), nhấn lần 2 để xóa chữ (<code>son</code> &rarr; <code>so</code>).<br />
+          - <b>Sửa lỗi</b>: Tự động sửa lỗi đặt dấu triphthong (huỵên &rarr; huyện) tức thì.<br />
+          - <b>Xóa dấu nhanh</b>: Gõ lặp phím dấu (<code>lyss</code> &rarr; <code>lys</code>).
         </p>
       </div>
     </div>

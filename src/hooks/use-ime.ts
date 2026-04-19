@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { convertText, InputMethod } from '@/lib/vietnamese-ime';
+import { convertText, removeLastMark, InputMethod } from '@/lib/vietnamese-ime';
 
 export function useIme() {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -33,11 +33,19 @@ export function useIme() {
       setText(val);
       return;
     }
-    
-    // Xử lý chuyển đổi ngôn ngữ tức thì (Offline)
     const converted = convertText(val, method, isModernStyle, isSmartFix);
     setText(converted);
   }, [isEnabled, method, isModernStyle, isSmartFix]);
+
+  const handleBackspace = useCallback(() => {
+    if (!isEnabled || !text) return false;
+    const unMarked = removeLastMark(text);
+    if (unMarked) {
+      setText(unMarked);
+      return true; // Ngăn chặn sự kiện mặc định
+    }
+    return false;
+  }, [isEnabled, text]);
 
   return {
     isEnabled,
@@ -50,6 +58,7 @@ export function useIme() {
     setMethod,
     text,
     setText: handleInput,
-    rawSetText: setText
+    rawSetText: setText,
+    handleBackspace
   };
 }
