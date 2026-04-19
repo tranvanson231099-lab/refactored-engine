@@ -105,22 +105,22 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" className="w-full h-10 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 gap-2 font-bold text-[10px] uppercase animate-pulse">
               <Download className="w-4 h-4" />
-              FIX LỖI TỆP KÊ KHAI (QUAN TRỌNG)
+              CÁCH CÀI VÀO HỆ THỐNG (FIX LỖI)
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600 font-bold uppercase tracking-tight">
                 <AlertTriangle className="w-5 h-5" />
-                KHÔNG ĐƯỢC CHỌN THƯ MỤC "VIETFLEX"
+                CHỈ CHỌN THƯ MỤC "OUT"
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <Alert variant="destructive" className="border-2 shadow-lg">
+                <Alert variant="destructive" className="border-2 shadow-lg bg-red-600 text-white">
                   <AlertTriangle className="h-5 w-5" />
-                  <AlertTitle className="text-sm font-black uppercase">LỖI CHẾT NGƯỜI</AlertTitle>
+                  <AlertTitle className="text-sm font-black uppercase">LƯU Ý QUAN TRỌNG</AlertTitle>
                   <AlertDescription className="text-xs font-bold leading-relaxed">
-                    Bạn báo lỗi "Tệp kê khai bị thiếu" vì bạn đang chọn thư mục gốc.<br/><br/>
-                    <span className="text-lg underline italic text-white bg-red-600 px-1">BẠN PHẢI CHỌN THƯ MỤC "OUT"</span>
+                    Nếu báo lỗi "Tệp kê khai bị thiếu", đó là vì bạn đang chọn thư mục gốc.<br/><br/>
+                    <span className="text-lg underline italic bg-white text-red-600 px-1">BẠN PHẢI CHỌN THƯ MỤC "OUT"</span>
                   </AlertDescription>
                 </Alert>
 
@@ -147,14 +147,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                       <p>1. Vào <code>chrome://extensions</code></p>
                       <p>2. Bật <b>Developer Mode</b>.</p>
                       <p>3. Nhấn <b>Load Unpacked</b>.</p>
-                      <p className="text-red-600 font-black text-sm uppercase underline">4. CHỌN THƯ MỤC "OUT" (Bên trong vietflex)</p>
+                      <p className="text-red-600 font-black text-sm uppercase underline">4. CHỌN THƯ MỤC "OUT" TRONG ~/vietflex</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <p className="font-bold text-primary flex items-center gap-2">
                       <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 3: Thêm vào Hệ thống
+                      BƯỚC 3: Kích hoạt bộ gõ
                     </p>
                     <p className="text-[12px]">Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>, nhấn <b>Thêm</b> và tìm <b>VietFlex Telex</b>.</p>
                   </div>

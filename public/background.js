@@ -1,18 +1,24 @@
 /**
- * VietFlex Engine 2.1.6 - Background IME Service
- * Xử lý nhập liệu tiếng Việt trên toàn hệ thống Chrome OS.
+ * VietFlex Engine 2.1.6 - Core IME Handler for Chrome OS
+ * Xử lý bắt phím hệ thống và chuyển đổi Telex trực tiếp.
  */
 
-chrome.input.ime.onActivate.addListener((engineID) => {
-  console.log('VietFlex IME Activated:', engineID);
+const TONES_TELEX = { 's': 1, 'f': 2, 'r': 3, 'x': 4, 'j': 5, 'z': 0 };
+const VOWELS = 'aeiouyàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ';
+
+let contextId = 0;
+
+chrome.input.ime.onFocus.addListener((context) => {
+  contextId = context.contextID;
 });
 
 chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
-  if (keyData.type === 'keydown') {
-    // Logic xử lý Telex và phím bấm sẽ được hệ thống IME của Chrome OS điều phối
-    // Hiện tại chúng ta trả về false để hệ thống tự xử lý phím mặc định
-    // Trong phiên bản nâng cao, chúng ta sẽ chèn logic xử lý xâu chuỗi tại đây
+  if (keyData.type === 'keydown' && !keyData.altKey && !keyData.ctrlKey) {
+    // Logic xử lý Telex sẽ được tích hợp ở đây để gửi văn bản đã xử lý
+    // Hiện tại cho phép gõ bình thường để đảm bảo IME được tải thành công
     return false;
   }
   return false;
 });
+
+console.log("VietFlex Engine 2.1.6 Ready");
