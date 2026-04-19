@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2 } from 'lucide-react';
+import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -106,8 +106,8 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
-                <Code className="w-4 h-4" />
-                Kích hoạt trong Chrome OS
+                <Download className="w-4 h-4" />
+                HƯỚNG DẪN CÀI ĐẶT
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
@@ -118,11 +118,11 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <div className="space-y-3">
-                    <p><b>Bước 1:</b> Tải mã nguồn về máy.</p>
-                    <p><b>Bước 2:</b> Chạy lệnh <code>npm run build</code> trong terminal.</p>
-                    <p><b>Bước 3:</b> Mở Chrome, truy cập <code>chrome://extensions</code>.</p>
-                    <p><b>Bước 4:</b> Bật <b>Developer Mode</b>, nhấn <b>Load Unpacked</b>.</p>
-                    <p><b>Bước 5:</b> Chọn thư mục <b>out</b> vừa tạo ra.</p>
+                    <p><b>Bước 1:</b> Chạy <code>npm run build</code> trong terminal.</p>
+                    <p><b>Bước 2:</b> Mở Chrome, vào <code>chrome://extensions</code>.</p>
+                    <p><b>Bước 3:</b> Bật <b>Developer Mode</b>.</p>
+                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b>.</p>
+                    <p><b>Bước 5:</b> Vào Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Thêm "VietFlex Telex".</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
