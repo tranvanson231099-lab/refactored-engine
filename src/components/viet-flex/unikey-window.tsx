@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -5,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle, RefreshCw, Copy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -17,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useToast } from '@/hooks/use-toast';
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -35,6 +37,16 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   isSmartFix,
   setIsSmartFix,
 }) => {
+  const { toast } = useToast();
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    toast({
+      title: "Đã sao chép lệnh!",
+      description: "Hãy dán vào Terminal Linux để chạy.",
+    });
+  };
+
   return (
     <Card className="w-80 shadow-2xl border-2 border-primary/20 overflow-hidden bg-white">
       <CardHeader className="bg-primary py-3 flex flex-row items-center justify-between space-y-0">
@@ -110,37 +122,56 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 KHẮC PHỤC LỖI & CÀI ĐẶT
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Terminal className="w-5 h-5 text-blue-600" />
-                  Khắc phục lỗi và Cài đặt
+                  Khắc phục lỗi EACCES (esbuild)
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
                     <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-xs font-bold uppercase">QUAN TRỌNG: LỖI EACCES (ESBUILD)</AlertTitle>
+                    <AlertTitle className="text-xs font-bold uppercase">LỆNH SỬA LỖI QUYỀN TRUY CẬP</AlertTitle>
                     <AlertDescription className="text-[10px] leading-relaxed">
-                      Lỗi bạn gặp phải là do thư mục <code className="bg-white/50 px-1">node_modules</code> bị lỗi quyền. Hãy chạy lệnh dọn dẹp sau:
+                      Lỗi <code className="bg-white/50 px-1 font-bold">EACCES</code> xảy ra do hệ thống file Linux. Hãy chạy tổ hợp lệnh này để dọn dẹp và cấp quyền lại:
                     </AlertDescription>
                   </Alert>
                   
-                  <div className="space-y-4 font-mono text-[11px] bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
-                    <p className="text-emerald-400"># BƯỚC A: DỌN DẸP TRIỆT ĐỂ (SỬA LỖI EACCES)</p>
-                    <p>cd ~/vietflex && rm -rf node_modules package-lock.json</p>
-                    
-                    <p className="text-emerald-400 mt-2"># BƯỚC B: CÀI ĐẶT LẠI</p>
-                    <p>npm install</p>
-                    
-                    <p className="text-emerald-400 mt-2"># BƯỚC C: BUILD TẠO THƯ MỤC &apos;out&apos;</p>
-                    <p>npm run build</p>
+                  <div className="space-y-4">
+                    <div className="relative group bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-[10px]">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute top-2 right-2 h-6 w-6 text-slate-400 hover:text-white"
+                        onClick={() => copyCommand("rm -rf node_modules package-lock.json && npm install --foreground-scripts")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                      <p className="text-emerald-400 mb-2"># CÁCH 1: DỌN DẸP & CÀI ĐẶT LẠI (KHUYÊN DÙNG)</p>
+                      <p className="leading-relaxed">rm -rf node_modules package-lock.json && npm install --foreground-scripts</p>
+                    </div>
+
+                    <div className="relative group bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-[10px]">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute top-2 right-2 h-6 w-6 text-slate-400 hover:text-white"
+                        onClick={() => copyCommand("chmod -R 755 ~/vietflex && npm run build")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                      <p className="text-emerald-400 mb-2"># CÁCH 2: CẤP QUYỀN THỰC THI</p>
+                      <p className="leading-relaxed">chmod -R 755 ~/vietflex && npm run build</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-3 pt-2 text-xs">
-                    <p className="flex gap-2"><b>1.</b> Mở Chrome, vào <code>chrome://extensions</code>, bật <b>Developer Mode</b>.</p>
-                    <p className="flex gap-2"><b>2.</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> trong <code>~/vietflex</code>.</p>
-                    <p className="flex gap-2"><b>3.</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
-                    <p className="flex gap-2"><b>4.</b> Nhấn <b>Thêm phương thức nhập</b>, tìm và chọn <b>VietFlex Telex</b>.</p>
+                  <div className="space-y-2 pt-4 border-t text-[11px] leading-relaxed">
+                    <p><b>Bước 1:</b> Tải mã nguồn về máy.</p>
+                    <p><b>Bước 2:</b> Mở Terminal Linux: <code className="bg-muted px-1">cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</code></p>
+                    <p><b>Bước 3:</b> <code className="bg-muted px-1">cd ~/vietflex && npm install</code></p>
+                    <p><b>Bước 4:</b> <code className="bg-muted px-1">npm run build</code> (Lệnh này tạo thư mục <b>out</b>).</p>
+                    <p><b>Bước 5:</b> Mở Chrome &gt; <code className="bg-muted px-1">chrome://extensions</code> &gt; <b>Load Unpacked</b> &gt; Chọn thư mục <b>out</b>.</p>
+                    <p><b>Bước 6:</b> Vào Cài đặt &gt; Ngôn ngữ &gt; Phương thức nhập &gt; Thêm "VietFlex Telex".</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>

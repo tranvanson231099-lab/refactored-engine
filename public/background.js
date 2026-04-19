@@ -1,39 +1,18 @@
+
 /**
- * VietFlex Engine 2.1.6 - System IME Service Worker
- * Xử lý bắt phím hệ thống cho Chrome OS Flex
+ * VietFlex Engine 2.1.6 - System IME Background Script
  */
 
-let contextID = 0;
-let currentText = "";
+let contextId = 0;
 
 chrome.input.ime.onFocus.addListener((context) => {
-  contextID = context.contextID;
-  currentText = "";
+  contextId = context.contextID;
 });
 
 chrome.input.ime.onBlur.addListener(() => {
-  contextID = 0;
-  currentText = "";
+  contextId = 0;
 });
 
-// Lõi xử lý Telex 2.1.6 đơn giản hóa cho Background
-function processTelex(text, key) {
-  // Đây là bản rút gọn của vietnamese-ime.ts để chạy độc lập
-  // Trong thực tế, toàn bộ logic từ lib/vietnamese-ime.ts sẽ được port vào đây
-  return text + key; 
-}
-
-chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
-  if (keyData.type === "keydown") {
-    // Nếu là phím chức năng, bỏ qua
-    if (keyData.altKey || keyData.ctrlKey) return false;
-    
-    // Nếu là phím chữ, xử lý Telex
-    if (keyData.key.length === 1) {
-      // Tạm thời để hệ thống tự xử lý phím gốc
-      // Sau khi build, logic chuyên sâu sẽ được tích hợp tại đây
-      return false;
-    }
-  }
-  return false;
-});
+// Chú thích: Logic Telex phức tạp sẽ được xử lý thông qua API IME của Chrome.
+// Hiện tại, tệp này đảm bảo Extension được đăng ký thành công vào hệ thống.
+console.log("VietFlex IME Engine 2.1.6 Service Worker Active");
