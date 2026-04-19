@@ -1,16 +1,19 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>VietFlex Redirect</title>
-    <script>
-        // Redirect to the real app in the 'out' directory if we are in the root
-        window.location.href = 'out/index.html';
-    </script>
+    <!-- Sử dụng meta refresh thay vì inline script để tránh lỗi CSP -->
+    <meta http-equiv="refresh" content="0; url=out/index.html">
 </head>
-<body>
-    <p>Đang chuyển hướng đến Bảng điều khiển VietFlex...</p>
-    <p>Nếu không tự chuyển hướng, hãy chọn thư mục <b>out</b> khi cài đặt Extension.</p>
+<body style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f8fafc;">
+    <div style="padding: 2rem; border-radius: 1rem; background: white; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); text-align: center; border: 1px solid #e2e8f0;">
+        <h2 style="color: #2563eb;">VietFlex Engine</h2>
+        <p style="color: #64748b;">Đang chuyển hướng đến Bảng điều khiển...</p>
+        <p style="font-size: 0.875rem; color: #94a3b8;">
+            Nếu không tự chuyển hướng, hãy <a href="out/index.html" style="color: #2563eb; font-weight: bold;">nhấn vào đây</a>.<br>
+            <i>Lưu ý: Bạn nên chọn thư mục <b>out</b> khi cài đặt Extension để có hiệu năng tốt nhất.</i>
+        </p>
+    </div>
 </body>
 </html>

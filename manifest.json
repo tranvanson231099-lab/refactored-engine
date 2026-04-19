@@ -1,4 +1,3 @@
-
 {
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
@@ -20,5 +19,8 @@
       "language": "vi",
       "layouts": ["us"]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
