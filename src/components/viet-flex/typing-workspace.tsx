@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -21,7 +20,6 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
   setText,
   handleBackspace,
   isEnabled,
-  isSmartFix,
 }) => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Backspace') {
@@ -63,7 +61,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Info className="h-4 w-4 text-blue-600" />
           <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Cơ chế xóa dấu 3 bước</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Backspace gỡ dấu thanh &rarr; gỡ dấu móc &rarr; xóa chữ. Tự động chuẩn hóa i/y và dấu câu sát chữ.
+            Backspace gỡ dấu thanh &rarr; gỡ dấu phụ (móc) &rarr; xóa chữ. Tự động chuẩn hóa i/y và dấu câu sát chữ.
           </AlertDescription>
         </Alert>
       )}
@@ -92,9 +90,9 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Quy tắc Engine 2.1.6
         </h3>
         <div className="text-xs text-muted-foreground leading-relaxed space-y-1">
-          <p>- <b>Smart i/y</b>: Dùng `i` sau phụ âm (`lí, kĩ`) và `y` sau `u` (`quý`) hoặc đứng đầu âm đôi (`yêu`).</p>
+          <p>- <b>Smart i/y</b>: Tự động dùng `i` sau phụ âm (`lí, kĩ`) và `y` sau `u` (`quý`).</p>
           <p>- <b>Xóa dấu 3 bước</b>: Gỡ dấu thanh &rarr; gỡ móc &rarr; xóa chữ. Hoàn hảo để sửa lỗi nhanh.</p>
-          <p>- <b>Chuẩn chính tả</b>: Đặt dấu chuẩn theo nguyên tắc âm chính (có/không phụ âm cuối).</p>
+          <p>- <b>Chuẩn chính tả</b>: Đặt dấu chuẩn nguyên âm chính cho cụm `ia, iê, ua, uô, ươ`.</p>
         </div>
       </div>
     </div>

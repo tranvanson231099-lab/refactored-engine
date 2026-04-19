@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -6,9 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, HelpCircle, Zap } from 'lucide-react';
+import { Power, Keyboard, Settings2, HelpCircle, Zap, Monitor, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -91,14 +98,32 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           </div>
         </div>
 
-        <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center gap-3">
-          <div className="p-2 bg-emerald-500 rounded text-white shadow-sm">
-            <Zap className="w-4 h-4" />
-          </div>
-          <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
-            Engine 2.1.6 Ultra Fast (Offline)
-          </p>
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full h-10 border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 gap-2">
+              <Monitor className="w-4 h-4" />
+              Cài vào Chrome OS Flex
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Download className="w-5 h-5 text-primary" />
+                Hướng dẫn cài đặt VietFlex
+              </DialogTitle>
+              <DialogDescription className="space-y-4 pt-4">
+                <div className="p-4 bg-primary/5 rounded-lg border border-primary/10 text-sm text-foreground space-y-3">
+                  <p><b>Bước 1:</b> Nhìn lên thanh địa chỉ (Address Bar) của trình duyệt Chrome.</p>
+                  <p><b>Bước 2:</b> Nhấn vào biểu tượng <b>Cài đặt ứng dụng</b> (hình máy tính có mũi tên xuống).</p>
+                  <p><b>Bước 3:</b> Nhấn <b>Cài đặt</b>. Ứng dụng sẽ xuất hiện trong Menu App của Chrome OS Flex.</p>
+                </div>
+                <p className="text-xs italic text-muted-foreground">
+                  * Sau khi cài đặt, bạn có thể ghim ứng dụng vào thanh Taskbar để mở nhanh bất cứ lúc nào.
+                </p>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         <div className="pt-2 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 h-12 flex flex-col gap-1 text-[10px] font-bold">
@@ -117,7 +142,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • Chrome OS Flex Optimized
+          VietFlex Engine v2.1.6 • Precision Orthography
         </p>
       </CardContent>
     </Card>

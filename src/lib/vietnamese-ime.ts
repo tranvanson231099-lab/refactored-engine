@@ -1,7 +1,6 @@
-
 /**
  * VietFlex Engine 2.1.6 - Precision Orthography & Chrome OS Flex Optimized
- * Tuân thủ tuyệt đối 5 quy tắc i/y và đặt dấu theo Bộ Giáo dục & Đào tạo.
+ * Tuân thủ tuyệt đối quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
  * Cơ chế Smart Backspace 3 bước: Xóa dấu thanh -> Xóa dấu phụ -> Xóa chữ.
  */
 
@@ -161,7 +160,6 @@ export function removeLastMark(text: string): string | null {
   // Bước 2: Xóa dấu phụ/móc
   let newWordChars = Array.from(word);
   let changed = false;
-  // Tìm từ phải qua trái để xóa dấu phụ gần nhất
   for (let i = newWordChars.length - 1; i >= 0; i--) {
     const char = newWordChars[i];
     const unhooked = UNHOOK_MAP[char.toLowerCase()];
@@ -183,13 +181,13 @@ function applySmartFix(word: string, isModern: boolean): string {
   const cleaned = removeToneOnly(result);
   const lowerClean = cleaned.toLowerCase();
   
-  // Quy tắc i/y: Đứng đầu âm đôi (yêu, yến, yên)
+  // Quy tắc 2: Đứng đầu âm đôi (yêu, yến, yên)
   if (lowerClean.startsWith('ie') && !hasVowel(cleaned[0])) {
       result = cleaned.replace(/i/g, 'y').replace(/I/g, 'Y');
       return applyTone(result, tone, isModern);
   }
 
-  // Quy tắc i/y: Bắt buộc y sau u (quy, quý, thúy, thủy)
+  // Quy tắc 4: Bắt buộc y sau u (quy, quý, thúy, thủy)
   if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.startsWith('th') || lowerClean.startsWith('h'))) {
       if (lowerClean.startsWith('qu') || lowerClean.startsWith('thu') || lowerClean.startsWith('hu')) {
           result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
@@ -197,7 +195,7 @@ function applySmartFix(word: string, isModern: boolean): string {
       }
   }
 
-  // Quy tắc i/y: Dùng i sau phụ âm (lí, kĩ, mĩ, hĩ)
+  // Quy tắc 3: Dùng i sau phụ âm (lí, kĩ, mĩ, hĩ)
   const consonants = 'bcdghklmnpqrstvx';
   for (const c of consonants) {
     if (lowerClean.startsWith(c) && lowerClean.endsWith('y') && !lowerClean.includes('uy')) {
@@ -208,7 +206,7 @@ function applySmartFix(word: string, isModern: boolean): string {
     }
   }
 
-  // Quy tắc i/y: Đứng một mình cho từ Hán Việt
+  // Quy tắc 1: Đứng một mình cho từ Hán Việt
   if (lowerClean === 'i') {
       return result.replace(/i/g, 'y').replace(/I/g, 'Y');
   }
@@ -290,17 +288,19 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     const baseWord = word.slice(0, -1);
     if (!hasVowel(baseWord)) return text;
     const currentTone = getWordToneIndex(baseWord);
-    // Toggle gỡ dấu
     if (currentTone === toneIdx && toneIdx !== 0) return prefix + removeToneOnly(baseWord);
     return prefix + applyTone(baseWord, toneIdx, isModern);
   }
 
-  // Smart Fix: i/y Standard
-  if (isSmartFix && hasVowel(word)) {
+  // Smart Fix: i/y & Đặt dấu chuẩn
+  if (hasVowel(word)) {
     const tone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);
     const toned = applyTone(cleaned, tone, isModern);
-    return prefix + applySmartFix(toned, isModern);
+    if (isSmartFix) {
+      return prefix + applySmartFix(toned, isModern);
+    }
+    return prefix + toned;
   }
 
   return text;
