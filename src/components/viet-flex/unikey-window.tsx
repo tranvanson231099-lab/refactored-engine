@@ -62,15 +62,15 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         {/* Hướng dẫn sửa lỗi khẩn cấp - Cực kỳ nổi bật */}
         <Alert variant="destructive" className="bg-red-50 border-red-500 border-2 py-3 shadow-lg animate-pulse">
           <AlertTriangle className="h-5 w-5 text-red-600" />
-          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">FIX LỖI 100% (FILE_NOT_FOUND / CSP)</AlertTitle>
+          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">SỬA LỖI 100% (FILE_NOT_FOUND / CSP)</AlertTitle>
           <AlertDescription className="text-[10px] text-red-800 font-bold space-y-2">
-            <p>Bản cài đặt của bạn đang bị lỗi thư mục. Hãy làm đúng 3 bước này:</p>
+            <p>Hãy làm đúng 3 bước này để hết lỗi ngay lập tức:</p>
             <div className="bg-white/90 p-2 rounded border border-red-200 text-slate-900 shadow-inner">
-              1. Mở Terminal, gõ: <code className="bg-slate-200 px-1 rounded">npm run build</code> rồi đợi nó chạy xong.<br/>
-              2. Vào <code className="bg-blue-100 px-1">chrome://extensions</code>, nhấn <strong>Load Unpacked</strong>.<br/>
-              3. <strong className="text-red-600 underline text-sm uppercase">Quan trọng nhất:</strong> Bạn phải đi <strong>VÀO TRONG</strong> thư mục vietflex và chọn thư mục tên là <strong className="text-blue-600">out</strong>.
+              1. <strong>XÓA tệp out.pem</strong> khỏi thư mục vietflex ngay lập tức.<br/>
+              2. Mở Terminal, gõ: <code className="bg-slate-200 px-1 rounded">npm run build</code>.<br/>
+              3. <strong className="text-red-600 underline text-sm uppercase">Quan trọng:</strong> Khi nạp tiện ích, bạn hãy <strong>CHỌN THƯ MỤC 'out'</strong> (nằm trong vietflex).
             </div>
-            <p className="italic text-[9px] text-red-600">Lưu ý: Nếu bạn chọn thư mục 'vietflex' (gốc), Chrome sẽ không tìm thấy file và báo lỗi CSP ngay lập tức!</p>
+            <p className="italic text-[9px] text-red-600 text-center">Nếu nạp thư mục gốc sẽ bị lỗi CSP do Chrome cấm mã scripts trực tiếp!</p>
           </AlertDescription>
         </Alert>
 
