@@ -15,8 +15,5 @@
       "language": "vi",
       "layouts": ["us"]
     }
-  ],
-  "action": {
-    "default_title": "VietFlex Dashboard"
-  }
+  ]
 }

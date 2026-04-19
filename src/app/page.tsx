@@ -6,7 +6,7 @@ import { useIme } from '@/hooks/use-ime';
 import { UnikeyWindow } from '@/components/viet-flex/unikey-window';
 import { TypingWorkspace } from '@/components/viet-flex/typing-workspace';
 import { Toaster } from '@/components/ui/toaster';
-import { Command, Layout, Monitor, Zap } from 'lucide-react';
+import { Command, Layout, Monitor, Zap, Settings } from 'lucide-react';
 
 export default function Home() {
   const { 
@@ -63,7 +63,7 @@ export default function Home() {
         <aside className="lg:w-80 flex flex-col gap-4 order-first lg:order-last">
           <div className="sticky top-20">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-              <Layout className="w-4 h-4" />
+              <Settings className="w-4 h-4" />
               Bảng điều khiển
             </div>
             <UnikeyWindow 
@@ -76,14 +76,14 @@ export default function Home() {
             />
             
             <div className="mt-8 p-6 bg-white rounded-xl border border-primary/5 shadow-sm">
-              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.1.6</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <h3 className="text-sm font-bold mb-3 text-primary uppercase tracking-tighter italic">Về VietFlex 2.1.6</h3>
+              <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
                 Bộ gõ tiếng Việt chuyên biệt cho Chrome OS Flex. 
-                Tuân thủ tuyệt đối 5 quy tắc i/y và Smart Backspace gỡ dấu trước xóa chữ sau.
+                Tuân thủ tuyệt đối quy tắc i/y và Smart Backspace gỡ dấu trước xóa chữ sau.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Version 2.1.6</span>
-                <span className="text-[10px] font-bold text-emerald-600 uppercase italic">Ultra Fast</span>
+                <span className="text-[10px] font-bold text-primary uppercase">v2.1.6</span>
+                <span className="text-[10px] font-bold text-emerald-600 uppercase">Chrome OS Flex</span>
               </div>
             </div>
           </div>
