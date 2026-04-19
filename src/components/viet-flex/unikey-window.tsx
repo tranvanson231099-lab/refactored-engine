@@ -40,7 +40,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <div className="p-1.5 bg-white/20 rounded-md">
             <Keyboard className="w-4 h-4 text-white" />
           </div>
-          <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.5</CardTitle>
+          <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.6</CardTitle>
         </div>
         <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
           {isEnabled ? "ON" : "OFF"}
@@ -112,7 +112,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <Zap className="w-4 h-4" />
           </div>
           <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
-            {isEnabled ? "Engine 2.1.5 Siêu Tốc (Offline)" : "IME Đang Tắt"}
+            {isEnabled ? "Engine 2.1.6 Siêu Tốc (Offline)" : "IME Đang Tắt"}
           </p>
         </div>
 
@@ -137,7 +137,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.5 • Chrome OS Flex Optimized
+          VietFlex Engine v2.1.6 • Chrome OS Flex Optimized
         </p>
       </CardContent>
     </Card>

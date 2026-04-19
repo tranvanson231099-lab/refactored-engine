@@ -1,6 +1,6 @@
 
 /**
- * VietFlex Engine 2.1.5 - Precision Orthography & Unicode NFC
+ * VietFlex Engine 2.1.6 - Precision Orthography & Unicode NFC
  * Tối ưu hóa cơ chế Toggle (đảo dấu) và xử lý phím 'w' chuyên biệt cho Chrome OS Flex.
  */
 
@@ -36,9 +36,14 @@ const BASE_VOWEL_MAP: Record<string, string> = {
   'ỳ': 'y', 'ý': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y',
 };
 
-const HOOK_MAP: Record<string, string> = {
-  'ư': 'u', 'ơ': 'o', 'ă': 'a',
-  'Ư': 'U', 'Ơ': 'O', 'Ă': 'A'
+// Map để gỡ móc (unhook) kể cả khi có dấu thanh
+const UNHOOK_MAP: Record<string, string> = {
+  'ư': 'u', 'ứ': 'ú', 'ừ': 'ù', 'ử': 'ủ', 'ữ': 'ũ', 'ự': 'ụ',
+  'ơ': 'o', 'ớ': 'ó', 'ờ': 'ò', 'ở': 'ỏ', 'ỡ': 'õ', 'ợ': 'ọ',
+  'ă': 'a', 'ắ': 'á', 'ằ': 'à', 'ẳ': 'ả', 'ẵ': 'ã', 'ặ': 'ạ',
+  'Ư': 'U', 'Ứ': 'Ú', 'Ừ': 'Ù', 'Ử': 'Ủ', 'Ữ': 'Ũ', 'Ự': 'Ụ',
+  'Ơ': 'O', 'Ớ': 'Ó', 'Ờ': 'Ò', 'Ở': 'Ỏ', 'Ỡ': 'Õ', 'Ợ': 'Ọ',
+  'Ă': 'A', 'Ắ': 'Á', 'Ằ': 'À', 'Ẳ': 'Ả', 'Ẵ': 'Ã', 'Ặ': 'Ạ'
 };
 
 const TONES_TELEX: Record<string, number> = { 's': 1, 'f': 2, 'r': 3, 'x': 4, 'j': 5, 'z': 0 };
@@ -119,18 +124,19 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (actualVowels.length === 0) return vowelsInWord[vowelsInWord.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
 
+  const vStr = actualVowels.map(i => simple[i]).join('');
+
   if (actualVowels.length === 2) {
-    const vStr = actualVowels.map(i => simple[i]).join('');
     if (isModern && (vStr === 'oa' || vStr === 'oe' || vStr === 'uy')) {
       return actualVowels[1];
     }
-    const lastChar = simple[simple.length - 1];
-    if (!isVowel(lastChar)) return actualVowels[1];
+    // Trường hợp 'uo' (ươ), 'ie' (iê)... nếu có phụ âm cuối thì đặt dấu ở âm thứ 2
+    const lastCharIndex = clean.length - 1;
+    if (!isVowel(clean[lastCharIndex])) return actualVowels[1];
     return actualVowels[0];
   }
 
   if (actualVowels.length === 3) {
-    const vStr = actualVowels.map(i => simple[i]).join('');
     if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
       return actualVowels[2];
     }
@@ -170,12 +176,12 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
   if (method === 'Telex') {
     if (lastChar === 'w') {
-      // Toggle logic for 'w'
+      // Toggle logic: gỡ móc nếu từ đã có móc
       let wordHasHook = false;
       let newWord = '';
       for (const char of word.slice(0, -1)) {
-        if (HOOK_MAP[char]) {
-          newWord += HOOK_MAP[char];
+        if (UNHOOK_MAP[char]) {
+          newWord += UNHOOK_MAP[char];
           wordHasHook = true;
         } else {
           newWord += char;
@@ -196,16 +202,21 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
       if (word.length === 1) return prefix + (word === 'w' ? 'ư' : 'Ư');
 
-      // Hook logic
+      // Hook logic: Thêm móc thông minh
       let currentBase = removeToneOnly(word.slice(0, -1));
       let currentTone = getWordToneIndex(word.slice(0, -1));
       let handled = false;
 
-      if (currentBase.toLowerCase().endsWith('uo')) {
-        const isUpper = currentBase.slice(-2).toUpperCase() === currentBase.slice(-2);
-        currentBase = currentBase.slice(0, -2) + (isUpper ? 'ƯƠ' : 'ươ');
+      const lowerBase = currentBase.toLowerCase();
+      // Ưu tiên cụm 'uo' -> 'ươ'
+      if (lowerBase.includes('uo')) {
+        const index = lowerBase.lastIndexOf('uo');
+        const isUUpper = currentBase[index] === currentBase[index].toUpperCase();
+        const isOUpper = currentBase[index+1] === currentBase[index+1].toUpperCase();
+        currentBase = currentBase.substring(0, index) + (isUUpper ? 'Ư' : 'ư') + (isOUpper ? 'Ơ' : 'ơ') + currentBase.substring(index + 2);
         handled = true;
       } else {
+        // Tìm và móc nguyên âm cuối cùng có thể móc được (o, u, a)
         for (let i = currentBase.length - 1; i >= 0; i--) {
           const char = currentBase[i].toLowerCase();
           if ('uoa'.includes(char)) {
@@ -250,6 +261,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     if (!hasVowel(baseWord)) return text;
 
     const currentTone = getWordToneIndex(baseWord);
+    // Nếu gõ trùng phím dấu thì xóa dấu (Toggle)
     if (currentTone === toneIndexFromKey && toneIndexFromKey !== 0) {
       return prefix + removeToneOnly(baseWord);
     }

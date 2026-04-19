@@ -37,7 +37,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
               {isEnabled && (
                 <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
                   <Zap className="w-3 h-3 fill-emerald-500" />
-                  Engine 2.1.5 {isSmartFix ? "Smart Fix Active" : "Active"}
+                  Engine 2.1.6 {isSmartFix ? "Smart Fix Active" : "Active"}
                 </Badge>
               )}
             </div>
@@ -83,7 +83,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
           <Zap className="w-3.5 h-3.5" />
-          Mẹo gõ Engine 2.1.5
+          Mẹo gõ Engine 2.1.6
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
           - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, gõ lặp <code>ww</code> ra <code>w</code>.<br />
