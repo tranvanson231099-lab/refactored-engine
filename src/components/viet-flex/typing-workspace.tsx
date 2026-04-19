@@ -69,7 +69,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Info className="h-4 w-4 text-blue-600" />
           <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix 2.1.6 Active</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Tự động sửa lỗi đặt dấu chuẩn Bộ Giáo dục (huyện, lý, hòa, chữa) và cơ chế xóa dấu trước (Smart Backspace).
+            Tự động sửa lỗi đặt dấu theo Nghị định 30 (huyện, mía), chuẩn hóa i/y (lí, mĩ) và cơ chế xóa dấu 3 bước (Smart Backspace).
           </AlertDescription>
         </Alert>
       )}
@@ -98,10 +98,10 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Mẹo gõ Engine 2.1.6
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          - <b>Backspace</b>: Nhấn lần 1 xóa dấu thanh (`lý` &rarr; `ly`), lần 2 xóa dấu phụ (`ly` &rarr; `ly`), lần 3 xóa chữ.<br />
-          - <b>Phím W</b>: Gõ `w` ra `ư`, `hw` ra `hư`, `sonw` ra `sơn`, `chuaw` ra `chưa`.<br />
-          - <b>Sửa lỗi</b>: Tự động sửa lỗi đặt dấu triphthong (huỵên &rarr; huyện, chuẵ &rarr; chữa) tức thì.<br />
-          - <b>Xóa dấu nhanh</b>: Gõ lặp phím dấu hoặc phím lặp (`ee`, `ss`, `ww`) để hủy dấu.
+          - <b>Backspace 3 bước</b>: Lần 1 xóa dấu thanh (`chữa` &rarr; `chưa`), lần 2 xóa dấu phụ (`chưa` &rarr; `chua`), lần 3 xóa chữ.<br />
+          - <b>Quy tắc i/y</b>: Tự động chuyển `ly` &rarr; `li`, `ky` &rarr; `ki` sau phụ âm khi bật Smart Fix.<br />
+          - <b>Dấu câu</b>: Tự động xóa khoảng trắng thừa trước dấu phẩy và dấu chấm.<br />
+          - <b>Xóa dấu nhanh</b>: Gõ lặp phím dấu hoặc phím lặp (`ee`, `ss`, `ww`) để hủy dấu ngay lập tức.
         </p>
       </div>
     </div>
