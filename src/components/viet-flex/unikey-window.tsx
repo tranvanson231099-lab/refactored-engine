@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Monitor, Download, Code } from 'lucide-react';
+import { Power, Keyboard, Settings2, Code, Terminal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -65,7 +65,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <div className="p-3 bg-secondary/10 rounded-lg border border-primary/10">
             <Label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1 block">Phương thức nhập</Label>
             <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-white border-primary/20 text-primary font-bold">TELEX (Ưu tiên)</Badge>
+                <Badge variant="outline" className="bg-white border-primary/20 text-primary font-bold">TELEX (Duy nhất)</Badge>
                 <span className="text-[10px] text-muted-foreground italic">Chrome OS Ready</span>
             </div>
           </div>
@@ -107,21 +107,21 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Code className="w-4 h-4" />
-                Cài Extension (Dev Mode)
+                Hướng dẫn Cài Extension
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  <Code className="w-5 h-5 text-blue-600" />
-                  Cài đặt Developer Extension
+                  <Terminal className="w-5 h-5 text-blue-600" />
+                  Cài đặt vào Chrome OS Flex
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <div className="space-y-3">
-                    <p><b>1.</b> Nhấn tải mã nguồn dự án về máy.</p>
-                    <p><b>2.</b> Chạy lệnh <code>npm run build</code> để tạo thư mục <code>out</code>.</p>
-                    <p><b>3.</b> Mở <code>chrome://extensions/</code>, bật <b>Developer mode</b>.</p>
-                    <p><b>4.</b> Nhấn <b>Load unpacked</b> và chọn thư mục <b>out</b>.</p>
+                    <p><b>Bước 1:</b> Nhấn nút tải mã nguồn (Source Code) về máy.</p>
+                    <p><b>Bước 2:</b> Mở terminal tại thư mục dự án và chạy lệnh: <code>npm run build</code></p>
+                    <p><b>Bước 3:</b> Sau khi chạy xong, thư mục <b>out</b> sẽ xuất hiện. Đây chính là bản Extension đã build sẵn.</p>
+                    <p><b>Bước 4:</b> Vào <code>chrome://extensions/</code>, bật <b>Developer mode</b>, nhấn <b>Load unpacked</b> và chọn thư mục <b>out</b>.</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>

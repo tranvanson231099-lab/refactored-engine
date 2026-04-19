@@ -19,7 +19,7 @@ const VOWEL_MAP: Record<string, string[]> = {
   'ơ': ['ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ'],
   'u': ['u', 'ú', 'ù', 'ủ', 'ũ', 'ụ'],
   'ư': ['ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự'],
-  'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
+  'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'], // Diacritic combined form for consistency
 };
 
 const UNHOOK_MAP: Record<string, string> = {
@@ -38,13 +38,6 @@ function isVowel(char: string): boolean {
   if (!char) return false;
   const c = char.toLowerCase();
   return 'aeiouyàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ'.includes(c);
-}
-
-function hasVowel(word: string): boolean {
-  for (const char of word) {
-    if (isVowel(char)) return true;
-  }
-  return false;
 }
 
 function removeToneOnly(word: string): string {
@@ -91,12 +84,8 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   let actualVowels = [...vowelIndices];
   
-  // Handle qu and gi as glides
-  if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) {
-    actualVowels.shift(); 
-  } else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) {
-    actualVowels.shift();
-  }
+  if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) actualVowels.shift(); 
+  else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) actualVowels.shift();
 
   if (actualVowels.length === 0) return vowelIndices[vowelIndices.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
@@ -107,33 +96,20 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   // Triple vowels
   if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
-  if (vowelString.includes('uôi')) return actualVowels[vowelString.indexOf('uôi') + 1];
-  if (vowelString.includes('iêu')) return actualVowels[vowelString.indexOf('iêu') + 1];
-  if (vowelString.includes('ươu')) return actualVowels[vowelString.indexOf('ươu') + 1];
+  if (vowelString.includes('uôi') || vowelString.includes('iêu') || vowelString.includes('ươu')) 
+    return actualVowels[1];
 
-  // Double vowels with final consonant
-  const diphthongs = ['iê', 'uô', 'ươ'];
+  // Double vowels
+  const diphthongs = ['ia', 'iê', 'ua', 'uô', 'ưa', 'ươ'];
   for (const d of diphthongs) {
     if (vowelString.includes(d)) {
       const startIdx = vowelString.indexOf(d);
+      // Quy tắc: Có phụ âm cuối đặt ở âm 2, không có phụ âm cuối đặt ở âm 1
       return hasFinalConsonant ? actualVowels[startIdx + 1] : actualVowels[startIdx];
     }
   }
-  
-  // Double vowels without final consonant
-  const diphthongsNoFinal = ['ia', 'ua', 'ưa'];
-  for (const d of diphthongsNoFinal) {
-    if (vowelString.includes(d)) {
-      const startIdx = vowelString.indexOf(d);
-      return actualVowels[startIdx]; 
-    }
-  }
 
-  // Modern style for oa, oe, uy
-  if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) {
-    return actualVowels[1];
-  }
-  
+  if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) return actualVowels[1];
   if (hasFinalConsonant && actualVowels.length >= 2) return actualVowels[1];
   return actualVowels[0];
 }
@@ -145,11 +121,10 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
     const charAtPos = cleanWord[pos];
     const isUpper = charAtPos === charAtPos.toUpperCase();
     const baseVowel = charAtPos.toLowerCase();
-    
     for (const [base, variants] of Object.entries(VOWEL_MAP)) {
       if (base === baseVowel || variants[0] === baseVowel) {
-          const mappedVowel = variants[toneIndex];
-          return cleanWord.substring(0, pos) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + cleanWord.substring(pos + 1);
+        const mappedVowel = variants[toneIndex];
+        return cleanWord.substring(0, pos) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + cleanWord.substring(pos + 1);
       }
     }
   }
@@ -163,13 +138,9 @@ export function removeLastMark(text: string): string | null {
   const word = text.substring(lastSpaceIndex + 1);
   if (!word) return null;
 
-  // Step 1: Remove tone mark
   const toneIdx = getWordToneIndex(word);
-  if (toneIdx !== 0) {
-    return prefix + removeToneOnly(word);
-  }
+  if (toneIdx !== 0) return prefix + removeToneOnly(word);
 
-  // Step 2: Remove diacritics (hook/hat)
   let newWordChars = Array.from(word);
   let changed = false;
   for (let i = newWordChars.length - 1; i >= 0; i--) {
@@ -182,10 +153,7 @@ export function removeLastMark(text: string): string | null {
       break; 
     }
   }
-
   if (changed) return prefix + newWordChars.join('');
-  
-  // Step 3: Default behavior (remove character)
   return null;
 }
 
@@ -195,15 +163,13 @@ function applySmartFix(word: string, isModern: boolean): string {
   const cleaned = removeToneOnly(result);
   const lowerClean = cleaned.toLowerCase();
   
-  // 5 Rules of i/y
-  
-  // Rule 4: After 'u' (glide) - Always Y
-  if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.includes('huy') || lowerClean.includes('tuy') || lowerClean.includes('luy'))) {
-      result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
-      return applyTone(removeToneOnly(result), tone, isModern);
+  // Rule: After 'u' must be 'y' (quy, quý)
+  if (lowerClean.includes('qu') && lowerClean.endsWith('i')) {
+    result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
+    return applyTone(removeToneOnly(result), tone, isModern);
   }
 
-  // Rule 3: After Consonant - Always I
+  // Rule: After consonant must be 'i' (lí, kĩ)
   const consonants = 'bcdghklmnpqrstvx';
   for (const c of consonants) {
     if (lowerClean.startsWith(c) && lowerClean.endsWith('y') && !lowerClean.includes('uy')) {
@@ -213,20 +179,11 @@ function applySmartFix(word: string, isModern: boolean): string {
       return result;
     }
   }
-
-  // Rule 5: iê/yê diphthong
-  if (lowerClean.startsWith('ie')) {
-    // If no initial consonant, must be 'y' (handled by user input usually, but we can fix)
-    // However, if it has initial consonant, must be 'i'
-  }
-
   return result;
 }
 
 export function convertText(text: string, method: InputMethod, isModern: boolean, isSmartFix: boolean): string {
   if (!text) return '';
-  
-  // Auto fix punctuation spacing
   if (isSmartFix && text.length >= 2) {
     const lastChar = text.slice(-1);
     const prevChar = text.slice(-2, -1);
@@ -242,74 +199,46 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
   const lastChar = word.slice(-1).toLowerCase();
 
-  // Handle 'w' hook logic (e.g., sonw -> sơn)
   if (lastChar === 'w') {
     const baseWord = word.slice(0, -1);
-    const isLastUpper = word.slice(-1) === word.slice(-1).toUpperCase();
-    let currentBase = removeToneOnly(baseWord);
-    let currentTone = getWordToneIndex(baseWord);
-    const lowerBase = currentBase.toLowerCase();
-
-    // Priority for 'w': uo -> ươ, then o -> ơ, u -> ư, a -> ă
+    const lowerBase = removeToneOnly(baseWord).toLowerCase();
     if (lowerBase.includes('uo')) {
       const idx = lowerBase.lastIndexOf('uo');
-      const isUUpper = currentBase[idx] === currentBase[idx].toUpperCase();
-      const isOUpper = currentBase[idx+1] === currentBase[idx+1].toUpperCase();
-      currentBase = currentBase.substring(0, idx) + (isUUpper ? 'Ư' : 'ư') + (isOUpper ? 'Ơ' : 'ơ') + currentBase.substring(idx + 2);
-      return prefix + applyTone(currentBase, currentTone, isModern);
+      const currentTone = getWordToneIndex(baseWord);
+      let hooked = removeToneOnly(baseWord).substring(0, idx) + 'ươ' + removeToneOnly(baseWord).substring(idx + 2);
+      return prefix + applyTone(hooked, currentTone, isModern);
     }
-
     const hookPriority = ['u', 'o', 'a'];
-    let hooked = false;
     for (const charToHook of hookPriority) {
       const idx = lowerBase.lastIndexOf(charToHook);
       if (idx !== -1) {
         const replacement = charToHook === 'u' ? 'ư' : charToHook === 'o' ? 'ơ' : 'ă';
-        const isUpper = currentBase[idx] === currentBase[idx].toUpperCase();
-        currentBase = currentBase.substring(0, idx) + (isUpper ? replacement.toUpperCase() : replacement) + currentBase.substring(idx + 1);
-        hooked = true;
-        break;
+        const currentTone = getWordToneIndex(baseWord);
+        const hooked = removeToneOnly(baseWord).substring(0, idx) + replacement + removeToneOnly(baseWord).substring(idx + 1);
+        return prefix + applyTone(hooked, currentTone, isModern);
       }
     }
-    
-    if (hooked) return prefix + applyTone(currentBase, currentTone, isModern);
-    if (word.length === 1 || !isVowel(baseWord.slice(-1))) {
-      return prefix + baseWord + (isLastUpper ? 'Ư' : 'ư');
-    }
+    if (word.length === 1) return prefix + 'ư';
   }
 
-  // Handle double characters (aa, ee, oo, dd)
   const modifiers: Record<string, string> = { 'e': 'ê', 'a': 'â', 'o': 'ô', 'd': 'đ' };
   if (modifiers[lastChar] && word.length >= 2) {
     const prevChar = word.slice(-2, -1).toLowerCase();
-    const isLastUpper = word.slice(-1) === word.slice(-1).toUpperCase();
     if (prevChar === lastChar) {
-      const base = removeToneOnly(word.slice(0, -2));
+      const base = removeToneOnly(word.slice(0, -2)) + modifiers[lastChar];
       const tone = getWordToneIndex(word.slice(0, -1));
-      return prefix + applyTone(base + (isLastUpper ? modifiers[lastChar].toUpperCase() : modifiers[lastChar]), tone, isModern);
+      return prefix + applyTone(base, tone, isModern);
     }
   }
 
-  // Handle tone marks (s, f, r, x, j, z)
   const toneIdx = TONES_TELEX[lastChar];
   if (toneIdx !== undefined) {
     const baseWord = word.slice(0, -1);
-    if (!hasVowel(baseWord)) return text;
     const currentTone = getWordToneIndex(baseWord);
     if (currentTone === toneIdx && toneIdx !== 0) return prefix + removeToneOnly(baseWord);
     return prefix + applyTone(baseWord, toneIdx, isModern);
   }
 
-  // Auto-normalize and Smart Fix
-  if (hasVowel(word)) {
-    const tone = getWordToneIndex(word);
-    const cleaned = removeToneOnly(word);
-    const toned = applyTone(cleaned, tone, isModern);
-    if (isSmartFix) {
-      return prefix + applySmartFix(toned, isModern);
-    }
-    return prefix + toned;
-  }
-
+  if (isSmartFix) return prefix + applySmartFix(word, isModern);
   return text;
 }
