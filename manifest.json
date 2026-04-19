@@ -1,24 +1,12 @@
 
 {
   "manifest_version": 3,
-  "name": "VietFlex Engine 2.1.6",
+  "name": "VietFlex Engine 2.1.6 (WARNING)",
   "version": "2.1.6",
-  "description": "Bộ gõ tiếng Việt thông minh cho Chrome OS Flex",
-  "permissions": ["input", "notifications", "storage"],
-  "background": {
-    "service_worker": "background.js"
-  },
+  "description": "Bạn đang nạp sai thư mục. Hãy nạp thư mục /out",
   "action": {
-    "default_popup": "out/index.html",
-    "default_title": "VietFlex Control Panel"
+    "default_popup": "index.html",
+    "default_title": "LỖI: CHỌN SAI THƯ MỤC"
   },
-  "options_page": "out/index.html",
-  "input_components": [
-    {
-      "name": "VietFlex Telex",
-      "id": "vietflex_telex",
-      "language": "vi",
-      "layouts": ["us"]
-    }
-  ]
+  "options_page": "index.html"
 }

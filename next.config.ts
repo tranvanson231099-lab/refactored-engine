@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Quan trọng: Phải để false để tránh tạo thư mục lồng nhau gây sai đường dẫn trong Extension
+  // Tắt dấu gạch chéo cuối để tránh lỗi đường dẫn trong Chrome Extension
   trailingSlash: false,
 };
 
