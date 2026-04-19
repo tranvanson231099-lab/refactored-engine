@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -6,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2, Download, AlertTriangle } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -108,30 +107,37 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Download className="w-4 h-4" />
-                HƯỚNG DẪN CÀI ĐẶT
+                KHẮC PHỤC LỖI & CÀI ĐẶT
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Terminal className="w-5 h-5 text-blue-600" />
-                  Kích hoạt Phương thức nhập
+                  Khắc phục lỗi và Cài đặt
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
                     <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-xs font-bold uppercase">Lưu ý sửa lỗi EACCES</AlertTitle>
-                    <AlertDescription className="text-[10px]">
-                      Phải di chuyển thư mục vào <code>~/vietflex</code> (Linux Home) trước khi gõ <code>npm install</code>.
+                    <AlertTitle className="text-xs font-bold uppercase">QUAN TRỌNG: LỖI EACCES</AlertTitle>
+                    <AlertDescription className="text-[10px] leading-relaxed">
+                      Lỗi bạn gặp phải là do thư mục "Downloads" không cho phép symlink. Bạn <b>bắt buộc</b> phải copy code vào Linux Home.
                     </AlertDescription>
                   </Alert>
-                  <div className="space-y-3">
-                    <p><b>Bước 1:</b> <code>cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</code></p>
-                    <p><b>Bước 2:</b> <code>cd ~/vietflex && npm install</code></p>
-                    <p><b>Bước 3:</b> <code>npm run build</code> (Lệnh này tạo thư mục <b>out</b>)</p>
+                  <div className="space-y-4 font-mono text-[11px] bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
+                    <p className="text-slate-400"># 1. Di chuyển dự án vào Linux Home</p>
+                    <p>cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</p>
+                    
+                    <p className="text-slate-400 mt-2"># 2. Truy cập thư mục mới và cài đặt</p>
+                    <p>cd ~/vietflex && npm install</p>
+                    
+                    <p className="text-slate-400 mt-2"># 3. Build tạo thư mục &apos;out&apos;</p>
+                    <p>npm run build</p>
+                  </div>
+                  <div className="space-y-3 pt-2">
                     <p><b>Bước 4:</b> Mở Chrome, vào <code>chrome://extensions</code>, bật <b>Developer Mode</b>.</p>
-                    <p><b>Bước 5:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b>.</p>
-                    <p><b>Bước 6:</b> Vào Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Thêm "VietFlex Telex".</p>
+                    <p><b>Bước 5:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> nằm trong <code>~/vietflex</code>.</p>
+                    <p><b>Bước 6:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>, thêm &quot;VietFlex Telex&quot;.</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
