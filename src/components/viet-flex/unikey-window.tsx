@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -105,22 +105,27 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" className="w-full h-10 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 gap-2 font-bold text-[10px] uppercase animate-pulse">
               <Download className="w-4 h-4" />
-              CÁCH CÀI VÀO HỆ THỐNG (FIX LỖI)
+              FIX LỖI CÀI ĐẶT / PEM KEY
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600 font-bold uppercase tracking-tight">
                 <AlertTriangle className="w-5 h-5" />
-                CHỈ CHỌN THƯ MỤC "OUT"
+                HƯỚNG DẪN FIX LỖI ĐÓNG GÓI
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                 <Alert variant="destructive" className="border-2 shadow-lg bg-red-600 text-white">
-                  <AlertTriangle className="h-5 w-5" />
-                  <AlertTitle className="text-sm font-black uppercase">LƯU Ý QUAN TRỌNG</AlertTitle>
+                  <Key className="h-5 w-5" />
+                  <AlertTitle className="text-sm font-black uppercase">LỖI: KHOÁ CÁ NHÂN ĐÃ TỒN TẠI</AlertTitle>
                   <AlertDescription className="text-xs font-bold leading-relaxed">
-                    Nếu báo lỗi "Tệp kê khai bị thiếu", đó là vì bạn đang chọn thư mục gốc.<br/><br/>
-                    <span className="text-lg underline italic bg-white text-red-600 px-1">BẠN PHẢI CHỌN THƯ MỤC "OUT"</span>
+                    Bạn nhận được lỗi này vì tệp <b>out.pem</b> đã có sẵn. Hãy chạy lệnh dưới đây để xoá nó trước khi đóng gói lại.<br/><br/>
+                    <div className="bg-white/20 p-2 rounded font-mono text-white text-[10px] flex justify-between items-center">
+                      <code>rm ~/vietflex/out.pem</code>
+                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyCommand("rm ~/vietflex/out.pem")}>
+                        <Copy className="h-3 h-3" />
+                      </Button>
+                    </div>
                   </AlertDescription>
                 </Alert>
 
@@ -141,9 +146,10 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                   <div className="space-y-2">
                     <p className="font-bold text-primary flex items-center gap-2">
                       <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 2: Tải vào Chrome
+                      BƯỚC 2: Tải vào Chrome (KHUYÊN DÙNG)
                     </p>
-                    <div className="text-[12px] space-y-2 bg-slate-50 p-3 border-2 border-dashed border-red-500 rounded-md">
+                    <div className="text-[12px] space-y-2 bg-slate-50 p-3 border-2 border-dashed border-primary/50 rounded-md">
+                      <p>Thay vì <b>Pack Extension</b>, hãy dùng <b>Load Unpacked</b>:</p>
                       <p>1. Vào <code>chrome://extensions</code></p>
                       <p>2. Bật <b>Developer Mode</b>.</p>
                       <p>3. Nhấn <b>Load Unpacked</b>.</p>
