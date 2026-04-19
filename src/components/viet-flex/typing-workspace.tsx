@@ -1,11 +1,13 @@
+
 import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles } from 'lucide-react';
+import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { smartTextRefiner } from '@/ai/flows/smart-text-refiner-flow';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface TypingWorkspaceProps {
   text: string;
@@ -30,7 +32,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
   const { toast } = useToast();
 
   const handleSuggestion = (suggestion: string) => {
-    const words = text.trim().split(' ');
+    const words = text.split(' ');
     words[words.length - 1] = suggestion;
     rawSetText(words.join(' ') + ' ');
   };
@@ -65,20 +67,20 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           </div>
           <div>
             <h2 className="text-lg font-bold">Interactive Sandbox</h2>
-            <p className="text-xs text-muted-foreground font-medium">Mixed English/Vietnamese typing active</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.1 Active</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
             {isAiEnabled && isOnline && (
               <Button 
                 size="sm" 
-                variant="outline" 
-                className="gap-2 border-primary/20 hover:bg-primary/5 animate-in fade-in"
+                variant="default" 
+                className="gap-2 bg-accent hover:bg-accent/90 text-white shadow-lg animate-bounce-subtle"
                 onClick={handleAIRefine}
                 disabled={isRefining || !text}
               >
-                {isRefining ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4 text-primary" />}
-                AI Smart Fix
+                {isRefining ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                AI Smart Fix (Dọn lỗi gõ)
               </Button>
             )}
             <div className="h-8 w-px bg-border hidden sm:block" />
@@ -89,10 +91,20 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
         </div>
       </div>
 
+      {!isOnline && isAiEnabled && (
+        <Alert variant="destructive" className="bg-destructive/5 border-destructive/20 py-2">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle className="text-xs font-bold">AI Offline</AlertTitle>
+          <AlertDescription className="text-[10px]">
+            Tính năng AI Smart Fix tạm thời không khả dụng do mất kết nối.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Mixed EN/VN)..." : "IME is currently disabled. Type in English..."}
-          className="min-h-[400px] text-lg p-6 bg-white border-2 border-primary/10 focus-visible:border-accent transition-all shadow-inner resize-none"
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: luyeenj -> luyện, sonw -> sơn)..." : "IME is currently disabled. Type in English..."}
+          className="min-h-[450px] text-lg p-6 bg-white border-2 border-primary/10 focus-visible:border-accent transition-all shadow-inner resize-none leading-relaxed"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -100,7 +112,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <div className="absolute inset-0 bg-secondary/5 pointer-events-none rounded-md" />
         )}
         <div className="absolute bottom-4 right-4 flex items-center gap-2 text-muted-foreground">
-            {isAiEnabled && <Sparkles className={`w-4 h-4 ${isOnline ? 'text-primary' : 'text-muted'}`} />}
+            {isAiEnabled && <Sparkles className={`w-4 h-4 ${isOnline ? 'text-accent' : 'text-muted'}`} />}
             <Keyboard className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-widest">
                 {text.length} Characters
@@ -115,11 +127,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
         isOnline={isOnline}
       />
       
-      <div className="p-4 bg-secondary/30 rounded-lg border border-border">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Typing Insight</h3>
-        <p className="text-xs text-muted-foreground italic">
-          VietFlex now automatically detects common English words and avoids incorrect accent placement. 
-          Use the AI Assistance toggle to manage GenAI features.
+      <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+          <AlertCircle className="w-3.5 h-3.5" />
+          Mẹo gõ chuẩn
+        </h3>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          Sử dụng phím <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px] font-bold">w</kbd> ở cuối từ để thêm móc (sonw &rarr; sơn, huw &rarr; hư). 
+          Gõ lặp phím modifier (ww, aa, ee) để trả lại ký tự gốc nếu gõ nhầm (đd &rarr; d, ưw &rarr; w).
         </p>
       </div>
     </div>
