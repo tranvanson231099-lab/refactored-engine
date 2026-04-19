@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -5,7 +6,7 @@ import { useIme } from '@/hooks/use-ime';
 import { UnikeyWindow } from '@/components/viet-flex/unikey-window';
 import { TypingWorkspace } from '@/components/viet-flex/typing-workspace';
 import { Toaster } from '@/components/ui/toaster';
-import { Command, Layout, Monitor, Smartphone, Wifi, WifiOff } from 'lucide-react';
+import { Command, Layout, Monitor, Wifi, WifiOff } from 'lucide-react';
 
 export default function Home() {
   const { 
@@ -19,7 +20,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background selection:bg-accent/30">
-      {/* Top Navigation / Status Bar */}
       <header className="h-14 border-b bg-white/50 backdrop-blur-md flex items-center px-6 sticky top-0 z-20">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg">
@@ -50,7 +50,6 @@ export default function Home() {
       </header>
 
       <main className="flex-1 container mx-auto p-4 md:p-8 flex flex-col lg:flex-row gap-8">
-        {/* Workspace Area */}
         <section className="flex-1">
           <TypingWorkspace 
             text={text} 
@@ -63,7 +62,6 @@ export default function Home() {
           />
         </section>
 
-        {/* Floating / Sidebar Control Panel */}
         <aside className="lg:w-80 flex flex-col gap-4 order-first lg:order-last">
           <div className="sticky top-20">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -89,7 +87,7 @@ export default function Home() {
                 Optimized for mixed English/Vietnamese environments.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Version 1.0.4</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Version 1.7.0</span>
                 <span className="text-[10px] font-bold text-accent uppercase">AI Powered</span>
               </div>
             </div>

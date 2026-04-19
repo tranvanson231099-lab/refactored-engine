@@ -33,7 +33,6 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
   const { toast } = useToast();
   const lastRefinedText = useRef(text);
 
-  // Tự động tinh chỉnh bằng AI khi người dùng ngừng gõ (Auto-Refine)
   useEffect(() => {
     if (!isAiEnabled || !isOnline || !text.trim() || text === lastRefinedText.current) return;
 
@@ -54,7 +53,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       } finally {
         setIsRefining(false);
       }
-    }, 2000); // Tự động sửa sau 2 giây ngừng gõ
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [text, isAiEnabled, isOnline, rawSetText, toast]);
@@ -104,7 +103,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
                 </Badge>
               )}
             </div>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine v1.6 • Smart Normalization</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine v1.7 • Smart Normalization</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -132,7 +131,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
         <Info className="h-4 w-4 text-amber-600" />
         <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý hệ thống</AlertTitle>
         <AlertDescription className="text-[10px] text-amber-700">
-          Vui lòng tắt bộ gõ của hệ thống (Chrome OS / Windows) để tránh xung đột. VietFlex đã tích hợp sẵn cơ chế tự sửa lỗi dấu thời gian thực.
+          Vui lòng tắt bộ gõ của hệ thống (Chrome OS / Windows) để tránh xung đột. VietFlex v1.7 đã tích hợp cơ chế tự sửa lỗi dấu thời gian thực.
         </AlertDescription>
       </Alert>
 
@@ -164,7 +163,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
           <Zap className="w-3.5 h-3.5" />
-          Hướng dẫn gõ thông minh (Thời gian thực)
+          Hướng dẫn gõ thông minh (v1.7)
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
           - <b>Sơn/Hư</b>: gõ <code>sonw</code>, <code>huw</code>. Phím <code>w</code> tự động thêm móc.<br />

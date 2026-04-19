@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Power, Keyboard, Settings2, HelpCircle, Wifi, WifiOff, Sparkles, CheckSquare } from 'lucide-react';
+import { Power, Keyboard, Settings2, HelpCircle, Wifi, WifiOff, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -68,7 +68,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <Label className="text-xs font-semibold uppercase tracking-wider text-primary">AI Assistance</Label>
             </div>
-            <p className="text-[10px] text-muted-foreground">{isOnline ? "Smart fixing enabled" : "Internet required"}</p>
+            <p className="text-[10px] text-muted-foreground">{isOnline ? "Auto-fix active" : "Internet required"}</p>
           </div>
           <Switch 
             checked={isAiEnabled} 
@@ -131,7 +131,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1">
-          VietFlex v1.0.4 • Windows/ChromeOS Optimized
+          VietFlex v1.7 • Windows/ChromeOS Optimized
         </p>
       </CardContent>
     </Card>
