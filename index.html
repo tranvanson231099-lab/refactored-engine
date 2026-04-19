@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>VietFlex Redirect</title>
+    <!-- Sử dụng meta refresh thay vì script để tránh lỗi CSP -->
     <meta http-equiv="refresh" content="0; url=out/index.html">
     <style>
         body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f8fafc; }
@@ -14,7 +15,8 @@
 <body>
     <div class="card">
         <h2>VietFlex Engine</h2>
-        <p>Đang khởi động...</p>
+        <p>Đang chuyển hướng đến thư mục build...</p>
+        <p style="font-size: 12px; color: #64748b;">Nếu không thấy gì, hãy nạp thư mục <b>'out'</b> thay vì thư mục gốc.</p>
     </div>
 </body>
 </html>

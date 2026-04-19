@@ -62,15 +62,15 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         {/* Hướng dẫn sửa lỗi khẩn cấp - Cực kỳ nổi bật */}
         <Alert variant="destructive" className="bg-red-50 border-red-500 border-2 py-3 shadow-lg animate-pulse">
           <AlertTriangle className="h-5 w-5 text-red-600" />
-          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">SỬA LỖI 100% (FILE_NOT_FOUND / CSP)</AlertTitle>
+          <AlertTitle className="text-[12px] font-black uppercase text-red-700 mb-1">CÁCH SỬA LỖI 100% (FIX CSP / FILE_NOT_FOUND)</AlertTitle>
           <AlertDescription className="text-[10px] text-red-800 font-bold space-y-2">
-            <p>Hãy làm đúng 3 bước này để hết lỗi ngay lập tức:</p>
+            <p>Hãy làm đúng 3 bước này để hết sạch lỗi đỏ:</p>
             <div className="bg-white/90 p-2 rounded border border-red-200 text-slate-900 shadow-inner">
-              1. <strong>XÓA tệp out.pem</strong> khỏi thư mục vietflex ngay lập tức.<br/>
+              1. **XÓA tệp out.pem** khỏi thư mục vietflex ngay lập tức.<br/>
               2. Mở Terminal, gõ: <code className="bg-slate-200 px-1 rounded">npm run build</code>.<br/>
-              3. <strong className="text-red-600 underline text-sm uppercase">Quan trọng:</strong> Khi nạp tiện ích, bạn hãy <strong>CHỌN THƯ MỤC 'out'</strong> (nằm trong vietflex).
+              3. **QUAN TRỌNG NHẤT:** Trong Chrome, hãy **CHỌN THƯ MỤC &apos;out&apos;** (nằm bên trong thư mục vietflex) để nạp.
             </div>
-            <p className="italic text-[9px] text-red-600 text-center">Nếu nạp thư mục gốc sẽ bị lỗi CSP do Chrome cấm mã scripts trực tiếp!</p>
+            <p className="italic text-[9px] text-red-600 text-center">Nếu nạp thư mục gốc &apos;vietflex&apos; sẽ bị lỗi File Not Found và CSP!</p>
           </AlertDescription>
         </Alert>
 
