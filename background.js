@@ -6,13 +6,12 @@ chrome.input.ime.onFocus.addListener((context) => {
 
 chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
   if (keyData.type === 'keydown') {
-    // Logic xử lý Telex sẽ được tích hợp tại đây cho bàn phím vật lý
+    // Logic xử lý Telex sẽ được tích hợp tại đây
     return false;
   }
   return false;
 });
 
-// Mở bảng điều khiển khi click vào icon nếu không có popup
 chrome.action.onClicked.addListener((tab) => {
   chrome.runtime.openOptionsPage();
 });
