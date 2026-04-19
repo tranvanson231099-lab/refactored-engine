@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -119,25 +119,28 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
                     <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-xs font-bold uppercase">QUAN TRỌNG: LỖI EACCES</AlertTitle>
+                    <AlertTitle className="text-xs font-bold uppercase">QUAN TRỌNG: LỖI EACCES (ESBUILD)</AlertTitle>
                     <AlertDescription className="text-[10px] leading-relaxed">
-                      Lỗi bạn gặp phải là do thư mục "Downloads" không cho phép symlink. Bạn <b>bắt buộc</b> phải copy code vào Linux Home.
+                      Lỗi bạn gặp phải là do thư mục <code className="bg-white/50 px-1">node_modules</code> bị lỗi quyền. Hãy chạy lệnh dọn dẹp sau:
                     </AlertDescription>
                   </Alert>
+                  
                   <div className="space-y-4 font-mono text-[11px] bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
-                    <p className="text-slate-400"># 1. Di chuyển dự án vào Linux Home</p>
-                    <p>cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</p>
+                    <p className="text-emerald-400"># BƯỚC A: DỌN DẸP TRIỆT ĐỂ (SỬA LỖI EACCES)</p>
+                    <p>cd ~/vietflex && rm -rf node_modules package-lock.json</p>
                     
-                    <p className="text-slate-400 mt-2"># 2. Truy cập thư mục mới và cài đặt</p>
-                    <p>cd ~/vietflex && npm install</p>
+                    <p className="text-emerald-400 mt-2"># BƯỚC B: CÀI ĐẶT LẠI</p>
+                    <p>npm install</p>
                     
-                    <p className="text-slate-400 mt-2"># 3. Build tạo thư mục &apos;out&apos;</p>
+                    <p className="text-emerald-400 mt-2"># BƯỚC C: BUILD TẠO THƯ MỤC &apos;out&apos;</p>
                     <p>npm run build</p>
                   </div>
-                  <div className="space-y-3 pt-2">
-                    <p><b>Bước 4:</b> Mở Chrome, vào <code>chrome://extensions</code>, bật <b>Developer Mode</b>.</p>
-                    <p><b>Bước 5:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> nằm trong <code>~/vietflex</code>.</p>
-                    <p><b>Bước 6:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>, thêm &quot;VietFlex Telex&quot;.</p>
+
+                  <div className="space-y-3 pt-2 text-xs">
+                    <p className="flex gap-2"><b>1.</b> Mở Chrome, vào <code>chrome://extensions</code>, bật <b>Developer Mode</b>.</p>
+                    <p className="flex gap-2"><b>2.</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> trong <code>~/vietflex</code>.</p>
+                    <p className="flex gap-2"><b>3.</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
+                    <p className="flex gap-2"><b>4.</b> Nhấn <b>Thêm phương thức nhập</b>, tìm và chọn <b>VietFlex Telex</b>.</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
