@@ -40,7 +40,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <div className="p-1.5 bg-white/20 rounded-md">
             <Keyboard className="w-4 h-4 text-white" />
           </div>
-          <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.0.0</CardTitle>
+          <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.0</CardTitle>
         </div>
         <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
           {isEnabled ? "ON" : "OFF"}
@@ -107,16 +107,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           </div>
         </div>
 
-        {isSmartFix && isEnabled && (
-          <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center gap-3 animate-in fade-in zoom-in-95 duration-300">
-            <div className="p-2 bg-emerald-500 rounded text-white shadow-sm">
-              <Zap className="w-4 h-4" />
-            </div>
-            <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
-              Engine 2.0 đang chạy (Offline)
-            </p>
+        <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center gap-3">
+          <div className="p-2 bg-emerald-500 rounded text-white shadow-sm">
+            <Zap className="w-4 h-4" />
           </div>
-        )}
+          <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
+            {isEnabled ? "Engine 2.1 Siêu Tốc (Offline)" : "IME Đang Tắt"}
+          </p>
+        </div>
 
         <div className="pt-2 grid grid-cols-3 gap-2">
           <Button variant="outline" size="sm" className="h-14 flex flex-col gap-1 text-[10px] font-bold">
@@ -139,7 +137,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex v2.0.0 • Ultra-Fast Orthography
+          VietFlex Engine v2.1.0 • Chrome OS Flex Optimized
         </p>
       </CardContent>
     </Card>
