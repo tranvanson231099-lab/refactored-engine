@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle } from 'lucide-react';
+import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { smartTextRefiner } from '@/ai/flows/smart-text-refiner-flow';
 import { useToast } from '@/hooks/use-toast';
@@ -67,7 +67,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           </div>
           <div>
             <h2 className="text-lg font-bold">Interactive Sandbox</h2>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.1 Active</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.2 Active</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -90,6 +90,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
             </div>
         </div>
       </div>
+
+      <Alert className="bg-amber-50 border-amber-200">
+        <Info className="h-4 w-4 text-amber-600" />
+        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý cho Chrome OS / Windows</AlertTitle>
+        <AlertDescription className="text-[10px] text-amber-700">
+          Vui lòng **tắt bộ gõ hệ thống (chuyển sang US English)** để tránh xung đột phím. VietFlex sẽ tự xử lý tiếng Việt cho bạn.
+        </AlertDescription>
+      </Alert>
 
       {!isOnline && isAiEnabled && (
         <Alert variant="destructive" className="bg-destructive/5 border-destructive/20 py-2">
@@ -130,11 +138,11 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
           <AlertCircle className="w-3.5 h-3.5" />
-          Mẹo gõ chuẩn
+          Mẹo gõ chuẩn Unicode
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
           Sử dụng phím <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px] font-bold">w</kbd> ở cuối từ để thêm móc (sonw &rarr; sơn, huw &rarr; hư). 
-          Gõ lặp phím modifier (ww, aa, ee) để trả lại ký tự gốc nếu gõ nhầm (đd &rarr; d, ưw &rarr; w).
+          Gõ lặp phím modifier (ww, aa, ee) để trả lại ký tự gốc nếu gõ nhầm. Quy tắc đặt dấu chuẩn mới (hoà, luyện) đã được kích hoạt.
         </p>
       </div>
     </div>
