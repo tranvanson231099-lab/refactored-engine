@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { smartTypingSuggestions, SmartTypingSuggestionsOutput } from '@/ai/flows/smart-typing-suggestions-flow';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +27,7 @@ export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({
       return;
     }
 
+    // Giảm độ trễ xuống 300ms để gợi ý xuất hiện gần như tức thì
     const timer = setTimeout(async () => {
       const words = text.trim().split(' ');
       const lastWord = words[words.length - 1] || '';
@@ -46,7 +48,7 @@ export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({
       } else {
         setSuggestions(null);
       }
-    }, 800);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [text, isAiEnabled, isOnline]);
@@ -94,7 +96,7 @@ export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({
         </button>
       ))}
 
-      {isLoading && <div className="ml-auto animate-pulse text-[10px] text-muted-foreground uppercase font-bold">Analysing context...</div>}
+      {isLoading && <div className="ml-auto animate-pulse text-[10px] text-muted-foreground uppercase font-bold">Analysing...</div>}
     </div>
   );
 };
