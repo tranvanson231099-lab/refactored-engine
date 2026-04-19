@@ -13,7 +13,6 @@ export default function Home() {
     isEnabled, setIsEnabled, 
     isModernStyle, setIsModernStyle,
     isSmartFix, setIsSmartFix,
-    method, setMethod, 
     text, setText, rawSetText,
     handleBackspace
   } = useIme();
@@ -32,18 +31,18 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
             <div className="flex items-center gap-1.5 text-emerald-600">
               <Zap className="w-3.5 h-3.5 fill-emerald-600" />
-              Siêu tốc (Zero Latency)
+              Siêu tốc (Offline)
             </div>
             <div className="flex items-center gap-1.5">
               <Monitor className="w-3.5 h-3.5" />
-              Windows / Chrome OS
+              Chrome OS Flex Optimized
             </div>
           </div>
           <div className="h-6 w-px bg-border" />
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${isEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
             <span className="text-xs font-bold uppercase tracking-wider">
-              {isEnabled ? `Sẵn sàng (${method})` : 'IME Đã Tắt'}
+              {isEnabled ? `TELEX READY` : 'IME OFF'}
             </span>
           </div>
         </div>
@@ -56,7 +55,6 @@ export default function Home() {
             setText={setText} 
             rawSetText={rawSetText}
             handleBackspace={handleBackspace}
-            method={method}
             isEnabled={isEnabled}
             isSmartFix={isSmartFix}
           />
@@ -75,18 +73,16 @@ export default function Home() {
               setIsModernStyle={setIsModernStyle}
               isSmartFix={isSmartFix}
               setIsSmartFix={setIsSmartFix}
-              method={method} 
-              setMethod={setMethod} 
             />
             
             <div className="mt-8 p-6 bg-white rounded-xl border border-primary/5 shadow-sm">
               <h3 className="text-sm font-bold mb-3">Về VietFlex 2.1.6</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Bộ gõ tiếng Việt siêu nhẹ, chuyên biệt cho Chrome OS Flex. 
-                Sử dụng thuật toán "Smart Fix" cục bộ tuân thủ 5 quy tắc i/y và Smart Backspace.
+                Bộ gõ tiếng Việt chuyên biệt cho Chrome OS Flex. 
+                Tuân thủ tuyệt đối 5 quy tắc i/y và Smart Backspace gỡ dấu trước xóa chữ sau.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.1.6</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Version 2.1.6</span>
                 <span className="text-[10px] font-bold text-emerald-600 uppercase italic">Ultra Fast</span>
               </div>
             </div>
