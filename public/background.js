@@ -1,19 +1,17 @@
+
 /**
- * VietFlex Background Engine 2.1.6
- * Xử lý sự kiện bàn phím hệ thống cho Chrome OS
+ * VietFlex Engine 2.1.6 - System IME Background Core
  */
 
 chrome.input.ime.onFocus.addListener((context) => {
-  console.log('VietFlex: Context focused', context);
+  console.log('VietFlex: IME focused', context);
 });
 
 chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
+  // VietFlex Engine 2.1.6 xử lý phím bấm tại đây
+  // Hiện tại trả về false để hệ thống xử lý phím bấm vật lý mặc định
   if (keyData.type === 'keydown') {
-    // Logic xử lý Telex 2.1.6 sẽ được tích hợp tại đây
-    // Hiện tại: Chế độ Passthrough để đảm bảo bàn phím hoạt động
-    return false; 
+    console.log('VietFlex Key:', keyData.key);
   }
   return false;
 });
-
-console.log('VietFlex Engine 2.1.6 is running in background');

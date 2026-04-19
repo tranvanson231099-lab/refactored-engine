@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -5,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key, Info, CheckCircle2 } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key, Info, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -38,14 +39,6 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 }) => {
   const { toast } = useToast();
 
-  const copyCommand = (cmd: string) => {
-    navigator.clipboard.writeText(cmd);
-    toast({
-      title: "Đã sao chép!",
-      description: "Dán vào Terminal Linux để chạy.",
-    });
-  };
-
   return (
     <Card className="w-80 shadow-2xl border-2 border-primary/20 overflow-hidden bg-white">
       <CardHeader className="bg-primary py-3 flex flex-row items-center justify-between space-y-0">
@@ -71,6 +64,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             className="data-[state=checked]:bg-accent"
           />
         </div>
+
+        <Alert variant="destructive" className="bg-red-50 border-red-200 py-2">
+          <AlertCircle className="h-4 w-4 text-red-600" />
+          <AlertTitle className="text-[10px] font-bold uppercase text-red-800">Lưu ý quan trọng!</AlertTitle>
+          <AlertDescription className="text-[9px] text-red-700 leading-tight">
+            Khi cài đặt, bạn <b>PHẢI CHỌN THƯ MỤC "OUT"</b>. Nếu chọn thư mục "vietflex" sẽ bị báo lỗi thiếu tệp kê khai.
+          </AlertDescription>
+        </Alert>
 
         <div className="space-y-4">
           <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
@@ -115,39 +116,29 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 KÍCH HOẠT BỘ GÕ HỆ THỐNG
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <p className="font-bold text-sm">Bạn đã đóng gói xong! Giờ hãy làm theo 3 bước cuối:</p>
-                
+                <p className="font-bold text-sm text-red-600">SỬA LỖI "TỆP KÊ KHAI BỊ THIẾU":</p>
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs font-medium">
+                   Lỗi này xảy ra vì bạn đang chọn thư mục <code>vietflex</code>. Hãy thực hiện <code>npm run build</code> rồi chọn thư mục <code>out</code> bên trong đó.
+                </div>
+
                 <div className="space-y-4 pt-2">
                   <div className="p-4 bg-slate-50 border-l-4 border-primary rounded-r-lg">
-                    <p className="font-bold text-xs text-primary mb-2 uppercase">Bước 1: Tải tiện ích vào Chrome</p>
+                    <p className="font-bold text-xs text-primary mb-2 uppercase">Bước 1: Chạy Build</p>
                     <p className="text-xs leading-relaxed">
-                      1. Mở Chrome, vào <code>chrome://extensions</code>.<br/>
-                      2. Bật <b>Developer Mode</b> (Chế độ nhà phát triển).<br/>
-                      3. Nhấn <b>Load Unpacked</b> (Tải tiện ích đã giải nén).<br/>
-                      4. Chọn đúng thư mục <b>out</b> nằm trong <code>~/vietflex</code>.
+                      Trong Terminal Linux, gõ lệnh: <br/>
+                      <code>npm run build</code>
                     </p>
                   </div>
 
                   <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-                    <p className="font-bold text-xs text-blue-700 mb-2 uppercase">Bước 2: Thêm vào Phương thức nhập</p>
+                    <p className="font-bold text-xs text-blue-700 mb-2 uppercase">Bước 2: Tải vào Chrome</p>
                     <p className="text-xs leading-relaxed">
-                      1. Mở <b>Cài đặt Chrome OS</b> (Settings).<br/>
-                      2. Chọn <b>Thiết bị (Device) &gt; Bàn phím (Keyboard)</b>.<br/>
-                      3. Nhấn <b>Thay đổi phương thức nhập</b>.<br/>
-                      4. Nhấn <b>Thêm phương thức nhập</b>, tìm và chọn <b>VietFlex Telex</b>.
+                      1. Vào <code>chrome://extensions</code>.<br/>
+                      2. Bật <b>Developer Mode</b>.<br/>
+                      3. Nhấn <b>Load Unpacked</b>.<br/>
+                      4. <b>QUAN TRỌNG:</b> Chọn thư mục <b>out</b> (không phải vietflex).
                     </p>
                   </div>
-
-                  <div className="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg">
-                    <p className="font-bold text-xs text-emerald-700 mb-2 uppercase">Bước 3: Sử dụng</p>
-                    <p className="text-xs leading-relaxed">
-                      Nhấn <b>Ctrl + Space</b> để chuyển đổi giữa tiếng Anh và <b>VietFlex Telex</b>. Giờ bạn có thể gõ tiếng Việt ở bất cứ đâu!
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-[10px] text-red-600 italic">
-                  * Lưu ý: Nếu gõ chưa ra tiếng Việt trong Word/Docs, hãy kiểm tra xem biểu tượng VietFlex ở khay hệ thống (góc dưới bên phải) đã được chọn chưa.
                 </div>
               </DialogDescription>
             </DialogHeader>
