@@ -4,9 +4,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Settings2, FolderSearch, AlertTriangle, ExternalLink, HelpCircle, Terminal, CheckCircle2 } from 'lucide-react';
+import { Power, Settings2, ExternalLink, Terminal, CheckCircle2, MoreVertical, Trash2, PinOff, ShieldCheck, Settings } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -16,6 +15,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -41,11 +47,35 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <div className="w-6 h-6 bg-primary rounded flex items-center justify-center text-white text-[10px] font-black">V</div>
           <CardTitle className="text-xs font-black uppercase tracking-tight">Bảng Điều Khiển VietFlex</CardTitle>
         </div>
-        <div className="flex gap-1">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-        </div>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-6 w-6">
+              <MoreVertical className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 font-medium">
+            <div className="px-2 py-1.5 text-xs text-muted-foreground font-bold uppercase">VietFlex Engine 2.1.6</div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-destructive focus:text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
+              <span>Xóa khỏi Chrome</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <PinOff className="mr-2 h-4 w-4" />
+              <span>Bỏ ghim</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => window.open('chrome://extensions', '_blank')}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Quản lý tiện ích</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <ShieldCheck className="mr-2 h-4 w-4" />
+              <span>Xem các quyền trên web</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       
       <CardContent className="p-4 space-y-4">
@@ -95,7 +125,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 
         <div className="bg-emerald-50 border border-emerald-200 p-2 rounded flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span className="text-[10px] font-bold text-emerald-700">Đã sẵn sàng cài đặt hệ thống</span>
+            <span className="text-[10px] font-bold text-emerald-700">Hệ thống đã sẵn sàng gõ Telex</span>
         </div>
 
         <div className="space-y-2 pt-2">
@@ -103,30 +133,30 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="secondary" className="w-full h-10 gap-2 font-black text-xs uppercase border border-primary/20">
                 <Terminal className="w-4 h-4 text-primary" />
-                FIX LỖI "MANIFEST MISSING"
+                SỬA LỖI ĐÓNG GÓI / PEM KEY
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-primary font-black uppercase text-xl flex items-center gap-2">
-                  <FolderSearch /> HƯỚNG DẪN CÀI ĐẶT CHUẨN
+                   HƯỚNG DẪN ĐÓNG GÓI CHUẨN
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4">
-                  <div className="p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-800 font-bold text-sm">
-                    Để không còn lỗi "Tệp kê khai bị thiếu", bạn hãy làm đúng các bước sau:
+                  <div className="p-4 bg-amber-50 border-l-4 border-amber-500 text-amber-800 font-bold text-sm">
+                    Nếu gặp lỗi "Khoá cá nhân đã tồn tại", hãy làm theo các bước sau:
                   </div>
                   <div className="space-y-3 text-sm font-medium">
                     <div className="flex gap-2">
                         <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px]">1</div>
-                        <p>Chạy lệnh: <code className="bg-slate-100 p-1 rounded font-mono">npm run build</code></p>
+                        <p>Tại ô <b>"Tệp khóa cá nhân"</b>, nhấn <b>Duyệt qua</b>.</p>
                     </div>
                     <div className="flex gap-2">
                         <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px]">2</div>
-                        <p>Vào <code className="text-blue-600">chrome://extensions</code>, chọn <b>Load Unpacked</b>.</p>
+                        <p>Chọn tệp <b>out.pem</b> nằm trong thư mục <b>vietflex</b>.</p>
                     </div>
                     <div className="flex gap-2">
                         <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px]">3</div>
-                        <p>Tìm đến thư mục <b>vietflex</b> và chọn thư mục <b>out</b> bên trong.</p>
+                        <p>Nhấn <b>Đóng gói tiện ích</b> để ghi đè phiên bản mới.</p>
                     </div>
                   </div>
                 </DialogDescription>
@@ -140,7 +170,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
           >
             <ExternalLink className="w-4 h-4" />
-            MỞ CÀI ĐẶT HỆ THỐNG
+            KÍCH HOẠT TRONG HỆ THỐNG
           </Button>
         </div>
         
