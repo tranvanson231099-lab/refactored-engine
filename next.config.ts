@@ -1,7 +1,7 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export', // Cần thiết để chạy như một Chrome Extension tĩnh
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true, // Bắt buộc cho output: 'export'
     remotePatterns: [
       {
         protocol: 'https',

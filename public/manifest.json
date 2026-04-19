@@ -1,21 +1,14 @@
 {
+  "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
-  "short_name": "VietFlex",
+  "version": "2.1.6",
   "description": "Smart Vietnamese Input Method for Chrome OS Flex",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
-  "icons": [
-    {
-      "src": "https://picsum.photos/seed/vietflex/192/192",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://picsum.photos/seed/vietflex/512/512",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "https://picsum.photos/seed/vietflex/128/128"
+  },
+  "icons": {
+    "128": "https://picsum.photos/seed/vietflex/128/128"
+  },
+  "permissions": ["storage"]
 }

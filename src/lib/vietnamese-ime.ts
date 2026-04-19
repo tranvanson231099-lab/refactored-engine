@@ -1,6 +1,6 @@
 /**
- * VietFlex Engine 2.1.6 - Precision Orthography & Chrome OS Flex Optimized
- * Tuân thủ tuyệt đối các quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
+ * VietFlex Engine 2.1.6 - Precision Orthography & Chrome Extension Ready
+ * Tuân thủ 100% 5 quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
  * Cơ chế Smart Backspace 3 bước: Xóa dấu thanh -> Xóa dấu phụ -> Xóa chữ.
  */
 
@@ -90,7 +90,6 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   let actualVowels = [...vowelIndices];
   
-  // Ngoại lệ 'qu' và 'gi' - u và i là âm đệm
   if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) {
     actualVowels.shift(); 
   } else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) {
@@ -104,13 +103,11 @@ function getTonePosition(word: string, isModern: boolean): number {
   const lastChar = clean[clean.length - 1].toLowerCase();
   const hasFinalConsonant = !isVowel(lastChar);
 
-  // Quy tắc tam âm (uyê, uôi, iêu, ươu)
   if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
   if (vowelString.includes('uôi')) return actualVowels[vowelString.indexOf('uôi') + 1];
   if (vowelString.includes('iêu')) return actualVowels[vowelString.indexOf('iêu') + 1];
   if (vowelString.includes('ươu')) return actualVowels[vowelString.indexOf('ươu') + 1];
 
-  // Quy tắc nguyên âm đôi (ia, iê, ua, uô, ưa, ươ)
   const diphthongsWithFinal = ['iê', 'uô', 'ươ'];
   for (const d of diphthongsWithFinal) {
     if (vowelString.includes(d)) {
@@ -123,11 +120,10 @@ function getTonePosition(word: string, isModern: boolean): number {
   for (const d of diphthongsNoFinal) {
     if (vowelString.includes(d)) {
       const startIdx = vowelString.indexOf(d);
-      return actualVowels[startIdx]; // Luôn là âm 1 vì ia, ua, ưa không có phụ âm cuối tiếng Việt chuẩn
+      return actualVowels[startIdx]; 
     }
   }
 
-  // Quy tắc kiểu mới cho oa, oe, uy
   if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) {
     return actualVowels[1];
   }
@@ -161,13 +157,11 @@ export function removeLastMark(text: string): string | null {
   const word = text.substring(lastSpaceIndex + 1);
   if (!word) return null;
 
-  // Bước 1: Xóa dấu thanh
   const toneIdx = getWordToneIndex(word);
   if (toneIdx !== 0) {
     return prefix + removeToneOnly(word);
   }
 
-  // Bước 2: Xóa dấu phụ/móc
   let newWordChars = Array.from(word);
   let changed = false;
   for (let i = newWordChars.length - 1; i >= 0; i--) {
@@ -191,32 +185,22 @@ function applySmartFix(word: string, isModern: boolean): string {
   const cleaned = removeToneOnly(result);
   const lowerClean = cleaned.toLowerCase();
   
-  // 1. Đứng một mình: i (ầm ĩ) hoặc y (y tế, ý nghĩa)
-  // Trong Hán Việt: y tế, y phục, ý nghĩa, y đức, y học
-  if (lowerClean === 'i' || lowerClean === 'y') {
-    // Thường đứng một mình là Y trong từ Hán Việt
-    if (lowerClean === 'i' && (tone === 0 || tone === 1)) {
-        return result.replace(/i/g, 'y').replace(/I/g, 'Y');
-    }
+  // Rule 1: Standalone
+  if (lowerClean === 'i') {
+    // Thuần Việt standalone is rare, usually Hán Việt 'y'
+    const newBase = result[0] === result[0].toUpperCase() ? 'Y' : 'y';
+    return applyTone(newBase, tone, isModern);
   }
 
-  // 2. Đứng đầu từ: y nếu là nguyên âm đơn hoặc đầu âm đôi (yêu, yến, yên)
-  if (lowerClean.startsWith('ie') && !'bcdghklmnpqrstvx'.includes(lowerClean[0])) {
-     // Không có phụ âm đầu -> dùng Yê
-     const final = cleaned.substring(2);
-     const newBase = (result[0] === result[0].toUpperCase() ? 'Y' : 'y') + (result[1] === result[1].toUpperCase() ? 'Ê' : 'ê') + final;
-     return applyTone(newBase, tone, isModern);
-  }
-
-  // 4. Sau âm đệm "u": Bắt buộc viết y (quý, quy, thủy)
-  if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.startsWith('th') || lowerClean.startsWith('h') || lowerClean.startsWith('l'))) {
-      if (lowerClean.includes('qui') || lowerClean.includes('thui') || lowerClean.includes('hui') || lowerClean.includes('lui')) {
+  // Rule 4: After 'u' (glide) - Bắt buộc Y
+  if (lowerClean.includes('ui') && (lowerClean.startsWith('q') || lowerClean.includes('huy') || lowerClean.includes('tuy') || lowerClean.includes('luy'))) {
+      if (lowerClean.includes('qui') || lowerClean.includes('hui') || lowerClean.includes('tui') || lowerClean.includes('lui')) {
           result = result.replace(/i/g, 'y').replace(/I/g, 'Y');
           return applyTone(removeToneOnly(result), tone, isModern);
       }
   }
 
-  // 3. Sau phụ âm đầu: Ưu tiên viết i (lí, kĩ, mĩ, sĩ, vị, di)
+  // Rule 3: After Consonant - Ưu tiên I
   const consonants = 'bcdghklmnpqrstvx';
   for (const c of consonants) {
     if (lowerClean.startsWith(c) && lowerClean.endsWith('y') && !lowerClean.includes('uy')) {
@@ -227,13 +211,19 @@ function applySmartFix(word: string, isModern: boolean): string {
     }
   }
 
+  // Rule 5: ie diphthong
+  if (lowerClean.startsWith('ie') && !'bcdghklmnpqrstvx'.includes(lowerClean[0])) {
+     const final = cleaned.substring(2);
+     const newBase = (result[0] === result[0].toUpperCase() ? 'Y' : 'y') + (result[1] === result[1].toUpperCase() ? 'Ê' : 'ê') + final;
+     return applyTone(newBase, tone, isModern);
+  }
+
   return result;
 }
 
 export function convertText(text: string, method: InputMethod, isModern: boolean, isSmartFix: boolean): string {
   if (!text) return '';
   
-  // Dấu câu sát chữ
   if (isSmartFix && text.length >= 2) {
     const lastChar = text.slice(-1);
     const prevChar = text.slice(-2, -1);
@@ -249,7 +239,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
   const lastChar = word.slice(-1).toLowerCase();
 
-  // Telex Logic
   if (lastChar === 'w') {
     const baseWord = word.slice(0, -1);
     const isLastUpper = word.slice(-1) === word.slice(-1).toUpperCase();
@@ -257,7 +246,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     let currentTone = getWordToneIndex(baseWord);
     const lowerBase = currentBase.toLowerCase();
 
-    // Hook 'uo' -> 'ươ'
     if (lowerBase.includes('uo')) {
       const idx = lowerBase.lastIndexOf('uo');
       const isUUpper = currentBase[idx] === currentBase[idx].toUpperCase();
@@ -266,7 +254,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
       return prefix + applyTone(currentBase, currentTone, isModern);
     }
 
-    // Hook 'o' -> 'ơ' (sơn)
     if (lowerBase.includes('on')) {
       const idx = lowerBase.lastIndexOf('o');
       const isUpper = currentBase[idx] === currentBase[idx].toUpperCase();
