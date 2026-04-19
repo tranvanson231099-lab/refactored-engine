@@ -93,10 +93,8 @@ function getTonePosition(word: string, isModern: boolean): number {
   // 3 nguyên âm
   if (actualVowels.length === 3) {
     if (actualVowelChars === 'uye' || actualVowelChars === 'uay' || actualVowelChars === 'oai') {
-      // uyê -> ê, oai -> a
       return actualVowels[1];
     }
-    // iêu, uôi, uâ-y -> ở giữa
     return actualVowels[1];
   }
 
@@ -111,7 +109,6 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
     const isUpper = charAtPos === charAtPos.toUpperCase();
     const baseVowel = charAtPos.toLowerCase();
     
-    // Tìm base vowel thực sự (có thể là nguyên âm có móc sẵn)
     let finalBase = baseVowel;
     for (const base in VOWEL_MAP) {
       if (base === baseVowel) {
@@ -145,7 +142,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     const restoreMap: Record<string, string> = {
       'aa': 'a', 'ee': 'e', 'oo': 'o', 'dd': 'd', 'ww': 'w'
     };
-    // Nếu gõ lặp phím modifier mà từ hiện tại đã có ký tự tiếng Việt tương ứng
+    
     const wordNoTone = removeTone(word);
     const prevChar = wordNoTone.slice(-2, -1).toLowerCase();
     
@@ -165,7 +162,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     if (cleanBase.toLowerCase().endsWith('uo')) {
       cleanBase = cleanBase.slice(0, -2) + (cleanBase.slice(-2, -1) === cleanBase.slice(-2, -1).toUpperCase() ? 'ƯƠ' : 'ươ');
     } else {
-      // Tìm nguyên âm có thể thêm móc (u -> ư, o -> ơ, a -> ă)
       let found = false;
       for (let i = cleanBase.length - 1; i >= 0; i--) {
         const char = cleanBase[i].toLowerCase();
