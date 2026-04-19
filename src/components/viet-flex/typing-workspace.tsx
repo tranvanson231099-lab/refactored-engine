@@ -47,7 +47,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
                 </Badge>
               )}
             </div>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine • Telex Optimized (Offline)</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine • Telex Only (Chrome OS Flex)</p>
           </div>
         </div>
         <div className="text-right hidden sm:block">
