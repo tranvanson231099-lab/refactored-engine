@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle, Info, Zap } from 'lucide-react';
+import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { smartTextRefiner } from '@/ai/flows/smart-text-refiner-flow';
 import { useToast } from '@/hooks/use-toast';
@@ -69,12 +69,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-bold">Interactive Sandbox</h2>
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
-                <Zap className="w-3 h-3 fill-emerald-500" />
-                Local AI Active
-              </Badge>
+              {isAiEnabled && (
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
+                  <Zap className="w-3 h-3 fill-emerald-500" />
+                  Real-time Fix Active
+                </Badge>
+              )}
             </div>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine v1.5 • Real-time Correcting</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine v1.6 • Smart Normalization</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -82,12 +84,12 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
               <Button 
                 size="sm" 
                 variant="default" 
-                className="gap-2 bg-accent hover:bg-accent/90 text-white shadow-lg animate-bounce-subtle"
+                className="gap-2 bg-accent hover:bg-accent/90 text-white shadow-lg"
                 onClick={handleAIRefine}
                 disabled={isRefining || !text}
               >
                 {isRefining ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                AI Smart Fix (Dọn lỗi gõ)
+                Deep Refine
               </Button>
             )}
             <div className="h-8 w-px bg-border hidden sm:block" />
@@ -100,26 +102,26 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
 
       <Alert className="bg-amber-50 border-amber-200">
         <Info className="h-4 w-4 text-amber-600" />
-        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý quan trọng cho Chrome OS / Windows</AlertTitle>
+        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý hệ thống</AlertTitle>
         <AlertDescription className="text-[10px] text-amber-700">
-          Hãy tắt bộ gõ tiếng Việt của máy tính (chuyển sang tiếng Anh). VietFlex đã tích hợp Local AI để tự sửa lỗi gõ ngay cả khi offline.
+          Vui lòng tắt bộ gõ của hệ thống (Chrome OS / Windows) để tránh xung đột. VietFlex đã tích hợp sẵn cơ chế tự sửa lỗi dấu thời gian thực.
         </AlertDescription>
       </Alert>
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: luyeenj -> luyện, sonw -> sơn)..." : "IME is currently disabled. Type in English..."}
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, luýên -> luyến)..." : "IME is currently disabled..."}
           className="min-h-[450px] text-lg p-6 bg-white border-2 border-primary/10 focus-visible:border-accent transition-all shadow-inner resize-none leading-relaxed"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
         <div className="absolute bottom-4 right-4 flex items-center gap-2 text-muted-foreground">
             <Badge variant="secondary" className="text-[9px] font-bold bg-white/80 backdrop-blur">
-              {isOnline ? 'CLOUD AI LINKED' : 'LOCAL AI ONLY'}
+              {isAiEnabled ? 'SMART FIX ON' : 'MANUAL MODE'}
             </Badge>
             <Keyboard className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-widest">
-                {text.length} Characters
+                {text.length} Chars
             </span>
         </div>
       </div>
@@ -134,12 +136,13 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
           <Zap className="w-3.5 h-3.5" />
-          Quy tắc gõ thông minh (Real-time Fix)
+          Hướng dẫn gõ thông minh (Thời gian thực)
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          - <b>Sơn</b>: gõ <code>sonw</code>. <b>Hư</b>: gõ <code>huw</code>.<br />
-          - <b>Trả lại phím gốc</b>: gõ lặp phím modifier (ví dụ: <code>ww</code> &rarr; w, <code>aa</code> &rarr; a).<br />
-          - <b>Tự động sửa dấu</b>: Dấu luôn được đặt chuẩn Unicode (ví dụ: <code>luýên</code> &rarr; <code>luyến</code>) nhờ Local Smart Engine.
+          - <b>Sơn/Hư</b>: gõ <code>sonw</code>, <code>huw</code>. Phím <code>w</code> tự động thêm móc.<br />
+          - <b>Sửa lỗi luýên</b>: Tự động chuyển thành <code>luyến</code> ngay khi gõ xong từ.<br />
+          - <b>Gõ lặp</b>: gõ <code>ww</code> &rarr; w, <code>aa</code> &rarr; a để trả lại phím gốc.<br />
+          - <b>Xóa dấu</b>: Gõ lại phím dấu cũ để xóa (ví dụ: gõ <code>as</code> &rarr; á, gõ tiếp <code>s</code> &rarr; a).
         </p>
       </div>
     </div>
