@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -6,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle, RefreshCw, Copy } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, CheckCircle2, Download, AlertTriangle, Copy, PackageCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -57,14 +56,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.6</CardTitle>
         </div>
         <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
-          {isEnabled ? "HỆ THỐNG ON" : "IME OFF"}
+          {isEnabled ? "IME READY" : "IME OFF"}
         </Badge>
       </CardHeader>
       <CardContent className="p-4 space-y-5">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tích hợp Chrome OS</Label>
-            <p className="text-sm font-medium">{isEnabled ? "SẴN SÀNG TRONG SETTINGS" : "IME CHƯA KÍCH HOẠT"}</p>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tích hợp hệ thống</Label>
+            <p className="text-[11px] font-bold text-emerald-600">{isEnabled ? "ĐANG CHẠY" : "CHỜ KÍCH HOẠT"}</p>
           </div>
           <Switch 
             checked={isEnabled} 
@@ -75,10 +74,10 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 
         <div className="space-y-4">
           <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Phương thức nhập</Label>
+            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Trạng thái IME</Label>
             <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                <span className="text-xs font-bold text-blue-800">VietFlex Telex (System)</span>
+                <PackageCheck className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-bold text-blue-800">VietFlex System IME 2.1.6</span>
             </div>
           </div>
           
@@ -88,28 +87,16 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 id="modern-style" 
                 checked={isModernStyle} 
                 onCheckedChange={(val) => setIsModernStyle(val === true)}
-                disabled={!isEnabled}
               />
-              <label
-                htmlFor="modern-style"
-                className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                Dấu kiểu mới (hoà, quý)
-              </label>
+              <label htmlFor="modern-style" className="text-xs font-medium cursor-pointer">Dấu kiểu mới (hoà, quý)</label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="smart-fix" 
                 checked={isSmartFix} 
                 onCheckedChange={(val) => setIsSmartFix(val === true)}
-                disabled={!isEnabled}
               />
-              <label
-                htmlFor="smart-fix"
-                className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-primary font-bold"
-              >
-                Smart Fix: 5 quy tắc i/y
-              </label>
+              <label htmlFor="smart-fix" className="text-xs font-bold cursor-pointer text-primary">Smart Fix: 5 quy tắc i/y</label>
             </div>
           </div>
         </div>
@@ -119,60 +106,44 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Download className="w-4 h-4" />
-                KHẮC PHỤC LỖI & CÀI ĐẶT
+                HƯỚNG DẪN CÀI ĐẶT IME
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <Terminal className="w-5 h-5 text-blue-600" />
-                  Khắc phục lỗi EACCES (esbuild)
+                <DialogTitle className="flex items-center gap-2 text-blue-700 font-bold uppercase tracking-tight">
+                  <Terminal className="w-5 h-5" />
+                  Cài đặt VietFlex vào Chrome OS
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                  <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
-                    <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-xs font-bold uppercase">LỆNH SỬA LỖI QUYỀN TRUY CẬP</AlertTitle>
-                    <AlertDescription className="text-[10px] leading-relaxed">
-                      Lỗi <code className="bg-white/50 px-1 font-bold">EACCES</code> xảy ra do hệ thống file Linux. Hãy chạy tổ hợp lệnh này để dọn dẹp và cấp quyền lại:
+                  <Alert className="bg-blue-50 border-blue-200">
+                    <AlertTitle className="text-xs font-bold uppercase text-blue-800">Bước 1: Build mã nguồn</AlertTitle>
+                    <AlertDescription className="text-[11px] text-blue-700">
+                      Mở Terminal Linux, chạy lệnh sau để tránh lỗi quyền:
+                      <div className="mt-2 bg-slate-900 p-3 rounded font-mono text-[10px] text-white relative">
+                        <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
+                        <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </AlertDescription>
                   </Alert>
                   
-                  <div className="space-y-4">
-                    <div className="relative group bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-[10px]">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="absolute top-2 right-2 h-6 w-6 text-slate-400 hover:text-white"
-                        onClick={() => copyCommand("rm -rf node_modules package-lock.json && npm install --foreground-scripts")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                      <p className="text-emerald-400 mb-2"># CÁCH 1: DỌN DẸP & CÀI ĐẶT LẠI (KHUYÊN DÙNG)</p>
-                      <p className="leading-relaxed">rm -rf node_modules package-lock.json && npm install --foreground-scripts</p>
-                    </div>
-
-                    <div className="relative group bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-[10px]">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="absolute top-2 right-2 h-6 w-6 text-slate-400 hover:text-white"
-                        onClick={() => copyCommand("chmod -R 755 ~/vietflex && npm run build")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                      <p className="text-emerald-400 mb-2"># CÁCH 2: CẤP QUYỀN THỰC THI</p>
-                      <p className="leading-relaxed">chmod -R 755 ~/vietflex && npm run build</p>
-                    </div>
+                  <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
+                    <p><b>Bước 2:</b> Mở Chrome, truy cập <code>chrome://extensions</code></p>
+                    <p><b>Bước 3:</b> Bật <b>Developer Mode</b> ở góc phải.</p>
+                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b>, chọn thư mục <b>out</b> nằm trong thư mục dự án.</p>
+                    <p><b>Bước 5:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
+                    <p><b>Bước 6:</b> Nhấn <b>Thêm phương thức nhập</b> và tìm chọn <b>VietFlex Telex</b>.</p>
                   </div>
 
-                  <div className="space-y-2 pt-4 border-t text-[11px] leading-relaxed">
-                    <p><b>Bước 1:</b> Tải mã nguồn về máy.</p>
-                    <p><b>Bước 2:</b> Mở Terminal Linux: <code className="bg-muted px-1">cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</code></p>
-                    <p><b>Bước 3:</b> <code className="bg-muted px-1">cd ~/vietflex && npm install</code></p>
-                    <p><b>Bước 4:</b> <code className="bg-muted px-1">npm run build</code> (Lệnh này tạo thư mục <b>out</b>).</p>
-                    <p><b>Bước 5:</b> Mở Chrome &gt; <code className="bg-muted px-1">chrome://extensions</code> &gt; <b>Load Unpacked</b> &gt; Chọn thư mục <b>out</b>.</p>
-                    <p><b>Bước 6:</b> Vào Cài đặt &gt; Ngôn ngữ &gt; Phương thức nhập &gt; Thêm "VietFlex Telex".</p>
-                  </div>
+                  <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
+                    <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    <AlertTitle className="text-xs font-bold uppercase">Lưu ý quan trọng</AlertTitle>
+                    <AlertDescription className="text-[10px]">
+                      Phải chọn đúng thư mục <b>out</b> sau khi build. Nếu chọn thư mục gốc, Chrome sẽ báo lỗi thiếu tệp kê khai.
+                    </AlertDescription>
+                  </Alert>
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
@@ -191,12 +162,12 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             onClick={() => setIsEnabled(!isEnabled)}
           >
             <Power className="w-4 h-4" />
-            {isEnabled ? "TẮT" : "BẬT"}
+            {isEnabled ? "DỪNG" : "CHẠY"}
           </Button>
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • Zero Latency IME
+          VietFlex Engine v2.1.6 • Chrome OS IME
         </p>
       </CardContent>
     </Card>
