@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, PackageCheck, AlertCircle, FolderSearch, AlertTriangle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Power, Settings2, FolderSearch, AlertTriangle, ExternalLink, HelpCircle } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -17,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -41,25 +39,32 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       <CardHeader className="bg-red-600 py-3 flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-white animate-pulse" />
-          <CardTitle className="text-sm font-black text-white uppercase tracking-tighter">FIX LỖI CÀI ĐẶT KHẨN CẤP</CardTitle>
+          <CardTitle className="text-sm font-black text-white uppercase tracking-tighter">KHÔNG VÀO ĐƯỢC CÀI ĐẶT?</CardTitle>
         </div>
       </CardHeader>
       
       <CardContent className="p-4 space-y-4">
         <div className="bg-red-50 border-2 border-red-200 p-3 rounded-lg">
-          <p className="text-[11px] font-black text-red-700 uppercase mb-2">ĐANG BỊ LỖI "TỆP KÊ KHAI BỊ THIẾU"?</p>
-          <ol className="text-[10px] space-y-2 font-bold text-red-600">
-            <li>1. Mở Terminal chạy: <code className="bg-black text-white p-1 rounded">npm run build</code></li>
-            <li>2. Vào <code className="text-blue-600 underline">chrome://extensions</code></li>
-            <li>3. Nhấn <b>Load Unpacked</b></li>
-            <li>4. <span className="bg-yellow-300 text-black px-1">CHỌN ĐÚNG THƯ MỤC "out"</span> (nằm bên trong thư mục vietflex)</li>
-          </ol>
+          <p className="text-[11px] font-black text-red-700 uppercase mb-2">BƯỚC 1: KIỂM TRA EXTENSION</p>
+          <p className="text-[10px] font-bold text-red-600 leading-tight">
+            Nếu bạn thấy lỗi "Tệp kê khai bị thiếu", hãy chạy <code className="bg-black text-white px-1">npm run build</code> rồi chọn thư mục <code className="text-blue-600 underline">out</code>.
+          </p>
+        </div>
+
+        <div className="bg-blue-50 border-2 border-blue-200 p-3 rounded-lg">
+          <p className="text-[11px] font-black text-blue-700 uppercase mb-2">BƯỚC 2: KÍCH HOẠT HỆ THỐNG</p>
+          <p className="text-[10px] font-bold text-blue-600 leading-tight mb-2">
+            Copy dòng dưới dán vào trình duyệt để mở trang cài đặt ẩn:
+          </p>
+          <code className="text-[9px] bg-white p-1 border block break-all font-mono select-all">
+            chrome://os-settings/osLanguages/input
+          </code>
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t">
           <div className="space-y-0.5">
             <Label className="text-xs font-bold uppercase text-muted-foreground">VietFlex Engine</Label>
-            <p className="text-[10px] font-bold text-emerald-600">{isEnabled ? "ACTIVE" : "STANDBY"}</p>
+            <p className="text-[10px] font-bold text-emerald-600">{isEnabled ? "READY" : "OFF"}</p>
           </div>
           <Switch 
             checked={isEnabled} 
@@ -83,35 +88,46 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 checked={isSmartFix} 
                 onCheckedChange={(val) => setIsSmartFix(val === true)}
               />
-              <label htmlFor="smart-fix" className="text-[11px] font-black cursor-pointer text-primary">Smart Fix: i/y & Backspace</label>
+              <label htmlFor="smart-fix" className="text-[11px] font-black cursor-pointer text-primary">Sửa lỗi i/y & Backspace</label>
             </div>
         </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="destructive" className="w-full h-12 gap-2 font-black text-xs uppercase shadow-lg animate-bounce">
-              <FolderSearch className="w-5 h-5" />
-              XEM VIDEO HƯỚNG DẪN FIX LỖI
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-red-600 font-black uppercase text-xl flex items-center gap-2">
-                <AlertCircle /> BƯỚC QUAN TRỌNG NHẤT
-              </DialogTitle>
-              <DialogDescription className="space-y-4 pt-4">
-                <div className="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-bold text-sm">
-                  Bạn đang chọn thư mục "vietflex". Chrome sẽ báo lỗi ngay lập tức vì không thấy tệp manifest.json ở đó.
-                </div>
-                <div className="space-y-2 text-sm font-medium">
-                  <p>1. Hãy chạy <code className="bg-slate-200 p-1">npm run build</code> trong Linux.</p>
-                  <p>2. Khi chọn thư mục cài đặt, hãy tìm thư mục <b className="text-red-600 uppercase">out</b>.</p>
-                  <p>3. Nhấn <b>Open/Select</b> khi đang ở trong thư mục <b>out</b> đó.</p>
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <div className="grid grid-cols-1 gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="destructive" className="w-full h-10 gap-2 font-black text-xs uppercase shadow-lg">
+                <FolderSearch className="w-4 h-4" />
+                XỬ LÝ LỖI "TỆP KÊ KHAI"
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-red-600 font-black uppercase text-xl flex items-center gap-2">
+                  <AlertTriangle /> CHỈ CHỌN THƯ MỤC "OUT"
+                </DialogTitle>
+                <DialogDescription className="space-y-4 pt-4">
+                  <div className="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-bold text-sm">
+                    Lỗi này 100% là do bạn chọn cả thư mục dự án. Chrome chỉ tìm manifest.json ở trong thư mục build.
+                  </div>
+                  <div className="space-y-2 text-sm font-medium">
+                    <p>1. Terminal: <code className="bg-slate-200 p-1">npm run build</code></p>
+                    <p>2. Chrome Extensions &rarr; Load Unpacked.</p>
+                    <p>3. <b>VÀO TRONG</b> thư mục vietflex, chọn thư mục <b>out</b>.</p>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+          <Button 
+            variant="outline" 
+            className="w-full h-10 gap-2 font-black text-xs uppercase border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+            onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
+          >
+            <ExternalLink className="w-4 h-4" />
+            MỞ TRANG CÀI ĐẶT ẨN
+          </Button>
+        </div>
 
         <div className="pt-2 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 h-10 text-[10px] font-bold">
