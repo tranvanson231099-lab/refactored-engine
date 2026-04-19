@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -106,44 +107,40 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Download className="w-4 h-4" />
-                HƯỚNG DẪN CÀI ĐẶT IME
+                HƯỚNG DẪN CÀI ĐẶT
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-blue-700 font-bold uppercase tracking-tight">
                   <Terminal className="w-5 h-5" />
-                  Cài đặt VietFlex vào Chrome OS
+                  Cài đặt vào Chrome OS
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                  <Alert className="bg-blue-50 border-blue-200">
-                    <AlertTitle className="text-xs font-bold uppercase text-blue-800">Bước 1: Sửa lỗi EACCES & Build</AlertTitle>
-                    <AlertDescription className="text-[11px] text-blue-700">
-                      Mở Terminal Linux, chạy lệnh sau để tránh lỗi quyền:
-                      <div className="mt-2 bg-slate-900 p-3 rounded font-mono text-[10px] text-white relative">
-                        <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
-                        <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </div>
+                  <Alert className="bg-red-50 border-red-200">
+                    <AlertTitle className="text-xs font-bold uppercase text-red-800">Khắc phục lỗi Tệp kê khai</AlertTitle>
+                    <AlertDescription className="text-[11px] text-red-700">
+                      Khi chọn <b>Load Unpacked</b>, bạn <b>PHẢI</b> chọn thư mục <b>out</b>. Không được chọn thư mục gốc <code>vietflex</code>.
                     </AlertDescription>
                   </Alert>
+
+                  <div className="bg-slate-900 p-4 rounded-lg space-y-2">
+                    <p className="text-xs text-slate-400 font-bold uppercase">Lệnh build sửa lỗi EACCES:</p>
+                    <div className="bg-slate-800 p-2 rounded font-mono text-[10px] text-white relative">
+                      <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
+                      <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
                   
                   <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
-                    <p><b>Bước 2:</b> Mở Chrome, truy cập <code>chrome://extensions</code></p>
-                    <p><b>Bước 3:</b> Bật <b>Developer Mode</b> ở góc phải.</p>
-                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b>, chọn thư mục <b>out</b> (phải nằm trong <code>~/vietflex</code>).</p>
-                    <p><b>Bước 5:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
-                    <p><b>Bước 6:</b> Nhấn <b>Thêm phương thức nhập</b> và tìm chọn <b>VietFlex Telex</b>.</p>
+                    <p><b>Bước 1:</b> Mở Chrome, truy cập <code>chrome://extensions</code></p>
+                    <p><b>Bước 2:</b> Bật <b>Developer Mode</b>.</p>
+                    <p><b>Bước 3:</b> Nhấn <b>Load Unpacked</b>, tìm đến thư mục <code>~/vietflex</code> và chọn đúng thư mục <b>out</b> bên trong đó.</p>
+                    <p><b>Bước 4:</b> Vào <b>Cài đặt hệ thống &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
+                    <p><b>Bước 5:</b> Nhấn <b>Thêm phương thức nhập</b> và tìm chọn <b>VietFlex Telex</b>.</p>
                   </div>
-
-                  <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
-                    <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-xs font-bold uppercase">Lưu ý quan trọng</AlertTitle>
-                    <AlertDescription className="text-[10px]">
-                      Phải chọn đúng thư mục <b>out</b> sau khi build. Nếu chọn thư mục gốc, Chrome sẽ báo lỗi thiếu tệp kê khai.
-                    </AlertDescription>
-                  </Alert>
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>

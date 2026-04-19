@@ -1,8 +1,9 @@
+
 {
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Bộ gõ tiếng Việt siêu tốc cho Chrome OS Flex",
+  "description": "Bộ gõ tiếng Việt siêu tốc tối ưu cho Chrome OS Flex",
   "permissions": ["input"],
   "background": {
     "service_worker": "background.js"
@@ -12,14 +13,13 @@
       "name": "VietFlex Telex",
       "id": "vietflex_telex",
       "language": "vi",
-      "layouts": ["us"],
-      "type": "ime"
+      "layouts": ["us"]
     }
   ],
-  "icons": {
-    "128": "https://picsum.photos/seed/vietflex/128/128"
-  },
   "action": {
     "default_popup": "index.html"
+  },
+  "icons": {
+    "128": "https://picsum.photos/seed/vietflex/128/128"
   }
 }
