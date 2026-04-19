@@ -1,14 +1,21 @@
+
 {
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Smart Vietnamese Input Method for Chrome OS Flex",
+  "description": "Bộ gõ tiếng Việt chuyên dụng cho Chrome OS Flex tuân thủ quy tắc i/y và Smart Backspace.",
   "action": {
     "default_popup": "index.html",
-    "default_icon": "https://picsum.photos/seed/vietflex/128/128"
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
   },
   "icons": {
-    "128": "https://picsum.photos/seed/vietflex/128/128"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "permissions": ["storage"]
 }

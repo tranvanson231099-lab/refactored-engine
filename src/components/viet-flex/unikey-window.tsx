@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -104,29 +105,6 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         <div className="flex flex-col gap-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full h-10 border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 gap-2 font-bold text-[10px] uppercase">
-                <Monitor className="w-4 h-4" />
-                Cài PWA (Dễ nhất)
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <Download className="w-5 h-5 text-primary" />
-                  Cài đặt VietFlex PWA
-                </DialogTitle>
-                <DialogDescription className="space-y-4 pt-4">
-                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/10 text-sm text-foreground space-y-3">
-                    <p><b>Bước 1:</b> Nhấn biểu tượng <b>Cài đặt ứng dụng</b> trên thanh địa chỉ Chrome.</p>
-                    <p><b>Bước 2:</b> Nhấn <b>Cài đặt</b>. Ứng dụng sẽ chạy độc lập, Offline.</p>
-                  </div>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-
-          <Dialog>
-            <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Code className="w-4 h-4" />
                 Cài Extension (Dev Mode)
@@ -140,7 +118,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <div className="space-y-3">
-                    <p><b>1.</b> Tải code dự án về máy.</p>
+                    <p><b>1.</b> Nhấn tải mã nguồn dự án về máy.</p>
                     <p><b>2.</b> Chạy lệnh <code>npm run build</code> để tạo thư mục <code>out</code>.</p>
                     <p><b>3.</b> Mở <code>chrome://extensions/</code>, bật <b>Developer mode</b>.</p>
                     <p><b>4.</b> Nhấn <b>Load unpacked</b> và chọn thư mục <b>out</b>.</p>
