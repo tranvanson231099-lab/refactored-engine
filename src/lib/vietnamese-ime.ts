@@ -1,7 +1,7 @@
 
 /**
- * VietFlex Engine 2.1 - Ultra-Fast Local Smart Processor
- * Tối ưu hóa cho Chrome OS Flex: Sửa lỗi sonw, ww, và cơ chế đảo dấu nhanh.
+ * VietFlex Engine 2.1.2 - Ultra-Fast Local Smart Processor
+ * Tối ưu hóa cho Chrome OS Flex: Xử lý triệt để phím lặp và chuẩn hóa Unicode.
  */
 
 export type InputMethod = 'Telex' | 'VNI';
@@ -132,92 +132,105 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   let word = text.substring(lastSpaceIndex + 1);
   if (!word) return text;
 
-  // 1. Xử lý thoát dấu cực nhanh (ww -> w, aa -> a, ss -> s...)
-  const modifiersTelex: Record<string, string> = { 
-    'ww': 'w', 'ưw': 'w', 'ơw': 'w', 'ăw': 'w',
-    'aa': 'a', 'âa': 'a',
-    'ee': 'e', 'êe': 'e',
-    'oo': 'o', 'ôo': 'o',
-    'dd': 'd', 'đd': 'd'
-  };
-
-  if (method === 'Telex' && word.length >= 2) {
-    const lastTwo = word.slice(-2).toLowerCase();
-    if (modifiersTelex[lastTwo]) {
-      return prefix + removeTone(word.slice(0, -2)) + modifiersTelex[lastTwo];
-    }
-  }
-
   const lastChar = word.slice(-1).toLowerCase();
-  const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
 
-  // 2. Phím W (Móc hoặc chữ Ư)
-  if (method === 'Telex' && lastChar === 'w') {
-    if (word.length === 1) return prefix + (word === 'w' ? 'ư' : 'Ư');
-    
-    let cleanBase = removeTone(word.slice(0, -1));
-    let toneIdx = getWordToneIndex(word.slice(0, -1));
-
-    // Trường hợp đặc biệt: sonw -> sơn
-    if (cleanBase.toLowerCase().endsWith('uo')) {
-      const isUpper = cleanBase.slice(-2).toUpperCase() === cleanBase.slice(-2);
-      cleanBase = cleanBase.slice(0, -2) + (isUpper ? 'ƯƠ' : 'ươ');
-      return prefix + applyTone(cleanBase, toneIdx, isModern);
-    } else {
-      let found = false;
-      // Tìm từ cuối lên để thêm móc vào o, u, a
-      for (let i = cleanBase.length - 1; i >= 0; i--) {
-        const char = cleanBase[i].toLowerCase();
-        if ('uoa'.includes(char)) {
-          const replacement = char === 'u' ? 'ư' : char === 'o' ? 'ơ' : 'ă';
-          const isUpper = cleanBase[i] === cleanBase[i].toUpperCase();
-          cleanBase = cleanBase.substring(0, i) + (isUpper ? replacement.toUpperCase() : replacement) + cleanBase.substring(i + 1);
-          found = true;
-          break;
+  // 1. Xử lý Telex
+  if (method === 'Telex') {
+    // 1a. Phím W (Móc hoặc chữ Ư)
+    if (lastChar === 'w') {
+      // Thoát dấu: ww -> w, ưw -> w
+      if (word.length >= 2) {
+        const prevChar = word.slice(-2, -1).toLowerCase();
+        if (prevChar === 'w' || prevChar === 'ư') {
+          return prefix + removeTone(word.slice(0, -2)) + 'w';
         }
       }
+
+      // Nếu gõ w đơn lẻ -> ư
+      if (word.length === 1) return prefix + (word === 'w' ? 'ư' : 'Ư');
+
+      // Hook thông minh: sonw -> sơn
+      let cleanBase = removeTone(word.slice(0, -1));
+      let toneIdx = getWordToneIndex(word.slice(0, -1));
+      let found = false;
+
+      // Ưu tiên cụm uo -> ươ (sonw -> sơn)
+      if (cleanBase.toLowerCase().endsWith('uo')) {
+        const isUpper = cleanBase.slice(-2).toUpperCase() === cleanBase.slice(-2);
+        cleanBase = cleanBase.slice(0, -2) + (isUpper ? 'ƯƠ' : 'ươ');
+        found = true;
+      } else {
+        // Tìm nguyên âm o, u, a gần cuối nhất để thêm móc
+        for (let i = cleanBase.length - 1; i >= 0; i--) {
+          const char = cleanBase[i].toLowerCase();
+          if ('uoa'.includes(char)) {
+            const replacement = char === 'u' ? 'ư' : char === 'o' ? 'ơ' : 'ă';
+            const isUpper = cleanBase[i] === cleanBase[i].toUpperCase();
+            cleanBase = cleanBase.substring(0, i) + (isUpper ? replacement.toUpperCase() : replacement) + cleanBase.substring(i + 1);
+            found = true;
+            break;
+          }
+        }
+      }
+
       if (found) return prefix + applyTone(cleanBase, toneIdx, isModern);
-      
-      // Nếu không tìm thấy nguyên âm để móc, trả về ư (phím w tự do)
       return prefix + word.slice(0, -1) + (word.slice(-1) === 'W' ? 'Ư' : 'ư');
     }
-  }
 
-  // 3. Modifier (aa, ee, oo, dd, aw)
-  const telexModifiers: Record<string, string> = { 'aa': 'â', 'ee': 'ê', 'oo': 'ô', 'dd': 'đ', 'aw': 'ă' };
-  if (method === 'Telex' && word.length >= 2) {
-    const lastTwo = word.slice(-2).toLowerCase();
-    if (telexModifiers[lastTwo]) {
-      const base = word.slice(0, -2);
-      const tone = getWordToneIndex(word);
-      const replacement = telexModifiers[lastTwo];
-      const isUpper = word.slice(-1) === word.slice(-1).toUpperCase();
-      return prefix + applyTone(removeTone(base) + (isUpper ? replacement.toUpperCase() : replacement), tone, isModern);
+    // 1b. Modifier (ee, aa, oo, dd)
+    const telexModifiers: Record<string, string> = { 'e': 'ê', 'a': 'â', 'o': 'ô', 'd': 'đ' };
+    if (telexModifiers[lastChar] && word.length >= 2) {
+      const prevChar = word.slice(-2, -1).toLowerCase();
+      const target = telexModifiers[lastChar];
+
+      // Nếu gõ lặp phím modifier (e + e -> ê)
+      if (prevChar === lastChar) {
+        const base = removeTone(word.slice(0, -2));
+        const tone = getWordToneIndex(word.slice(0, -1));
+        const isUpper = word.slice(-1) === word.slice(-1).toUpperCase();
+        return prefix + applyTone(base + (isUpper ? target.toUpperCase() : target), tone, isModern);
+      }
+
+      // Nếu gõ modifier vào chữ đã có dấu (ê + e -> e)
+      if (prevChar === target) {
+        const base = removeTone(word.slice(0, -2));
+        const tone = getWordToneIndex(word.slice(0, -1));
+        return prefix + applyTone(base + lastChar, tone, isModern);
+      }
+    }
+
+    // 1c. Modifier aw -> ă
+    if (lastChar === 'w' && word.toLowerCase().endsWith('aw')) {
+      // Đã xử lý ở phần Hook W bên trên
     }
   }
 
-  // 4. Phím dấu & Đảo dấu (Toggle Tone)
+  // 2. Phím dấu & Đảo dấu (Toggle Tone) cho cả Telex và VNI
+  const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
   const toneIndexFromKey = tones[lastChar];
+
   if (toneIndexFromKey !== undefined) {
     const baseWordStr = word.slice(0, -1);
     if (!hasVowel(baseWordStr)) return text;
 
     const currentTone = getWordToneIndex(baseWordStr);
     
-    // Nếu gõ phím dấu mà từ đã có đúng dấu đó -> Xóa dấu (lyss -> lys)
+    // Toggle Tone: gõ phím dấu khi từ đã có đúng dấu đó -> Xóa dấu (lyss -> lys)
     if (currentTone === toneIndexFromKey && toneIndexFromKey !== 0) {
-      return prefix + removeTone(baseWordStr) + word.slice(-1);
+      return prefix + removeTone(baseWordStr);
     }
     
-    // Nếu gõ dấu khác hoặc thêm dấu mới
+    // Gõ dấu khác hoặc thêm dấu mới
     return prefix + applyTone(baseWordStr, toneIndexFromKey, isModern);
   }
 
-  // 5. Smart Fix: Luôn chuẩn hóa vị trí dấu khi gõ phím khác
+  // 3. Smart Fix: Luôn chuẩn hóa vị trí dấu khi gõ
   if (isSmartFix && hasVowel(word)) {
     const currentTone = getWordToneIndex(word);
-    return prefix + applyTone(removeTone(word), currentTone, isModern);
+    const cleaned = removeTone(word);
+    return prefix + applyTone(cleaned, currentTone, isModern);
   }
 
   return text;
 }
+
