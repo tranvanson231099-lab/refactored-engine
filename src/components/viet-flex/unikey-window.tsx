@@ -1,19 +1,12 @@
+
 'use client';
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Power, Settings2, ExternalLink, Terminal, CheckCircle2, MoreVertical, Trash2, PinOff, ShieldCheck, Settings } from 'lucide-react';
+import { Power, Settings2, ExternalLink, CheckCircle2, MoreVertical, AlertTriangle, Settings } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -65,6 +59,17 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       </CardHeader>
       
       <CardContent className="p-3 space-y-3">
+        {/* Hướng dẫn sửa lỗi khẩn cấp */}
+        <Alert variant="destructive" className="bg-red-50 border-red-200 py-2 animate-pulse">
+          <AlertTriangle className="h-4 w-4 text-red-600" />
+          <AlertTitle className="text-[10px] font-black uppercase text-red-700">Lưu ý cài đặt (Fix lỗi CSP/404)</AlertTitle>
+          <AlertDescription className="text-[9px] text-red-600 font-bold leading-tight">
+            1. Chạy lệnh: <code className="bg-red-100 px-1">npm run build</code> trong Terminal.<br/>
+            2. Vào <code className="bg-red-100 px-1">chrome://extensions</code> nhấn <span className="underline">Load Unpacked</span>.<br/>
+            3. <strong>BẮT BUỘC:</strong> Chọn thư mục <strong>out</strong> bên trong vietflex.
+          </AlertDescription>
+        </Alert>
+
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-2">
             <div className="space-y-0.5">
@@ -114,16 +119,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <span className="text-[9px] font-bold text-emerald-700">Telex Engine Sẵn sàng</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-1.5 pt-1.5">
-          <Button 
-            variant="outline" 
-            className="w-full h-8 gap-2 font-black text-[10px] uppercase border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
-            onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            Kích hoạt hệ thống
-          </Button>
-        </div>
+        <Button 
+          variant="outline" 
+          className="w-full h-8 gap-2 font-black text-[10px] uppercase border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+          onClick={() => window.open('chrome://os-settings/osLanguages/input', '_blank')}
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          Kích hoạt hệ thống
+        </Button>
       </CardContent>
     </Card>
   );

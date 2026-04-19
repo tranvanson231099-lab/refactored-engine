@@ -1,15 +1,16 @@
+
 {
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Bộ gõ tiếng Việt thông minh cho Chrome OS Flex",
-  "permissions": ["input", "notifications", "storage"],
+  "description": "Bộ gõ tiếng Việt thông minh tối ưu cho Chrome OS Flex",
+  "permissions": ["input", "storage", "notifications"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Mở Bảng điều khiển VietFlex"
+    "default_title": "VietFlex Control Panel"
   },
   "options_page": "index.html",
   "input_components": [

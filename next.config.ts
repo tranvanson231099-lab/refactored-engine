@@ -14,7 +14,6 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   trailingSlash: false,
-  assetPrefix: '',
 };
 
 export default nextConfig;
