@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -42,8 +41,8 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   const copyCommand = (cmd: string) => {
     navigator.clipboard.writeText(cmd);
     toast({
-      title: "Đã sao chép lệnh!",
-      description: "Hãy dán vào Terminal Linux để chạy.",
+      title: "Đã sao chép!",
+      description: "Dán vào Terminal Linux để chạy.",
     });
   };
 
@@ -63,7 +62,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       <CardContent className="p-4 space-y-5">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tích hợp hệ thống</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hệ thống IME</Label>
             <p className="text-[11px] font-bold text-emerald-600">{isEnabled ? "ĐANG CHẠY" : "CHỜ KÍCH HOẠT"}</p>
           </div>
           <Switch 
@@ -75,7 +74,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 
         <div className="space-y-4">
           <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Trạng thái IME</Label>
+            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Tên thành phần</Label>
             <div className="flex items-center gap-2">
                 <PackageCheck className="w-4 h-4 text-blue-600" />
                 <span className="text-xs font-bold text-blue-800">VietFlex System IME 2.1.6</span>
@@ -97,55 +96,53 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 checked={isSmartFix} 
                 onCheckedChange={(val) => setIsSmartFix(val === true)}
               />
-              <label htmlFor="smart-fix" className="text-xs font-bold cursor-pointer text-primary">Smart Fix: 5 quy tắc i/y</label>
+              <label htmlFor="smart-fix" className="text-xs font-bold cursor-pointer text-primary">Smart Fix: i/y & Smart Backspace</label>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
-                <Download className="w-4 h-4" />
-                HƯỚNG DẪN CÀI ĐẶT
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-blue-700 font-bold uppercase tracking-tight">
-                  <Terminal className="w-5 h-5" />
-                  Cài đặt vào Chrome OS
-                </DialogTitle>
-                <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                  <Alert className="bg-red-50 border-red-200">
-                    <AlertTitle className="text-xs font-bold uppercase text-red-800">Khắc phục lỗi Tệp kê khai</AlertTitle>
-                    <AlertDescription className="text-[11px] text-red-700">
-                      Khi chọn <b>Load Unpacked</b>, bạn <b>PHẢI</b> chọn thư mục <b>out</b>. Không được chọn thư mục gốc <code>vietflex</code>.
-                    </AlertDescription>
-                  </Alert>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
+              <Download className="w-4 h-4" />
+              SỬA LỖI & CÀI ĐẶT
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-blue-700 font-bold uppercase tracking-tight">
+                <Terminal className="w-5 h-5" />
+                Hướng dẫn Chrome OS Flex
+              </DialogTitle>
+              <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
+                <Alert className="bg-red-50 border-red-200">
+                  <AlertTitle className="text-xs font-bold uppercase text-red-800">Lưu ý cực kỳ quan trọng</AlertTitle>
+                  <AlertDescription className="text-[11px] text-red-700">
+                    Khi nhấn <b>Load Unpacked</b>, bạn <b>PHẢI</b> chọn thư mục mang tên <b>out</b>. Nếu chọn thư mục <code>vietflex</code> gốc, bạn sẽ gặp lỗi "Thiếu tệp kê khai".
+                  </AlertDescription>
+                </Alert>
 
-                  <div className="bg-slate-900 p-4 rounded-lg space-y-2">
-                    <p className="text-xs text-slate-400 font-bold uppercase">Lệnh build sửa lỗi EACCES:</p>
-                    <div className="bg-slate-800 p-2 rounded font-mono text-[10px] text-white relative">
-                      <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
-                      <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                    </div>
+                <div className="bg-slate-900 p-4 rounded-lg space-y-2">
+                  <p className="text-xs text-slate-400 font-bold uppercase">Lệnh sửa lỗi EACCES & Build:</p>
+                  <div className="bg-slate-800 p-2 rounded font-mono text-[10px] text-white relative">
+                    <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
+                    <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
+                      <Copy className="h-3 w-3" />
+                    </Button>
                   </div>
-                  
-                  <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
-                    <p><b>Bước 1:</b> Mở Chrome, truy cập <code>chrome://extensions</code></p>
-                    <p><b>Bước 2:</b> Bật <b>Developer Mode</b>.</p>
-                    <p><b>Bước 3:</b> Nhấn <b>Load Unpacked</b>, tìm đến thư mục <code>~/vietflex</code> và chọn đúng thư mục <b>out</b> bên trong đó.</p>
-                    <p><b>Bước 4:</b> Vào <b>Cài đặt hệ thống &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
-                    <p><b>Bước 5:</b> Nhấn <b>Thêm phương thức nhập</b> và tìm chọn <b>VietFlex Telex</b>.</p>
-                  </div>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </div>
+                </div>
+                
+                <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
+                  <p><b>Bước 1:</b> Mở <code>chrome://extensions</code></p>
+                  <p><b>Bước 2:</b> Bật <b>Developer Mode</b>.</p>
+                  <p><b>Bước 3:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> (trong <code>~/vietflex/out</code>).</p>
+                  <p><b>Bước 4:</b> Vào <b>Cài đặt &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
+                  <p><b>Bước 5:</b> Nhấn <b>Thêm phương thức nhập</b> và chọn <b>VietFlex Telex</b>.</p>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         <div className="pt-2 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 h-12 flex flex-col gap-1 text-[10px] font-bold">
@@ -159,12 +156,12 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             onClick={() => setIsEnabled(!isEnabled)}
           >
             <Power className="w-4 h-4" />
-            {isEnabled ? "DỪNG" : "CHẠY"}
+            {isEnabled ? "TẮT" : "BẬT"}
           </Button>
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • Chrome OS IME
+          VietFlex Engine v2.1.6 • Built for Chrome OS
         </p>
       </CardContent>
     </Card>
