@@ -1,8 +1,7 @@
 
 /**
- * VietFlex Engine 2.1.6 - Precision Orthography & Chrome Extension Ready
- * Tuân thủ 100% 5 quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
- * Cơ chế Smart Backspace 3 bước: Xóa dấu thanh -> Xóa dấu phụ -> Xóa chữ.
+ * VietFlex Engine 2.1.6 - Bộ lõi xử lý tiếng Việt chuyên sâu cho Chrome OS
+ * Tuân thủ 100% quy tắc i/y và quy tắc đặt dấu của Bộ GD&ĐT.
  */
 
 export type InputMethod = 'Telex';
@@ -19,7 +18,7 @@ const VOWEL_MAP: Record<string, string[]> = {
   'ơ': ['ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ'],
   'u': ['u', 'ú', 'ù', 'ủ', 'ũ', 'ụ'],
   'ư': ['ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự'],
-  'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'], // Diacritic combined form for consistency
+  'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
 };
 
 const UNHOOK_MAP: Record<string, string> = {
@@ -84,6 +83,7 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   let actualVowels = [...vowelIndices];
   
+  // Xử lý qu và gi (u và i là âm đệm)
   if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) actualVowels.shift(); 
   else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) actualVowels.shift();
 
@@ -94,19 +94,20 @@ function getTonePosition(word: string, isModern: boolean): number {
   const lastChar = clean[clean.length - 1].toLowerCase();
   const hasFinalConsonant = !isVowel(lastChar);
 
-  // Triple vowels
+  // Nguyên âm ba
   if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
   if (vowelString.includes('uôi') || vowelString.includes('iêu') || vowelString.includes('ươu')) 
     return actualVowels[1];
 
-  // Double vowels
-  const diphthongs = ['ia', 'iê', 'ua', 'uô', 'ưa', 'ươ'];
-  for (const d of diphthongs) {
-    if (vowelString.includes(d)) {
-      const startIdx = vowelString.indexOf(d);
-      // Quy tắc: Có phụ âm cuối đặt ở âm 2, không có phụ âm cuối đặt ở âm 1
-      return hasFinalConsonant ? actualVowels[startIdx + 1] : actualVowels[startIdx];
-    }
+  // Nguyên âm đôi
+  const diphthongsWithToneOnTwo = ['iê', 'uô', 'ươ'];
+  for (const d of diphthongsWithToneOnTwo) {
+    if (vowelString.includes(d)) return actualVowels[vowelString.indexOf(d) + 1];
+  }
+
+  const diphthongsWithToneOnOne = ['ia', 'ua', 'ưa'];
+  for (const d of diphthongsWithToneOnOne) {
+    if (vowelString.includes(d)) return actualVowels[vowelString.indexOf(d)];
   }
 
   if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) return actualVowels[1];
@@ -202,12 +203,15 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   if (lastChar === 'w') {
     const baseWord = word.slice(0, -1);
     const lowerBase = removeToneOnly(baseWord).toLowerCase();
+    
+    // Xử lý móc cho uo -> ươ (sonw -> sơn)
     if (lowerBase.includes('uo')) {
       const idx = lowerBase.lastIndexOf('uo');
       const currentTone = getWordToneIndex(baseWord);
       let hooked = removeToneOnly(baseWord).substring(0, idx) + 'ươ' + removeToneOnly(baseWord).substring(idx + 2);
       return prefix + applyTone(hooked, currentTone, isModern);
     }
+
     const hookPriority = ['u', 'o', 'a'];
     for (const charToHook of hookPriority) {
       const idx = lowerBase.lastIndexOf(charToHook);

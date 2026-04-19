@@ -119,10 +119,12 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Zap className="w-3.5 h-3.5" />
           Quy tắc Engine 2.1.6
         </h3>
-        <div className="text-xs text-muted-foreground leading-relaxed space-y-1">
-          <p>- <b>Smart i/y</b>: Tự động dùng `i` sau phụ âm (`lí, kĩ`) và `y` sau `u` (`quý`).</p>
-          <p>- <b>Xóa dấu 3 bước</b>: Gỡ dấu thanh &rarr; gỡ móc &rarr; xóa chữ. Hoàn hảo để sửa lỗi nhanh.</p>
-          <p>- <b>Chuẩn chính tả</b>: Đặt dấu chuẩn nguyên âm chính cho cụm `ia, iê, ua, uô, ươ`.</p>
+        <div className="text-xs text-muted-foreground leading-relaxed space-y-2">
+          <p>
+            - <b>Smart i/y</b>: Tự động dùng `i` sau phụ âm (`lí, kĩ`) và `y` sau `u` (`quý`).<br />
+            - <b>Xóa dấu 3 bước</b>: Gỡ dấu thanh &rarr; gỡ móc &rarr; xóa chữ. Hoàn hảo để sửa lỗi nhanh.<br />
+            - <b>Chuẩn chính tả</b>: Đặt dấu chuẩn nguyên âm chính cho cụm `ia, iê, ua, uô, ươ`.
+          </p>
         </div>
       </div>
     </div>

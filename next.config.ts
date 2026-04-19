@@ -1,7 +1,8 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Cần thiết để chạy như một Chrome Extension tĩnh
+  output: 'export', // Bắt buộc để chạy dưới dạng Chrome Extension (Static HTML)
   typescript: {
     ignoreBuildErrors: true,
   },

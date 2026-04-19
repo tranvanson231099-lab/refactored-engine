@@ -118,11 +118,11 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <div className="space-y-3">
-                    <p><b>Bước 1:</b> Cài đặt Extension qua <code>chrome://extensions</code> (Load unpacked thư mục <b>out</b>).</p>
-                    <p><b>Bước 2:</b> Mở <b>Settings (Cài đặt)</b> của Chrome OS Flex.</p>
-                    <p><b>Bước 3:</b> Tìm mục <b>Languages and Input (Ngôn ngữ và nhập liệu)</b>.</p>
-                    <p><b>Bước 4:</b> Tại <b>Input Method (Phương thức nhập)</b>, nhấn <b>Add input methods</b>.</p>
-                    <p><b>Bước 5:</b> Chọn <b>VietFlex Telex</b> từ danh sách và nhấn Add.</p>
+                    <p><b>Bước 1:</b> Tải mã nguồn về máy.</p>
+                    <p><b>Bước 2:</b> Chạy lệnh <code>npm run build</code> trong terminal.</p>
+                    <p><b>Bước 3:</b> Mở Chrome, truy cập <code>chrome://extensions</code>.</p>
+                    <p><b>Bước 4:</b> Bật <b>Developer Mode</b>, nhấn <b>Load Unpacked</b>.</p>
+                    <p><b>Bước 5:</b> Chọn thư mục <b>out</b> vừa tạo ra.</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
@@ -147,7 +147,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • OS Level IME Enabled
+          VietFlex Engine v2.1.6 • Zero Latency IME
         </p>
       </CardContent>
     </Card>
