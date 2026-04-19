@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
@@ -67,7 +68,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           </div>
           <div>
             <h2 className="text-lg font-bold">Interactive Sandbox</h2>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.2 Active</p>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.3 Active</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -93,9 +94,9 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
 
       <Alert className="bg-amber-50 border-amber-200">
         <Info className="h-4 w-4 text-amber-600" />
-        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý cho Chrome OS / Windows</AlertTitle>
+        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý QUAN TRỌNG cho Chrome OS / Windows</AlertTitle>
         <AlertDescription className="text-[10px] text-amber-700">
-          Vui lòng **tắt bộ gõ hệ thống (chuyển sang US English)** để tránh xung đột phím. VietFlex sẽ tự xử lý tiếng Việt cho bạn.
+          Vui lòng **TẮT BỘ GÕ TIẾNG VIỆT HỆ THỐNG** (chuyển sang US English). Nếu không, phím sẽ bị lặp (ví dụ: luýên, ưư) do xung đột giữa bộ gõ máy tính và VietFlex.
         </AlertDescription>
       </Alert>
 
@@ -141,7 +142,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Mẹo gõ chuẩn Unicode
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Sử dụng phím <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px] font-bold">w</kbd> ở cuối từ để thêm móc (sonw &rarr; sơn, huw &rarr; hư). 
+          Sử dụng phím <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px] font-bold">w</kbd> ở cuối từ để thêm móc (sơn &rarr; sonw, hư &rarr; huw). 
           Gõ lặp phím modifier (ww, aa, ee) để trả lại ký tự gốc nếu gõ nhầm. Quy tắc đặt dấu chuẩn mới (hoà, luyện) đã được kích hoạt.
         </p>
       </div>
