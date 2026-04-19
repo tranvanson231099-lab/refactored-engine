@@ -15,6 +15,8 @@ interface UnikeyWindowProps {
   setIsEnabled: (enabled: boolean) => void;
   isModernStyle: boolean;
   setIsModernStyle: (enabled: boolean) => void;
+  isSmartFix: boolean;
+  setIsSmartFix: (enabled: boolean) => void;
   method: InputMethod;
   setMethod: (method: InputMethod) => void;
 }
@@ -24,6 +26,8 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   setIsEnabled,
   isModernStyle,
   setIsModernStyle,
+  isSmartFix,
+  setIsSmartFix,
   method,
   setMethod,
 }) => {
@@ -43,7 +47,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
       <CardContent className="p-4 space-y-5">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">IME Status</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Trạng thái IME</Label>
             <p className="text-sm font-medium">{isEnabled ? "BỘ GÕ ĐANG CHẠY" : "CHẾ ĐỘ TIẾNG ANH"}</p>
           </div>
           <Switch 
@@ -69,30 +73,48 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             </SelectContent>
           </Select>
           
-          <div className="flex items-center space-x-2 pt-1">
-            <Checkbox 
-              id="modern-style" 
-              checked={isModernStyle} 
-              onCheckedChange={(val) => setIsModernStyle(val === true)}
-              disabled={!isEnabled}
-            />
-            <label
-              htmlFor="modern-style"
-              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-            >
-              Bỏ dấu kiểu mới (hòa, thúy)
-            </label>
+          <div className="space-y-2 pt-1">
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="modern-style" 
+                checked={isModernStyle} 
+                onCheckedChange={(val) => setIsModernStyle(val === true)}
+                disabled={!isEnabled}
+              />
+              <label
+                htmlFor="modern-style"
+                className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                Bỏ dấu kiểu mới (hòa, thúy)
+              </label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="smart-fix" 
+                checked={isSmartFix} 
+                onCheckedChange={(val) => setIsSmartFix(val === true)}
+                disabled={!isEnabled}
+              />
+              <label
+                htmlFor="smart-fix"
+                className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-primary font-bold"
+              >
+                Smart Fix: Tự sửa lỗi chính tả
+              </label>
+            </div>
           </div>
         </div>
 
-        <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center gap-3">
-          <div className="p-2 bg-emerald-500 rounded text-white">
-            <Zap className="w-4 h-4" />
+        {isSmartFix && isEnabled && (
+          <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center gap-3 animate-in fade-in zoom-in-95 duration-300">
+            <div className="p-2 bg-emerald-500 rounded text-white shadow-sm">
+              <Zap className="w-4 h-4" />
+            </div>
+            <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
+              Engine 2.0 đang sửa lỗi thời gian thực (Offline)
+            </p>
           </div>
-          <p className="text-[10px] text-emerald-800 font-bold leading-tight uppercase">
-            Sửa lỗi chính tả thời gian thực đang bật (Offline)
-          </p>
-        </div>
+        )}
 
         <div className="pt-2 grid grid-cols-3 gap-2">
           <Button variant="outline" size="sm" className="h-14 flex flex-col gap-1 text-[10px] font-bold">
@@ -110,12 +132,12 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             onClick={() => setIsEnabled(!isEnabled)}
           >
             <Power className="w-4 h-4" />
-            {isEnabled ? "ĐÓNG" : "BẮT ĐẦU"}
+            {isEnabled ? "TẮT" : "BẬT"}
           </Button>
         </div>
         
-        <p className="text-[10px] text-center text-muted-foreground pt-1">
-          VietFlex Engine v2.0 • Tốc độ là ưu tiên số 1
+        <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
+          VietFlex Engine v2.0 • Ultra-Fast Orthography
         </p>
       </CardContent>
     </Card>

@@ -12,6 +12,7 @@ export default function Home() {
   const { 
     isEnabled, setIsEnabled, 
     isModernStyle, setIsModernStyle,
+    isSmartFix, setIsSmartFix,
     method, setMethod, 
     text, setText, rawSetText 
   } = useIme();
@@ -55,6 +56,7 @@ export default function Home() {
             rawSetText={rawSetText}
             method={method}
             isEnabled={isEnabled}
+            isSmartFix={isSmartFix}
           />
         </section>
 
@@ -69,6 +71,8 @@ export default function Home() {
               setIsEnabled={setIsEnabled} 
               isModernStyle={isModernStyle}
               setIsModernStyle={setIsModernStyle}
+              isSmartFix={isSmartFix}
+              setIsSmartFix={setIsSmartFix}
               method={method} 
               setMethod={setMethod} 
             />
