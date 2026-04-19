@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2, Download } from 'lucide-react';
+import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2, Download, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
@@ -110,19 +111,27 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 HƯỚNG DẪN CÀI ĐẶT
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Terminal className="w-5 h-5 text-blue-600" />
                   Kích hoạt Phương thức nhập
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
+                  <Alert variant="destructive" className="bg-amber-50 border-amber-200 text-amber-900">
+                    <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    <AlertTitle className="text-xs font-bold uppercase">Lưu ý sửa lỗi EACCES</AlertTitle>
+                    <AlertDescription className="text-[10px]">
+                      Phải di chuyển thư mục vào <code>~/vietflex</code> (Linux Home) trước khi gõ <code>npm install</code>.
+                    </AlertDescription>
+                  </Alert>
                   <div className="space-y-3">
-                    <p><b>Bước 1:</b> Chạy <code>npm run build</code> trong terminal.</p>
-                    <p><b>Bước 2:</b> Mở Chrome, vào <code>chrome://extensions</code>.</p>
-                    <p><b>Bước 3:</b> Bật <b>Developer Mode</b>.</p>
-                    <p><b>Bước 4:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b>.</p>
-                    <p><b>Bước 5:</b> Vào Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Thêm "VietFlex Telex".</p>
+                    <p><b>Bước 1:</b> <code>cp -r /mnt/chromeos/MyFiles/Downloads/vietflex ~/vietflex</code></p>
+                    <p><b>Bước 2:</b> <code>cd ~/vietflex && npm install</code></p>
+                    <p><b>Bước 3:</b> <code>npm run build</code> (Lệnh này tạo thư mục <b>out</b>)</p>
+                    <p><b>Bước 4:</b> Mở Chrome, vào <code>chrome://extensions</code>, bật <b>Developer Mode</b>.</p>
+                    <p><b>Bước 5:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b>.</p>
+                    <p><b>Bước 6:</b> Vào Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Thêm "VietFlex Telex".</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
