@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   trailingSlash: true,
-  // Đảm bảo không có asset nào bị thiếu khi export tĩnh
   assetPrefix: '',
 };
 

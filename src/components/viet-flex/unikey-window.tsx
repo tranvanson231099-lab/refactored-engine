@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -104,24 +103,24 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
+            <Button variant="outline" size="sm" className="w-full h-10 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 gap-2 font-bold text-[10px] uppercase animate-pulse">
               <Download className="w-4 h-4" />
-              HƯỚNG DẪN CÀI ĐẶT (FIX LỖI)
+              FIX LỖI TỆP KÊ KHAI (QUAN TRỌNG)
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600 font-bold uppercase tracking-tight">
                 <AlertTriangle className="w-5 h-5" />
-                FIX LỖI TỆP KÊ KHAI BỊ THIẾU
+                KHÔNG ĐƯỢC CHỌN THƯ MỤC "VIETFLEX"
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <Alert className="bg-red-50 border-red-200">
-                  <AlertTriangle className="h-4 w-4 text-red-600" />
-                  <AlertTitle className="text-xs font-bold uppercase text-red-800">LỖI THƯỜNG GẶP</AlertTitle>
-                  <AlertDescription className="text-[11px] text-red-700 font-bold leading-relaxed">
-                    Bạn đang chọn thư mục "vietflex" nên báo lỗi. 
-                    Bạn <b>PHẢI</b> chọn thư mục có tên là <b>out</b>.
+                <Alert variant="destructive" className="border-2 shadow-lg">
+                  <AlertTriangle className="h-5 w-5" />
+                  <AlertTitle className="text-sm font-black uppercase">LỖI CHẾT NGƯỜI</AlertTitle>
+                  <AlertDescription className="text-xs font-bold leading-relaxed">
+                    Bạn báo lỗi "Tệp kê khai bị thiếu" vì bạn đang chọn thư mục gốc.<br/><br/>
+                    <span className="text-lg underline italic text-white bg-red-600 px-1">BẠN PHẢI CHỌN THƯ MỤC "OUT"</span>
                   </AlertDescription>
                 </Alert>
 
@@ -129,11 +128,11 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                   <div className="space-y-2">
                     <p className="font-bold text-primary flex items-center gap-2">
                       <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 1: Chạy lệnh Build
+                      BƯỚC 1: Build lại sạch sẽ
                     </p>
                     <div className="bg-slate-900 p-3 rounded-md font-mono text-[10px] text-emerald-400 relative">
-                      <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
-                      <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
+                      <code>npm run build</code>
+                      <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("npm run build")}>
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
@@ -142,22 +141,22 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                   <div className="space-y-2">
                     <p className="font-bold text-primary flex items-center gap-2">
                       <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 2: Cài đặt vào Chrome
+                      BƯỚC 2: Tải vào Chrome
                     </p>
-                    <div className="text-[12px] space-y-2 bg-slate-50 p-3 border rounded-md">
-                      <p>1. Truy cập <code>chrome://extensions</code></p>
+                    <div className="text-[12px] space-y-2 bg-slate-50 p-3 border-2 border-dashed border-red-500 rounded-md">
+                      <p>1. Vào <code>chrome://extensions</code></p>
                       <p>2. Bật <b>Developer Mode</b>.</p>
                       <p>3. Nhấn <b>Load Unpacked</b>.</p>
-                      <p className="text-red-600 font-bold underline">4. Tìm và CHỌN ĐÚNG thư mục "out".</p>
+                      <p className="text-red-600 font-black text-sm uppercase underline">4. CHỌN THƯ MỤC "OUT" (Bên trong vietflex)</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <p className="font-bold text-primary flex items-center gap-2">
                       <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 3: Kích hoạt hệ thống
+                      BƯỚC 3: Thêm vào Hệ thống
                     </p>
-                    <p className="text-[12px]">Vào <b>Cài đặt &gt; Ngôn ngữ &gt; Phương thức nhập</b>, thêm <b>VietFlex Telex</b>.</p>
+                    <p className="text-[12px]">Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>, nhấn <b>Thêm</b> và tìm <b>VietFlex Telex</b>.</p>
                   </div>
                 </div>
               </DialogDescription>
