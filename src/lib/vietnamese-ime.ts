@@ -137,9 +137,16 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
 
   // 1. Xử lý gõ lặp phím modifier để trả lại phím gốc (ww -> w, aa -> a)
+  // Nhận diện cả ký tự đã biến đổi (ví dụ: ư + w -> w)
   if (method === 'Telex' && word.length >= 2) {
     const lastTwo = word.slice(-2).toLowerCase();
-    const restoreMap: Record<string, string> = { 'aa': 'a', 'ee': 'e', 'oo': 'o', 'dd': 'd', 'ww': 'w' };
+    const restoreMap: Record<string, string> = { 
+      'aa': 'a', 'âa': 'a',
+      'ee': 'e', 'êe': 'e',
+      'oo': 'o', 'ôo': 'o',
+      'dd': 'd', 'đd': 'd',
+      'ww': 'w', 'ưw': 'w'
+    };
     if (restoreMap[lastTwo]) {
       const base = word.slice(0, -2);
       const tone = getWordToneIndex(word);
@@ -197,7 +204,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   }
 
   // 5. Tự động sửa lỗi thời gian thực (Smart Normalization)
-  // Ví dụ: thuyene -> thuyền, luyené -> luyến
+  // Đảm bảo dấu luôn đặt đúng chỗ bất kể thứ tự gõ (ví dụ: luýên -> luyến)
   const currentTone = getWordToneIndex(word);
   const cleanNormalizedWord = removeTone(word);
   return prefix + applyTone(cleanNormalizedWord, currentTone, isModern);

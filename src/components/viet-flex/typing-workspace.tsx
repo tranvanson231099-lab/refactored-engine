@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
 import { InputMethod } from '@/lib/vietnamese-ime';
@@ -31,6 +31,33 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
 }) => {
   const [isRefining, setIsRefining] = useState(false);
   const { toast } = useToast();
+  const lastRefinedText = useRef(text);
+
+  // Tự động tinh chỉnh bằng AI khi người dùng ngừng gõ (Auto-Refine)
+  useEffect(() => {
+    if (!isAiEnabled || !isOnline || !text.trim() || text === lastRefinedText.current) return;
+
+    const timer = setTimeout(async () => {
+      setIsRefining(true);
+      try {
+        const result = await smartTextRefiner({ text });
+        if (result.refinedText !== text) {
+          rawSetText(result.refinedText);
+          lastRefinedText.current = result.refinedText;
+          toast({
+            title: "Auto-Refinement Applied",
+            description: result.explanation,
+          });
+        }
+      } catch (error) {
+        console.error('Auto-refine error:', error);
+      } finally {
+        setIsRefining(false);
+      }
+    }, 2000); // Tự động sửa sau 2 giây ngừng gõ
+
+    return () => clearTimeout(timer);
+  }, [text, isAiEnabled, isOnline, rawSetText, toast]);
 
   const handleSuggestion = (suggestion: string) => {
     const words = text.split(' ');
@@ -44,6 +71,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
     try {
       const result = await smartTextRefiner({ text });
       rawSetText(result.refinedText);
+      lastRefinedText.current = result.refinedText;
       toast({
         title: "AI Refinement Complete",
         description: result.explanation,
