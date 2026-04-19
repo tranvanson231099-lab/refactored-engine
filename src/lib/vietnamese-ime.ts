@@ -80,17 +80,6 @@ function removeToneOnly(word: string): string {
   return result;
 }
 
-function simplifyVowels(word: string): string {
-  let result = '';
-  for (const char of word) {
-    const lower = char.toLowerCase();
-    const simple = BASE_VOWEL_MAP[lower] || lower;
-    const isUpper = char === char.toUpperCase();
-    result += isUpper ? simple.toUpperCase() : simple;
-  }
-  return result;
-}
-
 function getWordToneIndex(word: string): number {
   for (const char of word) {
     const lower = char.toLowerCase();
@@ -103,7 +92,7 @@ function getWordToneIndex(word: string): number {
 }
 
 /**
- * Thuật toán xác định vị trí đặt dấu chuẩn 2.1.6
+ * Thuật toán xác định vị trí đặt dấu chuẩn 2.1.6 của Bộ Giáo dục
  */
 function getTonePosition(word: string, isModern: boolean): number {
   const clean = removeToneOnly(word);
@@ -129,35 +118,30 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (actualVowels.length === 1) return actualVowels[0];
 
   const vowelString = actualVowels.map(i => lowerClean[i]).join('');
+  const hasFinalConsonant = !isVowel(clean[clean.length - 1]);
 
-  // Ưu tiên nguyên âm có dấu phụ (ă, â, ê, ô, ơ, ư)
+  // Quy tắc cụm nguyên âm có dấu phụ (ă, â, ê, ô, ơ, ư)
   for (const idx of actualVowels) {
     if ('ăâêôơư'.includes(lowerClean[idx])) return idx;
   }
 
-  // Nguyên âm đôi (ia, iê, ua, uô, ươ...)
-  const hasFinalConsonant = !isVowel(clean[clean.length - 1]);
-  
-  // Trường hợp 'uyên', 'iêu', 'uôi'...
-  if (vowelString === 'uye' || vowelString === 'uôi' || vowelString === 'iêu' || vowelString === 'uou') {
-    return actualVowels[1];
-  }
-
-  if (actualVowels.length === 2) {
-    // Kiểu mới vs Kiểu cũ cho 'oa', 'oe', 'uy'
-    if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) {
-      return actualVowels[1];
+  // Quy tắc nguyên âm đôi (ia, iê, ua, uô, ươ)
+  const doubleVowels = ['ia', 'iê', 'ua', 'uô', 'ươ'];
+  for (const dv of doubleVowels) {
+    if (vowelString.includes(dv)) {
+      if (hasFinalConsonant) return actualVowels[1]; // Có âm cuối đặt ở âm thứ 2 (miếng, muốn, thưởng)
+      return actualVowels[0]; // Không âm cuối đặt ở âm thứ 1 (mía, tủa, nghĩa)
     }
-    
-    if (hasFinalConsonant) return actualVowels[1]; // Có âm cuối đặt ở âm thứ 2
-    return actualVowels[0]; // Không âm cuối đặt ở âm thứ 1 (mía, tủa)
   }
 
-  if (actualVowels.length === 3) {
-    return actualVowels[1]; // Miếng, thưởng...
+  // Quy tắc vần oa, oe, uy (Kiểu mới vs Kiểu cũ)
+  if (isModern && (vowelString.includes('oa') || vowelString.includes('oe') || vowelString.includes('uy'))) {
+    return actualVowels[1]; // Hoà, Khoẻ, Thuỷ
   }
 
-  return actualVowels[1];
+  // Trường hợp còn lại: Nếu có âm cuối đặt ở âm thứ 2, không có đặt ở âm thứ 1
+  if (hasFinalConsonant) return actualVowels[1];
+  return actualVowels[0];
 }
 
 function applyTone(word: string, toneIndex: number, isModern: boolean): string {
@@ -170,7 +154,6 @@ function applyTone(word: string, toneIndex: number, isModern: boolean): string {
     
     for (const [base, variants] of Object.entries(VOWEL_MAP)) {
       if (base === baseVowel || (base === 'ă' && variants.includes(baseVowel)) || (base === 'â' && variants.includes(baseVowel))) {
-          // Fix for diacritics being stripped
           const mappedVowel = variants[toneIndex];
           return cleanWord.substring(0, pos) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + cleanWord.substring(pos + 1);
       }
@@ -302,7 +285,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     return prefix + applyTone(baseWord, toneIdx, isModern);
   }
 
-  // Smart Fix: Tự sửa lỗi đặt dấu khi gõ xong
+  // Smart Fix: Tự sửa lỗi đặt dấu khi gõ
   if (isSmartFix && hasVowel(word)) {
     const tone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);

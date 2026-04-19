@@ -87,7 +87,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 htmlFor="modern-style"
                 className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                Bỏ dấu kiểu mới (hòa, thúy)
+                Bỏ dấu kiểu mới (hoà, thuỷ)
               </label>
             </div>
             <div className="flex items-center space-x-2">
