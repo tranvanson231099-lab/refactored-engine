@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { smartTypingSuggestions, SmartTypingSuggestionsOutput } from '@/ai/flows/smart-typing-suggestions-flow';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, CloudOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TypingSuggestionsProps {
   text: string;
   onSuggestionClick: (suggestion: string) => void;
+  isAiEnabled: boolean;
+  isOnline: boolean;
 }
 
-export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({ text, onSuggestionClick }) => {
+export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({ 
+  text, 
+  onSuggestionClick,
+  isAiEnabled,
+  isOnline 
+}) => {
   const [suggestions, setSuggestions] = useState<SmartTypingSuggestionsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!isAiEnabled || !isOnline) {
+      setSuggestions(null);
+      return;
+    }
+
     const timer = setTimeout(async () => {
       const words = text.trim().split(' ');
       const lastWord = words[words.length - 1] || '';
@@ -37,7 +49,18 @@ export const TypingSuggestions: React.FC<TypingSuggestionsProps> = ({ text, onSu
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [text]);
+  }, [text, isAiEnabled, isOnline]);
+
+  if (!isAiEnabled) return null;
+
+  if (!isOnline) {
+    return (
+      <div className="flex items-center gap-2 p-3 bg-secondary/20 rounded-lg border border-border text-muted-foreground">
+        <CloudOff className="w-4 h-4" />
+        <span className="text-xs font-medium">AI Offline mode. Connect to internet for smart suggestions.</span>
+      </div>
+    );
+  }
 
   if (!suggestions || (!suggestions.wordCompletions.length && !suggestions.toneMarkCorrections.length)) {
     return null;

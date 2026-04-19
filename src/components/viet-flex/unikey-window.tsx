@@ -5,12 +5,15 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Power, Keyboard, Settings2, HelpCircle } from 'lucide-react';
+import { Power, Keyboard, Settings2, HelpCircle, Wifi, WifiOff, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
   setIsEnabled: (enabled: boolean) => void;
+  isAiEnabled: boolean;
+  setIsAiEnabled: (enabled: boolean) => void;
+  isOnline: boolean;
   method: InputMethod;
   setMethod: (method: InputMethod) => void;
 }
@@ -18,6 +21,9 @@ interface UnikeyWindowProps {
 export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   isEnabled,
   setIsEnabled,
+  isAiEnabled,
+  setIsAiEnabled,
+  isOnline,
   method,
   setMethod,
 }) => {
@@ -30,9 +36,12 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           </div>
           <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex Input</CardTitle>
         </div>
-        <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
-          {isEnabled ? "ON" : "OFF"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {isOnline ? <Wifi className="w-3.5 h-3.5 text-accent animate-pulse" /> : <WifiOff className="w-3.5 h-3.5 text-destructive" />}
+          <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
+            {isEnabled ? "ON" : "OFF"}
+          </Badge>
+        </div>
       </CardHeader>
       <CardContent className="p-4 space-y-5">
         <div className="flex items-center justify-between">
@@ -44,6 +53,22 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             checked={isEnabled} 
             onCheckedChange={setIsEnabled}
             className="data-[state=checked]:bg-accent"
+          />
+        </div>
+
+        <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg border border-primary/10">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <Label className="text-xs font-semibold uppercase tracking-wider text-primary">AI Assistance</Label>
+            </div>
+            <p className="text-[10px] text-muted-foreground">{isOnline ? "Smart fixing enabled" : "Internet required"}</p>
+          </div>
+          <Switch 
+            checked={isAiEnabled} 
+            onCheckedChange={setIsAiEnabled}
+            disabled={!isOnline}
+            className="data-[state=checked]:bg-primary"
           />
         </div>
 
@@ -85,7 +110,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1">
-          VietFlex v1.0.2 • Optimized for Chrome OS Flex
+          VietFlex v1.0.3 • Chrome OS Flex Optimized
         </p>
       </CardContent>
     </Card>

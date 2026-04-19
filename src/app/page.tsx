@@ -5,10 +5,16 @@ import { useIme } from '@/hooks/use-ime';
 import { UnikeyWindow } from '@/components/viet-flex/unikey-window';
 import { TypingWorkspace } from '@/components/viet-flex/typing-workspace';
 import { Toaster } from '@/components/ui/toaster';
-import { Command, Layout, Monitor, Smartphone } from 'lucide-react';
+import { Command, Layout, Monitor, Smartphone, Wifi, WifiOff } from 'lucide-react';
 
 export default function Home() {
-  const { isEnabled, setIsEnabled, method, setMethod, text, setText, rawSetText } = useIme();
+  const { 
+    isEnabled, setIsEnabled, 
+    isAiEnabled, setIsAiEnabled,
+    isOnline,
+    method, setMethod, 
+    text, setText, rawSetText 
+  } = useIme();
 
   return (
     <div className="min-h-screen flex flex-col bg-background selection:bg-accent/30">
@@ -24,12 +30,12 @@ export default function Home() {
         <div className="ml-auto flex items-center gap-6">
           <div className="hidden md:flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
             <div className="flex items-center gap-1.5">
-              <Monitor className="w-3.5 h-3.5" />
-              Chrome OS Flex
+              {isOnline ? <Wifi className="w-3.5 h-3.5 text-accent" /> : <WifiOff className="w-3.5 h-3.5 text-destructive" />}
+              {isOnline ? 'Online' : 'Offline Mode'}
             </div>
             <div className="flex items-center gap-1.5">
-              <Smartphone className="w-3.5 h-3.5" />
-              Universal Sync
+              <Monitor className="w-3.5 h-3.5" />
+              Chrome OS Flex
             </div>
           </div>
           <div className="h-6 w-px bg-border" />
@@ -51,6 +57,8 @@ export default function Home() {
             rawSetText={rawSetText}
             method={method}
             isEnabled={isEnabled}
+            isAiEnabled={isAiEnabled}
+            isOnline={isOnline}
           />
         </section>
 
@@ -64,6 +72,9 @@ export default function Home() {
             <UnikeyWindow 
               isEnabled={isEnabled} 
               setIsEnabled={setIsEnabled} 
+              isAiEnabled={isAiEnabled}
+              setIsAiEnabled={setIsAiEnabled}
+              isOnline={isOnline}
               method={method} 
               setMethod={setMethod} 
             />
@@ -71,12 +82,12 @@ export default function Home() {
             <div className="mt-8 p-6 bg-white rounded-xl border-2 border-primary/5 shadow-sm">
               <h3 className="text-sm font-bold mb-3">About VietFlex</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Designed specifically for Chrome OS Flex users who need a lightweight, high-performance Vietnamese IME. 
-                Utilizing the latest linguistic algorithms and Gemini AI for context-aware suggestions.
+                Smart Vietnamese IME with integrated Gemini AI support. 
+                Optimized for mixed English/Vietnamese environments.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary">BETA ACCESS</span>
-                <span className="text-[10px] font-bold text-accent">STABLE 1.0.2</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Version 1.0.3</span>
+                <span className="text-[10px] font-bold text-accent uppercase">AI Powered</span>
               </div>
             </div>
           </div>

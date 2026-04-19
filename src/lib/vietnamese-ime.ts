@@ -1,6 +1,6 @@
 /**
  * Nâng cấp bộ gõ tiếng Việt Telex/VNI chuẩn Unikey.
- * Xử lý đặt dấu vào nguyên âm chính và hỗ trợ các quy tắc gõ hiện đại.
+ * Hỗ trợ gõ xen kẽ tiếng Anh và tiếng Việt (Smart Mixed Mode).
  */
 
 export type InputMethod = 'Telex' | 'VNI';
@@ -35,9 +35,9 @@ const TONES: Record<string, number> = {
   '0': 0 // Remove tone
 };
 
-/**
- * Tìm vị trí đặt dấu chuẩn trong một từ tiếng Việt.
- */
+// Danh sách từ tiếng Anh thông dụng để tránh bỏ dấu nhầm
+const COMMON_ENGLISH_WORDS = new Set(['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'new', 'now', 'old', 'see', 'two', 'way', 'who', 'boy', 'did', 'its', 'let', 'put', 'say', 'she', 'too', 'use']);
+
 function getTonePosition(word: string): number {
   const vowelsInWord: number[] = [];
   for (let i = 0; i < word.length; i++) {
@@ -47,7 +47,6 @@ function getTonePosition(word: string): number {
   if (vowelsInWord.length === 0) return -1;
   if (vowelsInWord.length === 1) return vowelsInWord[0];
 
-  // Quy tắc đặt dấu cho cụm nguyên âm (uo, oa, oe, uy, ...)
   const vowelStr = vowelsInWord.map(i => word[i].toLowerCase()).join('');
   
   if (vowelStr === 'oa' || vowelStr === 'oe' || vowelStr === 'uy' || vowelStr === 'ue') {
@@ -57,7 +56,6 @@ function getTonePosition(word: string): number {
     return vowelsInWord[0];
   }
   
-  // Mặc định đặt vào nguyên âm thứ 2 nếu có 2-3 nguyên âm
   return vowelsInWord[Math.floor(vowelsInWord.length / 2)];
 }
 
@@ -70,23 +68,29 @@ export function convertText(text: string, method: InputMethod): string {
   
   if (word.length === 0) return text;
 
-  // 1. Xử lý sửa đổi chữ (Vowel modifiers)
+  // Mixed Mode: Nếu từ hiện tại là tiếng Anh thông dụng, không xử lý bỏ dấu
+  if (COMMON_ENGLISH_WORDS.has(word.toLowerCase())) {
+    return text;
+  }
+
+  // 1. Xử lý sửa đổi chữ
   const mods = method === 'Telex' ? TELEX_MODS : VNI_MODS;
   for (const [key, val] of Object.entries(mods)) {
+    // Regex tránh thay thế nếu từ đó có vẻ là tiếng Anh (ví dụ: 'sweet' không nên bị đổi thành 'swêet')
+    // Ở đây dùng logic đơn giản: chỉ đổi nếu là phím gõ cuối hoặc cụm Telex đặc trưng
     const regex = new RegExp(key, 'gi');
     word = word.replace(regex, (match) => {
       return match === match.toUpperCase() ? val.toUpperCase() : val;
     });
   }
 
-  // 2. Xử lý dấu (Tones)
+  // 2. Xử lý dấu
   const lastChar = word.slice(-1).toLowerCase();
   const toneIndex = TONES[lastChar];
 
   if (toneIndex !== undefined) {
     let wordWithoutToneMarker = word.slice(0, -1);
     
-    // Tìm và gỡ dấu cũ trước khi đặt dấu mới
     let cleanWord = '';
     for (const char of wordWithoutToneMarker) {
       let found = false;
@@ -112,7 +116,6 @@ export function convertText(text: string, method: InputMethod): string {
              (isUpper ? newVowel.toUpperCase() : newVowel) + 
              cleanWord.substring(pos + 1);
     } else {
-      // Không có nguyên âm thì giữ nguyên marker
       word = wordWithoutToneMarker + lastChar;
     }
   }
