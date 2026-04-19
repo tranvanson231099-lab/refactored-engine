@@ -105,39 +105,46 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
               <Download className="w-4 h-4" />
-              SỬA LỖI & CÀI ĐẶT
+              HƯỚNG DẪN CÀI ĐẶT
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-blue-700 font-bold uppercase tracking-tight">
                 <Terminal className="w-5 h-5" />
-                Hướng dẫn Chrome OS Flex
+                Cài đặt vào Chrome OS Flex
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <Alert className="bg-red-50 border-red-200">
-                  <AlertTitle className="text-xs font-bold uppercase text-red-800">Lưu ý cực kỳ quan trọng</AlertTitle>
-                  <AlertDescription className="text-[11px] text-red-700">
-                    Khi nhấn <b>Load Unpacked</b>, bạn <b>PHẢI</b> chọn thư mục mang tên <b>out</b>. Nếu chọn thư mục <code>vietflex</code> gốc, bạn sẽ gặp lỗi "Thiếu tệp kê khai".
+                <Alert className="bg-amber-50 border-amber-200">
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
+                  <AlertTitle className="text-xs font-bold uppercase text-amber-800">Lưu ý quan trọng</AlertTitle>
+                  <AlertDescription className="text-[11px] text-amber-700 font-medium">
+                    Bạn <b>PHẢI</b> chọn thư mục <b>out</b> khi nhấn Load Unpacked. Nếu chọn thư mục gốc "vietflex", Chrome sẽ báo lỗi "Thiếu tệp kê khai".
                   </AlertDescription>
                 </Alert>
 
+                <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
+                  <div className="bg-slate-100 p-3 rounded-md font-mono text-[10px]">
+                    <p className="font-bold text-primary mb-1">LỆNH BUILD (Trong Terminal Linux):</p>
+                    <code className="block bg-white p-2 border">npm run build</code>
+                  </div>
+                  
+                  <p><b>Bước 1:</b> Mở Chrome, vào <code>chrome://extensions</code></p>
+                  <p><b>Bước 2:</b> Bật <b>Developer Mode</b> (Góc trên bên phải).</p>
+                  <p><b>Bước 3:</b> Nhấn <b>Load Unpacked</b>.</p>
+                  <p><b>Bước 4:</b> Tìm đến thư mục <code>~/vietflex/out</code> và nhấn <b>Open/Mở</b>.</p>
+                  <p><b>Bước 5:</b> Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
+                  <p><b>Bước 6:</b> Nhấn <b>Thêm phương thức nhập</b> và chọn <b>VietFlex Telex</b>.</p>
+                </div>
+
                 <div className="bg-slate-900 p-4 rounded-lg space-y-2">
-                  <p className="text-xs text-slate-400 font-bold uppercase">Lệnh sửa lỗi EACCES & Build:</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase">Sửa lỗi cài đặt (EACCES):</p>
                   <div className="bg-slate-800 p-2 rounded font-mono text-[10px] text-white relative">
                     <code>rm -rf node_modules && npm install --foreground-scripts && npm run build</code>
                     <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("rm -rf node_modules && npm install --foreground-scripts && npm run build")}>
                       <Copy className="h-3 w-3" />
                     </Button>
                   </div>
-                </div>
-                
-                <div className="space-y-3 pt-2 text-[12px] leading-relaxed">
-                  <p><b>Bước 1:</b> Mở <code>chrome://extensions</code></p>
-                  <p><b>Bước 2:</b> Bật <b>Developer Mode</b>.</p>
-                  <p><b>Bước 3:</b> Nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> (trong <code>~/vietflex/out</code>).</p>
-                  <p><b>Bước 4:</b> Vào <b>Cài đặt &gt; Ngôn ngữ &gt; Phương thức nhập</b>.</p>
-                  <p><b>Bước 5:</b> Nhấn <b>Thêm phương thức nhập</b> và chọn <b>VietFlex Telex</b>.</p>
                 </div>
               </DialogDescription>
             </DialogHeader>

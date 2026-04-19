@@ -1,4 +1,3 @@
-
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -13,8 +12,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Đảm bảo các tệp tĩnh được copy đúng vào thư mục out
   trailingSlash: true,
+  // Đảm bảo không có asset nào bị thiếu khi export tĩnh
+  assetPrefix: '',
 };
 
 export default nextConfig;

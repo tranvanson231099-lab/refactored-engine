@@ -3,7 +3,9 @@
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
   "description": "Bộ gõ tiếng Việt siêu tốc cho Chrome OS Flex",
-  "permissions": ["input"],
+  "permissions": [
+    "input"
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -12,7 +14,9 @@
       "name": "VietFlex Telex",
       "id": "vietflex_telex",
       "language": "vi",
-      "layouts": ["us"]
+      "layouts": [
+        "us"
+      ]
     }
   ],
   "icons": {
