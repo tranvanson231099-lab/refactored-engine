@@ -12,7 +12,9 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  // Đảm bảo các tệp tĩnh được copy đúng vào thư mục out
+  trailingSlash: true,
 };
 
 export default nextConfig;
