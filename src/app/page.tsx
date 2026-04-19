@@ -11,6 +11,7 @@ export default function Home() {
   const { 
     isEnabled, setIsEnabled, 
     isAiEnabled, setIsAiEnabled,
+    isModernStyle, setIsModernStyle,
     isOnline,
     method, setMethod, 
     text, setText, rawSetText 
@@ -74,6 +75,8 @@ export default function Home() {
               setIsEnabled={setIsEnabled} 
               isAiEnabled={isAiEnabled}
               setIsAiEnabled={setIsAiEnabled}
+              isModernStyle={isModernStyle}
+              setIsModernStyle={setIsModernStyle}
               isOnline={isOnline}
               method={method} 
               setMethod={setMethod} 
@@ -86,7 +89,7 @@ export default function Home() {
                 Optimized for mixed English/Vietnamese environments.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Version 1.0.3</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Version 1.0.4</span>
                 <span className="text-[10px] font-bold text-accent uppercase">AI Powered</span>
               </div>
             </div>

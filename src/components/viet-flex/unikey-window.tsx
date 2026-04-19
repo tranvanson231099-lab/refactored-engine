@@ -5,14 +5,17 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Power, Keyboard, Settings2, HelpCircle, Wifi, WifiOff, Sparkles } from 'lucide-react';
+import { Power, Keyboard, Settings2, HelpCircle, Wifi, WifiOff, Sparkles, CheckSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface UnikeyWindowProps {
   isEnabled: boolean;
   setIsEnabled: (enabled: boolean) => void;
   isAiEnabled: boolean;
   setIsAiEnabled: (enabled: boolean) => void;
+  isModernStyle: boolean;
+  setIsModernStyle: (enabled: boolean) => void;
   isOnline: boolean;
   method: InputMethod;
   setMethod: (method: InputMethod) => void;
@@ -23,6 +26,8 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   setIsEnabled,
   isAiEnabled,
   setIsAiEnabled,
+  isModernStyle,
+  setIsModernStyle,
   isOnline,
   method,
   setMethod,
@@ -72,7 +77,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Input Method</Label>
           <Select 
             value={method} 
@@ -87,6 +92,21 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
               <SelectItem value="VNI">VNI (Numeric)</SelectItem>
             </SelectContent>
           </Select>
+          
+          <div className="flex items-center space-x-2 pt-1">
+            <Checkbox 
+              id="modern-style" 
+              checked={isModernStyle} 
+              onCheckedChange={(val) => setIsModernStyle(val === true)}
+              disabled={!isEnabled}
+            />
+            <label
+              htmlFor="modern-style"
+              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            >
+              Bỏ dấu kiểu mới (hoà, hoá, thuý)
+            </label>
+          </div>
         </div>
 
         <div className="pt-2 grid grid-cols-3 gap-2">
@@ -110,7 +130,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1">
-          VietFlex v1.0.3 • Chrome OS Flex Optimized
+          VietFlex v1.0.4 • Windows/ChromeOS Optimized
         </p>
       </CardContent>
     </Card>
