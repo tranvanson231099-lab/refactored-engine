@@ -2,7 +2,7 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Bắt buộc để chạy dưới dạng Chrome Extension (Static HTML)
+  output: 'export',
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // Bắt buộc cho output: 'export'
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

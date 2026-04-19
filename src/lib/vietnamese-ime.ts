@@ -83,34 +83,36 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   let actualVowels = [...vowelIndices];
   
-  // Xử lý qu và gi (u và i là âm đệm)
   if (lowerClean.startsWith('qu') && vowelIndices[0] === 1) actualVowels.shift(); 
   else if (lowerClean.startsWith('gi') && vowelIndices[0] === 1 && vowelIndices.length > 1) actualVowels.shift();
 
   if (actualVowels.length === 0) return vowelIndices[vowelIndices.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
 
-  const vowelString = actualVowels.map(i => lowerClean[i]).join('');
+  const lowerVowelStr = actualVowels.map(i => lowerClean[i]).join('');
   const lastChar = clean[clean.length - 1].toLowerCase();
   const hasFinalConsonant = !isVowel(lastChar);
 
   // Nguyên âm ba
-  if (vowelString.includes('uyê')) return actualVowels[vowelString.indexOf('uyê') + 2];
-  if (vowelString.includes('uôi') || vowelString.includes('iêu') || vowelString.includes('ươu')) 
+  if (lowerVowelStr.includes('uyê')) return actualVowels[lowerVowelStr.indexOf('uyê') + 2];
+  if (lowerVowelStr.includes('uôi') || lowerVowelStr.includes('iêu') || lowerVowelStr.includes('ươu')) 
     return actualVowels[1];
 
   // Nguyên âm đôi
   const diphthongsWithToneOnTwo = ['iê', 'uô', 'ươ'];
   for (const d of diphthongsWithToneOnTwo) {
-    if (vowelString.includes(d)) return actualVowels[vowelString.indexOf(d) + 1];
+    if (lowerVowelStr.includes(d)) return actualVowels[lowerVowelStr.indexOf(d) + 1];
   }
 
   const diphthongsWithToneOnOne = ['ia', 'ua', 'ưa'];
   for (const d of diphthongsWithToneOnOne) {
-    if (vowelString.includes(d)) return actualVowels[vowelString.indexOf(d)];
+    if (lowerVowelStr.includes(d)) {
+      if (hasFinalConsonant) return actualVowels[lowerVowelStr.indexOf(d) + 1];
+      return actualVowels[lowerVowelStr.indexOf(d)];
+    }
   }
 
-  if (isModern && (vowelString === 'oa' || vowelString === 'oe' || vowelString === 'uy')) return actualVowels[1];
+  if (isModern && (lowerVowelStr === 'oa' || lowerVowelStr === 'oe' || lowerVowelStr === 'uy')) return actualVowels[1];
   if (hasFinalConsonant && actualVowels.length >= 2) return actualVowels[1];
   return actualVowels[0];
 }
@@ -185,6 +187,7 @@ function applySmartFix(word: string, isModern: boolean): string {
 
 export function convertText(text: string, method: InputMethod, isModern: boolean, isSmartFix: boolean): string {
   if (!text) return '';
+  
   if (isSmartFix && text.length >= 2) {
     const lastChar = text.slice(-1);
     const prevChar = text.slice(-2, -1);
@@ -204,7 +207,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     const baseWord = word.slice(0, -1);
     const lowerBase = removeToneOnly(baseWord).toLowerCase();
     
-    // Xử lý móc cho uo -> ươ (sonw -> sơn)
     if (lowerBase.includes('uo')) {
       const idx = lowerBase.lastIndexOf('uo');
       const currentTone = getWordToneIndex(baseWord);
