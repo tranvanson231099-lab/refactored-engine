@@ -1,14 +1,14 @@
 
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { TypingSuggestions } from './typing-suggestions';
 import { InputMethod } from '@/lib/vietnamese-ime';
-import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle, Info } from 'lucide-react';
+import { Keyboard, MousePointer2, Wand2, Loader2, Sparkles, AlertCircle, Info, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { smartTextRefiner } from '@/ai/flows/smart-text-refiner-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from '@/components/ui/badge';
 
 interface TypingWorkspaceProps {
   text: string;
@@ -67,8 +67,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
             <MousePointer2 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold">Interactive Sandbox</h2>
-            <p className="text-xs text-muted-foreground font-medium">VietFlex Core 1.3 Active</p>
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold">Interactive Sandbox</h2>
+              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
+                <Zap className="w-3 h-3 fill-emerald-500" />
+                Local AI Active
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground font-medium">VietFlex Engine v1.5 • Real-time Correcting</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -94,21 +100,11 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
 
       <Alert className="bg-amber-50 border-amber-200">
         <Info className="h-4 w-4 text-amber-600" />
-        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý QUAN TRỌNG cho Chrome OS / Windows</AlertTitle>
+        <AlertTitle className="text-xs font-bold text-amber-800">Lưu ý quan trọng cho Chrome OS / Windows</AlertTitle>
         <AlertDescription className="text-[10px] text-amber-700">
-          Vui lòng **TẮT BỘ GÕ TIẾNG VIỆT HỆ THỐNG** (chuyển sang US English). Nếu không, phím sẽ bị lặp (ví dụ: luýên, ưư) do xung đột giữa bộ gõ máy tính và VietFlex.
+          Hãy tắt bộ gõ tiếng Việt của máy tính (chuyển sang tiếng Anh). VietFlex đã tích hợp Local AI để tự sửa lỗi gõ ngay cả khi offline.
         </AlertDescription>
       </Alert>
-
-      {!isOnline && isAiEnabled && (
-        <Alert variant="destructive" className="bg-destructive/5 border-destructive/20 py-2">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle className="text-xs font-bold">AI Offline</AlertTitle>
-          <AlertDescription className="text-[10px]">
-            Tính năng AI Smart Fix tạm thời không khả dụng do mất kết nối.
-          </AlertDescription>
-        </Alert>
-      )}
 
       <div className="relative group">
         <Textarea
@@ -117,11 +113,10 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        {!isEnabled && (
-          <div className="absolute inset-0 bg-secondary/5 pointer-events-none rounded-md" />
-        )}
         <div className="absolute bottom-4 right-4 flex items-center gap-2 text-muted-foreground">
-            {isAiEnabled && <Sparkles className={`w-4 h-4 ${isOnline ? 'text-accent' : 'text-muted'}`} />}
+            <Badge variant="secondary" className="text-[9px] font-bold bg-white/80 backdrop-blur">
+              {isOnline ? 'CLOUD AI LINKED' : 'LOCAL AI ONLY'}
+            </Badge>
             <Keyboard className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-widest">
                 {text.length} Characters
@@ -138,12 +133,13 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
-          <AlertCircle className="w-3.5 h-3.5" />
-          Mẹo gõ chuẩn Unicode
+          <Zap className="w-3.5 h-3.5" />
+          Quy tắc gõ thông minh (Real-time Fix)
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Sử dụng phím <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px] font-bold">w</kbd> ở cuối từ để thêm móc (sơn &rarr; sonw, hư &rarr; huw). 
-          Gõ lặp phím modifier (ww, aa, ee) để trả lại ký tự gốc nếu gõ nhầm. Quy tắc đặt dấu chuẩn mới (hoà, luyện) đã được kích hoạt.
+          - <b>Sơn</b>: gõ <code>sonw</code>. <b>Hư</b>: gõ <code>huw</code>.<br />
+          - <b>Trả lại phím gốc</b>: gõ lặp phím modifier (ví dụ: <code>ww</code> &rarr; w, <code>aa</code> &rarr; a).<br />
+          - <b>Tự động sửa dấu</b>: Dấu luôn được đặt chuẩn Unicode (ví dụ: <code>luýên</code> &rarr; <code>luyến</code>) nhờ Local Smart Engine.
         </p>
       </div>
     </div>
