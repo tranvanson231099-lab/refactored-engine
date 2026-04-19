@@ -1,12 +1,11 @@
 
 /**
  * VietFlex Engine 2.1.5 - Precision Orthography & Unicode NFC
- * Tối ưu hóa đặt dấu cho các cụm nguyên âm phức tạp và địa danh.
+ * Tối ưu hóa cơ chế Toggle (đảo dấu) và xử lý phím 'w' chuyên biệt cho Chrome OS Flex.
  */
 
 export type InputMethod = 'Telex' | 'VNI';
 
-// Bản đồ nguyên âm đầy đủ để xử lý Unicode NFC
 const VOWEL_MAP: Record<string, string[]> = {
   'a': ['a', 'á', 'à', 'ả', 'ã', 'ạ'],
   'ă': ['ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ'],
@@ -22,7 +21,6 @@ const VOWEL_MAP: Record<string, string[]> = {
   'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
 };
 
-// Bản đồ để đưa nguyên âm có dấu phụ (ê, ô, ơ...) về nguyên âm gốc (e, o, u...)
 const BASE_VOWEL_MAP: Record<string, string> = {
   'à': 'a', 'á': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
   'ă': 'a', 'ằ': 'a', 'ắ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
@@ -36,6 +34,11 @@ const BASE_VOWEL_MAP: Record<string, string> = {
   'ù': 'u', 'ú': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
   'ư': 'u', 'ừ': 'u', 'ứ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
   'ỳ': 'y', 'ý': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y',
+};
+
+const HOOK_MAP: Record<string, string> = {
+  'ư': 'u', 'ơ': 'o', 'ă': 'a',
+  'Ư': 'U', 'Ơ': 'O', 'Ă': 'A'
 };
 
 const TONES_TELEX: Record<string, number> = { 's': 1, 'f': 2, 'r': 3, 'x': 4, 'j': 5, 'z': 0 };
@@ -128,9 +131,8 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   if (actualVowels.length === 3) {
     const vStr = actualVowels.map(i => simple[i]).join('');
-    // Đặc biệt xử lý "uyê" trong "huyện"
     if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
-      return actualVowels[2]; // Dấu đặt ở nguyên âm thứ 3 (ê, y, ê, ô, ơ)
+      return actualVowels[2];
     }
     return actualVowels[1];
   }
@@ -168,6 +170,23 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
   if (method === 'Telex') {
     if (lastChar === 'w') {
+      // Toggle logic for 'w'
+      let wordHasHook = false;
+      let newWord = '';
+      for (const char of word.slice(0, -1)) {
+        if (HOOK_MAP[char]) {
+          newWord += HOOK_MAP[char];
+          wordHasHook = true;
+        } else {
+          newWord += char;
+        }
+      }
+
+      if (wordHasHook) {
+        return prefix + newWord;
+      }
+
+      // Standalone 'w' or 'ww'
       if (word.length >= 2) {
         const prevChar = word.slice(-2, -1).toLowerCase();
         if (prevChar === 'w' || prevChar === 'ư') {
@@ -177,6 +196,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
       if (word.length === 1) return prefix + (word === 'w' ? 'ư' : 'Ư');
 
+      // Hook logic
       let currentBase = removeToneOnly(word.slice(0, -1));
       let currentTone = getWordToneIndex(word.slice(0, -1));
       let handled = false;
