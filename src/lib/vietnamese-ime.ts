@@ -88,6 +88,7 @@ function getTonePosition(word: string, isModern: boolean): number {
 
   if (actualVowels.length === 2) {
     const vowelStr = actualVowels.map(i => clean[i]).join('');
+    // Kiểu mới: hòa, thúy
     if (isModern && (vowelStr === 'oa' || vowelStr === 'oe' || vowelStr === 'uy')) {
       return actualVowels[1];
     }
@@ -129,7 +130,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   let word = text.substring(lastSpaceIndex + 1);
   if (!word) return text;
 
-  // Tự động chuẩn hóa từ trước đó khi gõ phím cách
+  // Khi gõ phím cách -> chuẩn hóa từ vừa gõ
   if (text.endsWith(' ')) {
     if (!isSmartFix) return text;
     const words = text.trimEnd().split(' ');
@@ -144,7 +145,7 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
   const lastChar = word.slice(-1).toLowerCase();
   const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
 
-  // 1. Xử lý gõ lặp (ww -> w, aa -> a, dd -> d)
+  // 1. Xử lý gõ lặp phím modifier (ww -> w, aa -> a, dd -> d)
   if (method === 'Telex' && word.length >= 2) {
     const lastTwo = word.slice(-2).toLowerCase();
     const restoreMap: Record<string, string> = { 
@@ -161,11 +162,12 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
-  // 2. Xử lý phím W (Móc tự động)
+  // 2. Xử lý phím W (Móc tự động chuẩn Unikey)
   if (method === 'Telex' && lastChar === 'w') {
     let cleanBase = removeTone(word.slice(0, -1));
     let toneIdx = getWordToneIndex(word.slice(0, -1));
 
+    // Trường hợp 'uo' -> 'ươ'
     if (cleanBase.toLowerCase().endsWith('uo')) {
       const isUpper = cleanBase.slice(-2).toUpperCase() === cleanBase.slice(-2);
       cleanBase = cleanBase.slice(0, -2) + (isUpper ? 'ƯƠ' : 'ươ');
@@ -184,13 +186,13 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
       }
       if (found) return prefix + applyTone(cleanBase, toneIdx, isModern);
       
-      // Nếu không tìm thấy nguyên âm để thêm móc, w sẽ là chữ ư
+      // Nếu là w đứng độc lập hoặc không có nguyên âm phù hợp -> thành chữ ư
       const isUpper = word.slice(-1) === 'W';
-      return prefix + baseWord(word.slice(0,-1)) + (isUpper ? 'Ư' : 'ư');
+      return prefix + word.slice(0,-1) + (isUpper ? 'Ư' : 'ư');
     }
   }
 
-  // 3. Xử lý phím mũ (aa, ee, oo, dd, aw)
+  // 3. Xử lý các tổ hợp phím modifier (aa, ee, oo, dd, aw)
   const telexMap: Record<string, string> = { 'aa': 'â', 'ee': 'ê', 'oo': 'ô', 'dd': 'đ', 'aw': 'ă' };
   if (method === 'Telex' && word.length >= 2) {
     const lastTwo = word.slice(-2).toLowerCase();
@@ -203,32 +205,29 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
-  // 4. Xử lý phím dấu
+  // 4. Xử lý phím dấu (s, f, r, x, j)
   const toneIndexFromKey = tones[lastChar];
   if (toneIndexFromKey !== undefined) {
     const baseWordStr = word.slice(0, -1);
     
-    // NẾU TỪ KHÔNG CÓ NGUYÊN ÂM -> GIỮ NGUYÊN PHÍM VỪA GÕ (Sửa lỗi mất phím s)
+    // Nếu từ chưa có nguyên âm -> Không xử lý phím dấu (giữ nguyên s, f...)
     if (!hasVowel(baseWordStr)) {
       return text;
     }
 
     const currentTone = getWordToneIndex(baseWordStr);
     if (currentTone === toneIndexFromKey) {
+      // Nhấn phím dấu cũ một lần nữa -> Xóa dấu
       return prefix + applyTone(baseWordStr, 0, isModern);
     }
     return prefix + applyTone(baseWordStr, toneIndexFromKey, isModern);
   }
 
-  // 5. Smart Fix: Luôn tự động chuẩn hóa dấu khi gõ
+  // 5. Smart Fix: Tự động chuẩn hóa dấu khi đang gõ
   if (isSmartFix && hasVowel(word)) {
     const currentTone = getWordToneIndex(word);
     return prefix + applyTone(removeTone(word), currentTone, isModern);
   }
 
   return text;
-}
-
-function baseWord(w: string) {
-  return w;
 }
