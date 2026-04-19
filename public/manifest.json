@@ -3,19 +3,32 @@
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Smart Vietnamese Input Method Optimized for Chrome OS Flex",
+  "description": "Bộ gõ tiếng Việt siêu tốc chuẩn Bộ GD&ĐT cho Chrome OS Flex.",
+  "permissions": ["input", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "index.html",
     "default_icon": {
-      "16": "https://picsum.photos/seed/vietflex/16/16",
-      "48": "https://picsum.photos/seed/vietflex/48/48",
-      "128": "https://picsum.photos/seed/vietflex/128/128"
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
     }
   },
-  "permissions": ["storage", "clipboardWrite"],
+  "input_components": [
+    {
+      "name": "VietFlex Telex",
+      "type": "ime",
+      "id": "vietflex_telex",
+      "description": "VietFlex Vietnamese Telex IME",
+      "language": "vi",
+      "layouts": ["us"]
+    }
+  ],
   "icons": {
-    "16": "https://picsum.photos/seed/vietflex/16/16",
-    "48": "https://picsum.photos/seed/vietflex/48/48",
-    "128": "https://picsum.photos/seed/vietflex/128/128"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }

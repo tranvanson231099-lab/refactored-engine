@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Code, Terminal } from 'lucide-react';
+import { Power, Keyboard, Settings2, Code, Terminal, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -45,14 +45,14 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.6</CardTitle>
         </div>
         <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
-          {isEnabled ? "ON" : "OFF"}
+          {isEnabled ? "HỆ THỐNG ON" : "IME OFF"}
         </Badge>
       </CardHeader>
       <CardContent className="p-4 space-y-5">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Trạng thái Engine</Label>
-            <p className="text-sm font-medium">{isEnabled ? "BỘ GÕ SẴN SÀNG" : "IME ĐÃ TẮT"}</p>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tích hợp Chrome OS</Label>
+            <p className="text-sm font-medium">{isEnabled ? "SẴN SÀNG TRONG SETTINGS" : "IME CHƯA KÍCH HOẠT"}</p>
           </div>
           <Switch 
             checked={isEnabled} 
@@ -62,11 +62,11 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
 
         <div className="space-y-4">
-          <div className="p-3 bg-secondary/10 rounded-lg border border-primary/10">
-            <Label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1 block">Phương thức nhập</Label>
+          <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Phương thức nhập</Label>
             <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-white border-primary/20 text-primary font-bold">TELEX (Duy nhất)</Badge>
-                <span className="text-[10px] text-muted-foreground italic">Chrome OS Ready</span>
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-bold text-blue-800">VietFlex Telex (System)</span>
             </div>
           </div>
           
@@ -107,21 +107,22 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="w-full h-10 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 gap-2 font-bold text-[10px] uppercase">
                 <Code className="w-4 h-4" />
-                Hướng dẫn Cài Extension
+                Kích hoạt trong Chrome OS
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Terminal className="w-5 h-5 text-blue-600" />
-                  Cài đặt vào Chrome OS Flex
+                  Kích hoạt Phương thức nhập
                 </DialogTitle>
                 <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                   <div className="space-y-3">
-                    <p><b>Bước 1:</b> Nhấn nút tải mã nguồn (Source Code) về máy.</p>
-                    <p><b>Bước 2:</b> Mở terminal tại thư mục dự án và chạy lệnh: <code>npm run build</code></p>
-                    <p><b>Bước 3:</b> Sau khi chạy xong, thư mục <b>out</b> sẽ xuất hiện. Đây chính là bản Extension đã build sẵn.</p>
-                    <p><b>Bước 4:</b> Vào <code>chrome://extensions/</code>, bật <b>Developer mode</b>, nhấn <b>Load unpacked</b> và chọn thư mục <b>out</b>.</p>
+                    <p><b>Bước 1:</b> Cài đặt Extension qua <code>chrome://extensions</code> (Load unpacked thư mục <b>out</b>).</p>
+                    <p><b>Bước 2:</b> Mở <b>Settings (Cài đặt)</b> của Chrome OS Flex.</p>
+                    <p><b>Bước 3:</b> Tìm mục <b>Languages and Input (Ngôn ngữ và nhập liệu)</b>.</p>
+                    <p><b>Bước 4:</b> Tại <b>Input Method (Phương thức nhập)</b>, nhấn <b>Add input methods</b>.</p>
+                    <p><b>Bước 5:</b> Chọn <b>VietFlex Telex</b> từ danh sách và nhấn Add.</p>
                   </div>
                 </DialogDescription>
               </DialogHeader>
@@ -146,7 +147,7 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </div>
         
         <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • Chrome Extension Ready
+          VietFlex Engine v2.1.6 • OS Level IME Enabled
         </p>
       </CardContent>
     </Card>
