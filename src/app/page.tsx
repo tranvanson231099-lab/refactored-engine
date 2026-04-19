@@ -24,7 +24,7 @@ export default function Home() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg">
             <Command className="w-5 h-5" />
           </div>
-          <h1 className="text-base font-bold tracking-tight">VietFlex <span className="text-primary/70">Engine 2.0</span></h1>
+          <h1 className="text-base font-bold tracking-tight">VietFlex <span className="text-primary/70">Engine 2.1.5</span></h1>
         </div>
         
         <div className="ml-auto flex items-center gap-6">
@@ -78,13 +78,13 @@ export default function Home() {
             />
             
             <div className="mt-8 p-6 bg-white rounded-xl border border-primary/5 shadow-sm">
-              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.0.0</h3>
+              <h3 className="text-sm font-bold mb-3">Về VietFlex 2.1.5</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Bộ gõ tiếng Việt siêu nhẹ, chuyên biệt cho Chrome OS Flex. 
                 Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả tức thì, không độ trễ.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.0.0</span>
+                <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.1.5</span>
                 <span className="text-[10px] font-bold text-emerald-600 uppercase italic">Ultra Fast</span>
               </div>
             </div>

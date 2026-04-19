@@ -22,7 +22,7 @@ const VOWEL_MAP: Record<string, string[]> = {
   'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
 };
 
-// Bản đồ để đưa nguyên âm có dấu phụ (ê, ô, ơ...) về nguyên âm gốc (e, o, u...) để tính toán vị trí
+// Bản đồ để đưa nguyên âm có dấu phụ (ê, ô, ơ...) về nguyên âm gốc (e, o, u...)
 const BASE_VOWEL_MAP: Record<string, string> = {
   'à': 'a', 'á': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
   'ă': 'a', 'ằ': 'a', 'ắ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
@@ -54,7 +54,6 @@ function hasVowel(word: string): boolean {
   return false;
 }
 
-// Loại bỏ dấu thanh nhưng giữ lại dấu phụ (ê, ô, ư...)
 function removeToneOnly(word: string): string {
   let result = '';
   for (const char of word) {
@@ -73,7 +72,6 @@ function removeToneOnly(word: string): string {
   return result;
 }
 
-// Loại bỏ hoàn toàn dấu thanh và dấu phụ để tính toán vị trí
 function simplifyVowels(word: string): string {
   let result = '';
   for (const char of word) {
@@ -97,7 +95,7 @@ function getWordToneIndex(word: string): number {
 }
 
 function getTonePosition(word: string, isModern: boolean): number {
-  const clean = removeToneOnly(word).toLowerCase();
+  const clean = removeToneOnly(word);
   const simple = simplifyVowels(clean).toLowerCase();
   const vowelsInWord: number[] = [];
   
@@ -109,7 +107,6 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (vowelsInWord.length === 1) return vowelsInWord[0];
 
   let actualVowels = [...vowelsInWord];
-  // Loại bỏ 'u' trong 'qu' và 'i' trong 'gi' nếu theo sau là nguyên âm khác
   if (simple.startsWith('qu') && vowelsInWord[0] === 1) {
     actualVowels.shift();
   } else if (simple.startsWith('gi') && vowelsInWord[0] === 1 && vowelsInWord.length > 1) {
@@ -119,26 +116,21 @@ function getTonePosition(word: string, isModern: boolean): number {
   if (actualVowels.length === 0) return vowelsInWord[vowelsInWord.length - 1];
   if (actualVowels.length === 1) return actualVowels[0];
 
-  // Xử lý 2 nguyên âm
   if (actualVowels.length === 2) {
     const vStr = actualVowels.map(i => simple[i]).join('');
-    // Quy tắc đặt dấu hiện đại: oa, oe, uy đặt dấu vào nguyên âm thứ 2
     if (isModern && (vStr === 'oa' || vStr === 'oe' || vStr === 'uy')) {
       return actualVowels[1];
     }
-    // Nếu kết thúc bằng phụ âm, đặt vào nguyên âm thứ 2 (vd: toán, hiền)
     const lastChar = simple[simple.length - 1];
     if (!isVowel(lastChar)) return actualVowels[1];
-    // Ngược lại đặt vào nguyên âm đầu (vd: tòa, hứa)
     return actualVowels[0];
   }
 
-  // Xử lý 3 nguyên âm (vd: huyện, khiêu, người)
   if (actualVowels.length === 3) {
     const vStr = actualVowels.map(i => simple[i]).join('');
-    // Các cụm nguyên âm có âm đệm, đặt vào nguyên âm cuối (vd: huyện, khuỷu)
+    // Đặc biệt xử lý "uyê" trong "huyện"
     if (vStr === 'uye' || vStr === 'uay' || vStr === 'ieu' || vStr === 'uoi' || vStr === 'uou') {
-      return actualVowels[2];
+      return actualVowels[2]; // Dấu đặt ở nguyên âm thứ 3 (ê, y, ê, ô, ơ)
     }
     return actualVowels[1];
   }
@@ -174,11 +166,8 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
   const lastChar = word.slice(-1).toLowerCase();
 
-  // 1. Xử lý Telex
   if (method === 'Telex') {
-    // Phím W (Móc)
     if (lastChar === 'w') {
-      // Thoát dấu: ww -> w
       if (word.length >= 2) {
         const prevChar = word.slice(-2, -1).toLowerCase();
         if (prevChar === 'w' || prevChar === 'ư') {
@@ -188,18 +177,15 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
 
       if (word.length === 1) return prefix + (word === 'w' ? 'ư' : 'Ư');
 
-      // Hook thông minh (vd: sonw -> sơn)
       let currentBase = removeToneOnly(word.slice(0, -1));
       let currentTone = getWordToneIndex(word.slice(0, -1));
       let handled = false;
 
-      // Ưu tiên cụm uo -> ươ
       if (currentBase.toLowerCase().endsWith('uo')) {
         const isUpper = currentBase.slice(-2).toUpperCase() === currentBase.slice(-2);
         currentBase = currentBase.slice(0, -2) + (isUpper ? 'ƯƠ' : 'ươ');
         handled = true;
       } else {
-        // Tìm o, u, a để thêm móc
         for (let i = currentBase.length - 1; i >= 0; i--) {
           const char = currentBase[i].toLowerCase();
           if ('uoa'.includes(char)) {
@@ -216,7 +202,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
       return prefix + word.slice(0, -1) + (word.slice(-1) === 'W' ? 'Ư' : 'ư');
     }
 
-    // Phím Modifier (ee, aa, oo, dd)
     const modifiers: Record<string, string> = { 'e': 'ê', 'a': 'â', 'o': 'ô', 'd': 'đ' };
     if (modifiers[lastChar] && word.length >= 2) {
       const prevChar = word.slice(-2, -1).toLowerCase();
@@ -229,7 +214,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
         return prefix + applyTone(base + (isUpper ? target.toUpperCase() : target), tone, isModern);
       }
       
-      // Toggle ngược (êe -> e)
       if (prevChar === target) {
         const base = removeToneOnly(word.slice(0, -2));
         const tone = getWordToneIndex(word.slice(0, -1));
@@ -238,7 +222,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     }
   }
 
-  // 2. Xử lý Dấu Thanh & Đảo Dấu (Toggle Tone)
   const tones = method === 'Telex' ? TONES_TELEX : TONES_VNI;
   const toneIndexFromKey = tones[lastChar];
 
@@ -247,7 +230,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     if (!hasVowel(baseWord)) return text;
 
     const currentTone = getWordToneIndex(baseWord);
-    // Nếu gõ lại phím dấu đang có -> Xóa dấu (lyss -> lys)
     if (currentTone === toneIndexFromKey && toneIndexFromKey !== 0) {
       return prefix + removeToneOnly(baseWord);
     }
@@ -255,7 +237,6 @@ export function convertText(text: string, method: InputMethod, isModern: boolean
     return prefix + applyTone(baseWord, toneIndexFromKey, isModern);
   }
 
-  // 3. Smart Fix: Tự động chuẩn hóa dấu khi gõ
   if (isSmartFix && hasVowel(word)) {
     const currentTone = getWordToneIndex(word);
     const cleaned = removeToneOnly(word);

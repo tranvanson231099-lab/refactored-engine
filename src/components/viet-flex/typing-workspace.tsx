@@ -37,7 +37,7 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
               {isEnabled && (
                 <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1 flex items-center">
                   <Zap className="w-3 h-3 fill-emerald-500" />
-                  Engine 2.0 {isSmartFix ? "Smart Fix Active" : "Active"}
+                  Engine 2.1.5 {isSmartFix ? "Smart Fix Active" : "Active"}
                 </Badge>
               )}
             </div>
@@ -58,14 +58,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Info className="h-4 w-4 text-blue-600" />
           <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix đang bật</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và phím lặp (lyss &rarr; lys, ww &rarr; w) tức thì. Tốc độ Zero Latency.
+            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và cụm phức tạp (huỵên &rarr; huyện) tức thì.
           </AlertDescription>
         </Alert>
       )}
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, lyss -> lys, ww -> w)..." : "IME đang tắt..."}
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, huw -> hư, lyss -> lys)..." : "IME đang tắt..."}
           className="min-h-[450px] text-xl p-8 bg-white border-2 border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -83,13 +83,13 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
       <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
         <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
           <Zap className="w-3.5 h-3.5" />
-          Mẹo gõ Engine 2.0
+          Mẹo gõ Engine 2.1.5
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
           - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, gõ lặp <code>ww</code> ra <code>w</code>.<br />
-          - <b>Xóa dấu</b>: Gõ lặp phím dấu (Ví dụ: <code>ly</code> + <code>s</code> &rarr; lý, gõ tiếp <code>s</code> &rarr; lys).<br />
+          - <b>Xóa dấu</b>: Gõ lặp phím dấu (Ví dụ: <code>lys</code> &rarr; lý, gõ tiếp <code>s</code> &rarr; lys).<br />
           - <b>Sơn/Hư</b>: Gõ <code>sonw</code>, <code>huw</code> (phím <code>w</code> tự thêm móc chuẩn).<br />
-          - <b>Smart Fix</b>: Tự động đưa dấu về đúng vị trí chuẩn Unicode khi bạn gõ.
+          - <b>Smart Fix</b>: Tự động sửa lỗi đặt dấu triphthong (huỵên &rarr; huyện) tức thì.
         </p>
       </div>
     </div>
