@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key } from 'lucide-react';
+import { Power, Keyboard, Settings2, Terminal, PackageCheck, Download, AlertTriangle, Copy, ChevronRight, Key, Info } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -105,64 +105,52 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" className="w-full h-10 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 gap-2 font-bold text-[10px] uppercase animate-pulse">
               <Download className="w-4 h-4" />
-              FIX LỖI CÀI ĐẶT / PEM KEY
+              SỬA LỖI ĐÓNG GÓI / PEM KEY
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600 font-bold uppercase tracking-tight">
                 <AlertTriangle className="w-5 h-5" />
-                HƯỚNG DẪN FIX LỖI ĐÓNG GÓI
+                XỬ LÝ LỖI KHOÁ CÁ NHÂN (PEM)
               </DialogTitle>
               <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
                 <Alert variant="destructive" className="border-2 shadow-lg bg-red-600 text-white">
                   <Key className="h-5 w-5" />
                   <AlertTitle className="text-sm font-black uppercase">LỖI: KHOÁ CÁ NHÂN ĐÃ TỒN TẠI</AlertTitle>
                   <AlertDescription className="text-xs font-bold leading-relaxed">
-                    Bạn nhận được lỗi này vì tệp <b>out.pem</b> đã có sẵn. Hãy chạy lệnh dưới đây để xoá nó trước khi đóng gói lại.<br/><br/>
-                    <div className="bg-white/20 p-2 rounded font-mono text-white text-[10px] flex justify-between items-center">
-                      <code>rm ~/vietflex/out.pem</code>
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyCommand("rm ~/vietflex/out.pem")}>
-                        <Copy className="h-3 h-3" />
-                      </Button>
-                    </div>
+                    Bạn thấy lỗi này vì tệp <b>out.pem</b> đã có sẵn. Trong bảng "Đóng gói tiện ích", bạn có 2 lựa chọn:
                   </AlertDescription>
                 </Alert>
 
                 <div className="space-y-4 pt-2">
-                  <div className="space-y-2">
-                    <p className="font-bold text-primary flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 1: Build lại sạch sẽ
+                  <div className="p-4 bg-slate-50 border-2 border-dashed border-primary/30 rounded-lg">
+                    <p className="font-bold text-sm mb-2 text-primary">LỰA CHỌN 1: Sử dụng lại khoá (Khuyên dùng)</p>
+                    <p className="text-xs leading-relaxed">
+                      Trong cửa sổ <b>Đóng gói tiện ích</b> (như ảnh bạn chụp):<br/>
+                      1. Ô 1 (Thư mục gốc): Chọn thư mục <code>out</code>.<br/>
+                      2. Ô 2 (Tệp khoá cá nhân): Nhấn <b>Duyệt qua</b> và chọn tệp <code>out.pem</code> nằm ở thư mục <code>~/vietflex</code>.
                     </p>
-                    <div className="bg-slate-900 p-3 rounded-md font-mono text-[10px] text-emerald-400 relative">
-                      <code>npm run build</code>
-                      <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-slate-400" onClick={() => copyCommand("npm run build")}>
+                  </div>
+
+                  <div className="p-4 bg-red-50 border-2 border-dashed border-red-300 rounded-lg">
+                    <p className="font-bold text-sm mb-2 text-red-700">LỰA CHỌN 2: Xoá khoá cũ để tạo mới</p>
+                    <p className="text-xs leading-relaxed mb-2">Chạy lệnh này trong Terminal để xoá tệp PEM cũ:</p>
+                    <div className="bg-slate-900 p-2 rounded font-mono text-white text-[10px] flex justify-between items-center mb-2">
+                      <code>rm ~/vietflex/out.pem</code>
+                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyCommand("rm ~/vietflex/out.pem")}>
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
+                    <p className="text-xs text-red-600 italic">* Lưu ý: Xoá khoá cũ sẽ làm thay đổi ID của Extension.</p>
                   </div>
 
                   <div className="space-y-2">
-                    <p className="font-bold text-primary flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 2: Tải vào Chrome (KHUYÊN DÙNG)
+                    <p className="font-bold text-emerald-700 flex items-center gap-2">
+                      <Info className="w-4 h-4" /> 
+                      MẸO: Dùng "Tải tiện ích đã giải nén"
                     </p>
-                    <div className="text-[12px] space-y-2 bg-slate-50 p-3 border-2 border-dashed border-primary/50 rounded-md">
-                      <p>Thay vì <b>Pack Extension</b>, hãy dùng <b>Load Unpacked</b>:</p>
-                      <p>1. Vào <code>chrome://extensions</code></p>
-                      <p>2. Bật <b>Developer Mode</b>.</p>
-                      <p>3. Nhấn <b>Load Unpacked</b>.</p>
-                      <p className="text-red-600 font-black text-sm uppercase underline">4. CHỌN THƯ MỤC "OUT" TRONG ~/vietflex</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="font-bold text-primary flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4" /> 
-                      BƯỚC 3: Kích hoạt bộ gõ
-                    </p>
-                    <p className="text-[12px]">Vào <b>Cài đặt Chrome OS &gt; Ngôn ngữ &gt; Phương thức nhập</b>, nhấn <b>Thêm</b> và tìm <b>VietFlex Telex</b>.</p>
+                    <p className="text-[12px]">Để phát triển nhanh, bạn không cần "Đóng gói". Chỉ cần nhấn <b>Load Unpacked</b> và chọn thư mục <b>out</b> là đủ.</p>
                   </div>
                 </div>
               </DialogDescription>
