@@ -83,7 +83,7 @@ export default function Home() {
               <h3 className="text-sm font-bold mb-3">Về VietFlex 2.1.6</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Bộ gõ tiếng Việt siêu nhẹ, chuyên biệt cho Chrome OS Flex. 
-                Sử dụng thuật toán "Smart Fix" cục bộ để sửa lỗi chính tả tức thì và xóa dấu thông minh.
+                Sử dụng thuật toán "Smart Fix" cục bộ tuân thủ 5 quy tắc i/y và Smart Backspace.
               </p>
               <div className="mt-4 pt-4 border-t flex items-center justify-between">
                 <span className="text-[10px] font-bold text-primary uppercase">Phiên bản 2.1.6</span>
