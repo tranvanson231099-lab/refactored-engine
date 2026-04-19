@@ -9,7 +9,6 @@ export function useIme() {
   const [method, setMethod] = useState<InputMethod>('Telex');
   const [text, setText] = useState('');
   
-  // Persistence
   useEffect(() => {
     const savedMethod = localStorage.getItem('vietflex_method') as InputMethod;
     const savedEnabled = localStorage.getItem('vietflex_enabled');
@@ -35,7 +34,7 @@ export function useIme() {
       return;
     }
     
-    // Tự động chuyển đổi và sửa lỗi thời gian thực
+    // Xử lý chuyển đổi ngôn ngữ tức thì (Offline)
     const converted = convertText(val, method, isModernStyle, isSmartFix);
     setText(converted);
   }, [isEnabled, method, isModernStyle, isSmartFix]);

@@ -58,14 +58,14 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           <Info className="h-4 w-4 text-blue-600" />
           <AlertTitle className="text-xs font-bold text-blue-800 uppercase tracking-tighter">Smart Fix đang bật</AlertTitle>
           <AlertDescription className="text-[10px] text-blue-700 font-medium">
-            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và phím lặp (lyss &rarr; lys) tức thì. Tốc độ Zero Latency.
+            Tự động chuẩn hóa dấu (luýên &rarr; luyến) và phím lặp (lyss &rarr; lys, ww &rarr; w) tức thì. Tốc độ Zero Latency.
           </AlertDescription>
         </Alert>
       )}
 
       <div className="relative group">
         <Textarea
-          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, thuyeenf -> thuyền, lyss -> lys)..." : "IME đang tắt..."}
+          placeholder={isEnabled ? "Nhập văn bản (Ví dụ: sonw -> sơn, lyss -> lys, ww -> w)..." : "IME đang tắt..."}
           className="min-h-[450px] text-xl p-8 bg-white border-2 border-primary/10 focus-visible:border-primary transition-all shadow-inner resize-none leading-relaxed font-medium"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -86,9 +86,9 @@ export const TypingWorkspace: React.FC<TypingWorkspaceProps> = ({
           Mẹo gõ Engine 2.0
         </h3>
         <p className="text-xs text-muted-foreground leading-relaxed">
+          - <b>Phím W</b>: Gõ <code>w</code> ra <code>ư</code>, gõ lặp <code>ww</code> ra <code>w</code>.<br />
           - <b>Xóa dấu</b>: Gõ lặp phím dấu (Ví dụ: <code>ly</code> + <code>s</code> &rarr; lý, gõ tiếp <code>s</code> &rarr; lys).<br />
           - <b>Sơn/Hư</b>: Gõ <code>sonw</code>, <code>huw</code> (phím <code>w</code> tự thêm móc chuẩn).<br />
-          - <b>Thoát tiếng Việt</b>: Gõ lặp <code>ww</code> &rarr; w, <code>aa</code> &rarr; a, <code>dd</code> &rarr; d.<br />
           - <b>Smart Fix</b>: Tự động đưa dấu về đúng vị trí chuẩn Unicode khi bạn gõ.
         </p>
       </div>
