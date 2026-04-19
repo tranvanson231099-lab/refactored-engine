@@ -1,32 +1,15 @@
 /**
- * Simple Vietnamese IME implementation for Telex and VNI.
- * This handles character conversion based on the current word being typed.
+ * Nâng cấp bộ gõ tiếng Việt Telex/VNI chuẩn Unikey.
+ * Xử lý đặt dấu vào nguyên âm chính và hỗ trợ các quy tắc gõ hiện đại.
  */
 
 export type InputMethod = 'Telex' | 'VNI';
 
-const VIET_CHARS: Record<string, string> = {
-  // Telex Vowels
-  'aa': 'â', 'aw': 'ă', 'ee': 'ê', 'oo': 'ô', 'ow': 'ơ', 'uw': 'ư',
-  'AA': 'Â', 'AW': 'Ă', 'EE': 'Ê', 'OO': 'Ô', 'OW': 'Ơ', 'UW': 'Ư',
-  'dd': 'đ', 'DD': 'Đ',
-  
-  // VNI Vowels
-  'a6': 'â', 'a8': 'ă', 'e6': 'ê', 'o6': 'ô', 'o7': 'ơ', 'u7': 'ư',
-  'A6': 'Â', 'A8': 'Ă', 'E6': 'Ê', 'O6': 'Ô', 'O7': 'Ơ', 'U7': 'Ư',
-  'd9': 'đ', 'D9': 'Đ',
-};
-
-// Tones: [s, f, r, x, j] for Telex and [1, 2, 3, 4, 5] for VNI
-const TONES: Record<string, number> = {
-  's': 1, 'f': 2, 'r': 3, 'x': 4, 'j': 5,
-  '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
-};
-
-const VOWEL_TABLE: Record<string, string[]> = {
+const VOWELS = 'aeiouyàáảãạèéẻẽẹìíỉĩịòóỏõọùúủũụỳýỷỹỵăắằẳẵặâấầẩẫậêếềểễệôốồổỗộơớờởỡợưứừửữự';
+const VOWEL_MAP: Record<string, string[]> = {
   'a': ['a', 'á', 'à', 'ả', 'ã', 'ạ'],
-  'â': ['â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ'],
   'ă': ['ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ'],
+  'â': ['â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ'],
   'e': ['e', 'é', 'è', 'ẻ', 'ẽ', 'ẹ'],
   'ê': ['ê', 'ế', 'ề', 'ể', 'ễ', 'ệ'],
   'i': ['i', 'í', 'ì', 'ỉ', 'ĩ', 'ị'],
@@ -38,69 +21,101 @@ const VOWEL_TABLE: Record<string, string[]> = {
   'y': ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
 };
 
+const TELEX_MODS: Record<string, string> = {
+  'aa': 'â', 'aw': 'ă', 'ee': 'ê', 'oo': 'ô', 'ow': 'ơ', 'uw': 'ư', 'w': 'ư', 'dd': 'đ'
+};
+
+const VNI_MODS: Record<string, string> = {
+  'a6': 'â', 'a8': 'ă', 'e6': 'ê', 'o6': 'ô', 'o7': 'ơ', 'u7': 'ư', 'd9': 'đ'
+};
+
+const TONES: Record<string, number> = {
+  's': 1, 'f': 2, 'r': 3, 'x': 4, 'j': 5, // Telex
+  '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, // VNI
+  '0': 0 // Remove tone
+};
+
 /**
- * Applies Vietnamese IME conversion to the last part of the text.
+ * Tìm vị trí đặt dấu chuẩn trong một từ tiếng Việt.
  */
+function getTonePosition(word: string): number {
+  const vowelsInWord: number[] = [];
+  for (let i = 0; i < word.length; i++) {
+    if (VOWELS.includes(word[i].toLowerCase())) vowelsInWord.push(i);
+  }
+
+  if (vowelsInWord.length === 0) return -1;
+  if (vowelsInWord.length === 1) return vowelsInWord[0];
+
+  // Quy tắc đặt dấu cho cụm nguyên âm (uo, oa, oe, uy, ...)
+  const vowelStr = vowelsInWord.map(i => word[i].toLowerCase()).join('');
+  
+  if (vowelStr === 'oa' || vowelStr === 'oe' || vowelStr === 'uy' || vowelStr === 'ue') {
+    return vowelsInWord[1];
+  }
+  if (vowelStr === 'uo' || vowelStr === 'ua') {
+    return vowelsInWord[0];
+  }
+  
+  // Mặc định đặt vào nguyên âm thứ 2 nếu có 2-3 nguyên âm
+  return vowelsInWord[Math.floor(vowelsInWord.length / 2)];
+}
+
 export function convertText(text: string, method: InputMethod): string {
   if (!text) return '';
   
-  // We only look at the current word (up to last space)
   const lastSpaceIndex = text.lastIndexOf(' ');
   const prefix = text.substring(0, lastSpaceIndex + 1);
-  const word = text.substring(lastSpaceIndex + 1);
+  let word = text.substring(lastSpaceIndex + 1);
   
   if (word.length === 0) return text;
 
-  let resultWord = word;
-
-  // 1. Handle double-character combinations (e.g., aa -> â, dd -> đ)
-  if (method === 'Telex') {
-    for (const [key, val] of Object.entries(VIET_CHARS)) {
-      if (key.length === 2 && !/[0-9]/.test(key)) {
-        resultWord = resultWord.replace(new RegExp(key, 'g'), val);
-      }
-    }
-    // Special case for 'w' alone usually turning into 'ư' or attached to 'o'
-    resultWord = resultWord.replace(/uw/g, 'ư').replace(/ow/g, 'ơ').replace(/w/g, 'ư');
-  } else {
-    // VNI
-    for (const [key, val] of Object.entries(VIET_CHARS)) {
-      if (/[0-9]/.test(key)) {
-        resultWord = resultWord.replace(new RegExp(key, 'g'), val);
-      }
-    }
+  // 1. Xử lý sửa đổi chữ (Vowel modifiers)
+  const mods = method === 'Telex' ? TELEX_MODS : VNI_MODS;
+  for (const [key, val] of Object.entries(mods)) {
+    const regex = new RegExp(key, 'gi');
+    word = word.replace(regex, (match) => {
+      return match === match.toUpperCase() ? val.toUpperCase() : val;
+    });
   }
 
-  // 2. Handle tones
-  // This is a simplified tone engine
-  const toneChar = resultWord.slice(-1).toLowerCase();
-  const toneIndex = TONES[toneChar];
-  
+  // 2. Xử lý dấu (Tones)
+  const lastChar = word.slice(-1).toLowerCase();
+  const toneIndex = TONES[lastChar];
+
   if (toneIndex !== undefined) {
-    // Basic tone placement logic: find the "main" vowel
-    // In a real IME this is much more complex (rules for uo, oa, etc)
-    const wordBase = resultWord.slice(0, -1);
-    let foundVowel = false;
-    let newWord = '';
+    let wordWithoutToneMarker = word.slice(0, -1);
     
-    // Reverse search for vowels to find the one to put tone on
-    for (let i = wordBase.length - 1; i >= 0; i--) {
-      const char = wordBase[i];
-      const lowerChar = char.toLowerCase();
-      
-      if (!foundVowel && VOWEL_TABLE[lowerChar]) {
-        const isUpper = char === char.toUpperCase();
-        const mappedVowel = VOWEL_TABLE[lowerChar][toneIndex];
-        newWord = wordBase.substring(0, i) + (isUpper ? mappedVowel.toUpperCase() : mappedVowel) + wordBase.substring(i + 1);
-        foundVowel = true;
-        break;
+    // Tìm và gỡ dấu cũ trước khi đặt dấu mới
+    let cleanWord = '';
+    for (const char of wordWithoutToneMarker) {
+      let found = false;
+      for (const [base, variants] of Object.entries(VOWEL_MAP)) {
+        if (variants.includes(char.toLowerCase())) {
+          const isUpper = char === char.toUpperCase();
+          cleanWord += isUpper ? base.toUpperCase() : base;
+          found = true;
+          break;
+        }
       }
+      if (!found) cleanWord += char;
     }
-    
-    if (foundVowel) {
-      resultWord = newWord;
+
+    const pos = getTonePosition(cleanWord);
+    if (pos !== -1) {
+      const charToMap = cleanWord[pos];
+      const lowerChar = charToMap.toLowerCase();
+      const isUpper = charToMap === charToMap.toUpperCase();
+      const newVowel = VOWEL_MAP[lowerChar][toneIndex];
+      
+      word = cleanWord.substring(0, pos) + 
+             (isUpper ? newVowel.toUpperCase() : newVowel) + 
+             cleanWord.substring(pos + 1);
+    } else {
+      // Không có nguyên âm thì giữ nguyên marker
+      word = wordWithoutToneMarker + lastChar;
     }
   }
 
-  return prefix + resultWord;
+  return prefix + word;
 }
