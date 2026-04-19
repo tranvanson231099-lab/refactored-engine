@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Power, Keyboard, Settings2, PackageCheck, AlertCircle, CheckCircle2, FolderSearch } from 'lucide-react';
+import { Power, Keyboard, Settings2, PackageCheck, AlertCircle, FolderSearch, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -37,56 +37,45 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
   setIsSmartFix,
 }) => {
   return (
-    <Card className="w-80 shadow-2xl border-2 border-primary/20 overflow-hidden bg-white">
-      <CardHeader className="bg-primary py-3 flex flex-row items-center justify-between space-y-0">
+    <Card className="w-80 shadow-2xl border-4 border-red-500 overflow-hidden bg-white animate-in zoom-in-95 duration-300">
+      <CardHeader className="bg-red-600 py-3 flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-white/20 rounded-md">
-            <Keyboard className="w-4 h-4 text-white" />
-          </div>
-          <CardTitle className="text-sm font-bold text-white tracking-tight">VietFlex v2.1.6</CardTitle>
+          <AlertTriangle className="w-5 h-5 text-white animate-pulse" />
+          <CardTitle className="text-sm font-black text-white uppercase tracking-tighter">FIX LỖI CÀI ĐẶT KHẨN CẤP</CardTitle>
         </div>
-        <Badge variant={isEnabled ? "default" : "secondary"} className={isEnabled ? "bg-accent text-white" : "bg-white/20 text-white"}>
-          {isEnabled ? "IME READY" : "IME OFF"}
-        </Badge>
       </CardHeader>
-      <CardContent className="p-4 space-y-5">
-        <div className="flex items-center justify-between">
+      
+      <CardContent className="p-4 space-y-4">
+        <div className="bg-red-50 border-2 border-red-200 p-3 rounded-lg">
+          <p className="text-[11px] font-black text-red-700 uppercase mb-2">ĐANG BỊ LỖI "TỆP KÊ KHAI BỊ THIẾU"?</p>
+          <ol className="text-[10px] space-y-2 font-bold text-red-600">
+            <li>1. Mở Terminal chạy: <code className="bg-black text-white p-1 rounded">npm run build</code></li>
+            <li>2. Vào <code className="text-blue-600 underline">chrome://extensions</code></li>
+            <li>3. Nhấn <b>Load Unpacked</b></li>
+            <li>4. <span className="bg-yellow-300 text-black px-1">CHỌN ĐÚNG THƯ MỤC "out"</span> (nằm bên trong thư mục vietflex)</li>
+          </ol>
+        </div>
+
+        <div className="flex items-center justify-between pt-2 border-t">
           <div className="space-y-0.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hệ thống IME</Label>
-            <p className="text-[11px] font-bold text-emerald-600">{isEnabled ? "ĐANG CHẠY" : "CHỜ KÍCH HOẠT"}</p>
+            <Label className="text-xs font-bold uppercase text-muted-foreground">VietFlex Engine</Label>
+            <p className="text-[10px] font-bold text-emerald-600">{isEnabled ? "ACTIVE" : "STANDBY"}</p>
           </div>
           <Switch 
             checked={isEnabled} 
             onCheckedChange={setIsEnabled}
-            className="data-[state=checked]:bg-accent"
+            className="data-[state=checked]:bg-emerald-500"
           />
         </div>
 
-        <Alert variant="destructive" className="bg-red-600 border-none py-3 animate-pulse shadow-lg">
-          <AlertCircle className="h-5 w-5 text-white" />
-          <AlertTitle className="text-xs font-black uppercase text-white">LỖI TỆP KÊ KHAI - XEM NGAY!</AlertTitle>
-          <AlertDescription className="text-[10px] text-white font-bold leading-tight">
-            Bạn PHẢI chọn thư mục <span className="underline text-yellow-300">"out"</span> khi Load Unpacked. Nếu chọn thư mục "vietflex" sẽ báo lỗi ngay lập tức.
-          </AlertDescription>
-        </Alert>
-
-        <div className="space-y-4">
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-            <Label className="text-[10px] font-bold uppercase text-blue-700 tracking-widest mb-1 block">Thành phần chuẩn</Label>
-            <div className="flex items-center gap-2">
-                <PackageCheck className="w-4 h-4 text-blue-600" />
-                <span className="text-xs font-bold text-blue-800">VietFlex System IME 2.1.6</span>
-            </div>
-          </div>
-          
-          <div className="space-y-2 pt-1">
+        <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="modern-style" 
                 checked={isModernStyle} 
                 onCheckedChange={(val) => setIsModernStyle(val === true)}
               />
-              <label htmlFor="modern-style" className="text-xs font-medium cursor-pointer">Dấu kiểu mới (hoà, quý)</label>
+              <label htmlFor="modern-style" className="text-[11px] font-bold cursor-pointer">Dấu kiểu mới (hòa, thúy)</label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox 
@@ -94,49 +83,30 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
                 checked={isSmartFix} 
                 onCheckedChange={(val) => setIsSmartFix(val === true)}
               />
-              <label htmlFor="smart-fix" className="text-xs font-bold cursor-pointer text-primary">Smart Fix: i/y & Smart Backspace</label>
+              <label htmlFor="smart-fix" className="text-[11px] font-black cursor-pointer text-primary">Smart Fix: i/y & Backspace</label>
             </div>
-          </div>
         </div>
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full h-12 border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 gap-2 font-black text-xs uppercase shadow-md border-2">
+            <Button variant="destructive" className="w-full h-12 gap-2 font-black text-xs uppercase shadow-lg animate-bounce">
               <FolderSearch className="w-5 h-5" />
-              CÁCH SỬA LỖI TỆP KÊ KHAI
+              XEM VIDEO HƯỚNG DẪN FIX LỖI
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
+          <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-red-600 font-black uppercase tracking-tight text-xl">
-                <AlertCircle className="w-6 h-6" />
-                DỪNG LẠI! ĐỌC KỸ BƯỚC NÀY
+              <DialogTitle className="text-red-600 font-black uppercase text-xl flex items-center gap-2">
+                <AlertCircle /> BƯỚC QUAN TRỌNG NHẤT
               </DialogTitle>
-              <DialogDescription className="space-y-4 pt-4 text-sm text-foreground">
-                <div className="p-4 bg-red-600 text-white rounded-xl shadow-inner font-bold">
-                   Lỗi "Tệp kê khai bị thiếu" là do bạn đang chọn nhầm thư mục "vietflex".
+              <DialogDescription className="space-y-4 pt-4">
+                <div className="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-bold text-sm">
+                  Bạn đang chọn thư mục "vietflex". Chrome sẽ báo lỗi ngay lập tức vì không thấy tệp manifest.json ở đó.
                 </div>
-
-                <div className="space-y-4 pt-2">
-                  <div className="p-4 bg-slate-100 border-l-8 border-slate-800 rounded-r-lg">
-                    <p className="font-black text-xs text-slate-800 mb-2 uppercase italic">Bước 1: Chạy lệnh đóng gói</p>
-                    <p className="text-sm leading-relaxed">
-                      Mở Terminal Linux, copy và chạy: <br/>
-                      <code className="bg-black text-emerald-400 p-2 rounded block mt-2 text-xs">npm run build</code>
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-emerald-50 border-l-8 border-emerald-500 rounded-r-lg">
-                    <p className="font-black text-xs text-emerald-700 mb-2 uppercase italic">Bước 2: Chọn ĐÚNG thư mục</p>
-                    <p className="text-sm leading-relaxed">
-                      1. Vào <code className="font-bold">chrome://extensions</code>.<br/>
-                      2. Nhấn <b>Load Unpacked</b>.<br/>
-                      3. <b>QUAN TRỌNG NHẤT:</b> Tìm vào thư mục <code className="font-bold">vietflex</code>, sau đó chọn thư mục con tên là <code className="bg-yellow-200 px-1 font-black">out</code>.
-                    </p>
-                    <p className="mt-2 text-xs text-red-600 font-bold underline">
-                      Tệp manifest.json nằm trong thư mục "out" này!
-                    </p>
-                  </div>
+                <div className="space-y-2 text-sm font-medium">
+                  <p>1. Hãy chạy <code className="bg-slate-200 p-1">npm run build</code> trong Linux.</p>
+                  <p>2. Khi chọn thư mục cài đặt, hãy tìm thư mục <b className="text-red-600 uppercase">out</b>.</p>
+                  <p>3. Nhấn <b>Open/Select</b> khi đang ở trong thư mục <b>out</b> đó.</p>
                 </div>
               </DialogDescription>
             </DialogHeader>
@@ -144,23 +114,21 @@ export const UnikeyWindow: React.FC<UnikeyWindowProps> = ({
         </Dialog>
 
         <div className="pt-2 flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1 h-12 flex flex-col gap-1 text-[10px] font-bold">
-            <Settings2 className="w-4 h-4" />
-            CÀI ĐẶT
+          <Button variant="outline" size="sm" className="flex-1 h-10 text-[10px] font-bold">
+            <Settings2 className="w-4 h-4 mr-1" /> CÀI ĐẶT
           </Button>
           <Button 
             variant={isEnabled ? "destructive" : "default"} 
             size="sm" 
-            className="flex-1 h-12 flex flex-col gap-1 text-[10px] font-bold"
+            className="flex-1 h-10 text-[10px] font-bold"
             onClick={() => setIsEnabled(!isEnabled)}
           >
-            <Power className="w-4 h-4" />
-            {isEnabled ? "TẮT" : "BẬT"}
+            <Power className="w-4 h-4 mr-1" /> {isEnabled ? "TẮT" : "BẬT"}
           </Button>
         </div>
         
-        <p className="text-[10px] text-center text-muted-foreground pt-1 italic font-medium">
-          VietFlex Engine v2.1.6 • Built for Chrome OS
+        <p className="text-[9px] text-center text-muted-foreground pt-1 font-bold italic">
+          VietFlex Engine v2.1.6 • Chrome OS Flex Standard
         </p>
       </CardContent>
     </Card>

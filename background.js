@@ -5,6 +5,7 @@ chrome.input.ime.onFocus.addListener((context) => {
 
 chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
   if (keyData.type === 'keydown') {
+    // Logic xử lý phím bấm sẽ được tích hợp ở đây
     return false;
   }
   return false;
