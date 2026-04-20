@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
-    "build": "next build && mv out/_next out/nextAssets && find out -type f -name '*.html' -exec sed -i 's/_next/nextAssets/g' {} + && find out -type f -name '*.html' -exec sed -i 's/<script[^>]*>\\s*<\\/script>//g' {} +",
+    "build": "next build && node src/scripts/fix-extension.mjs",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

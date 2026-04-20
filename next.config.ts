@@ -15,10 +15,8 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: true,
   assetPrefix: './',
+  // Tắt React Strict Mode để giảm thiểu các script tự động chèn của Next.js
   reactStrictMode: false,
-  // Tắt các tính năng gây lỗi trong môi trường extension
-  productionBrowserSourceMaps: false,
-  devIndicators: false,
 };
 
 export default nextConfig;

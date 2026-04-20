@@ -5,14 +5,10 @@
   "version": "2.1.6",
   "description": "Bộ gõ tiếng Việt thông minh tối ưu cho Chrome OS Flex",
   "permissions": ["storage", "notifications"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Bảng điều khiển VietFlex"
+    "default_title": "VietFlex Panel"
   },
-  "options_page": "index.html",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }
