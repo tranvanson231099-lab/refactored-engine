@@ -1,9 +1,10 @@
+
 import type {Metadata, Viewport} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
   title: 'VietFlex Engine 2.1.6',
-  description: 'Smart Vietnamese Input Method Optimized for Chrome OS Flex',
+  description: 'Bộ gõ tiếng Việt thông minh cho Chrome OS Flex',
 };
 
 export const viewport: Viewport = {
@@ -19,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className="font-sans antialiased selection:bg-primary/20 bg-background text-foreground">
+      <body className="antialiased selection:bg-primary/20 bg-background text-foreground">
         {children}
       </body>
     </html>

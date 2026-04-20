@@ -1,22 +1,29 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>VietFlex Engine - Hướng dẫn cài đặt</title>
+    <title>VietFlex - Hướng dẫn</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f0f7ff; color: #1e3a8a; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .card { background: white; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 2px solid #3b82f6; max-width: 450px; }
+        h1 { color: #1d4ed8; font-size: 1.5rem; margin-bottom: 1rem; }
+        .step { text-align: left; background: #f8fafc; padding: 1rem; border-radius: 0.75rem; margin: 1rem 0; border: 1px solid #e2e8f0; font-size: 0.9rem; }
+        code { background: #e2e8f0; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: monospace; }
+        .highlight { color: #2563eb; font-weight: bold; }
+    </style>
 </head>
-<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #eff6ff; color: #1e3a8a; text-align: center; padding: 20px;">
-    <div style="padding: 3rem; background: white; border-radius: 2rem; border: 4px solid #2563eb; max-width: 500px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);">
-        <h1 style="color: #1e40af; margin-top: 0; font-weight: 900; font-size: 24px;">XÁC NHẬN CÀI ĐẶT THÀNH CÔNG</h1>
-        <p style="font-size: 16px; line-height: 1.6; font-weight: 500;">Nếu bạn thấy trang này, hãy thực hiện bước cuối cùng để kích hoạt bộ gõ:</p>
-        
-        <div style="margin: 2rem 0; text-align: left; font-size: 14px; background: #f8fafc; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0;">
-            <p style="margin: 0 0 1rem 0;"><b>1.</b> Mở Terminal và chạy: <code style="background: #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 0.4rem; font-family: monospace;">npm run build</code></p>
-            <p style="margin: 0 0 1rem 0;"><b>2.</b> Quay lại trang Extensions, nhấn <b>Tải tiện ích đã giải nén</b>.</p>
-            <p style="margin: 0;"><b>3.</b> <b>QUAN TRỌNG:</b> Kích đúp vào thư mục <b>vietflex</b>, sau đó CHỌN THƯ MỤC <b>out</b>.</p>
+<body>
+    <div class="card">
+        <h1>XÁC NHẬN CÀI ĐẶT</h1>
+        <p>Tiện ích đã được nhận diện. Hãy thực hiện bước cuối để kích hoạt giao diện:</p>
+        <div class="step">
+            <p>1. Chạy lệnh: <code>npm run build</code></p>
+            <p>2. Quay lại <b>chrome://extensions</b></p>
+            <p>3. Nhấn <b>Tải tiện ích đã giải nén</b></p>
+            <p>4. Chọn thư mục: <span class="highlight">vietflex/out</span></p>
         </div>
-
-        <p style="font-size: 12px; color: #64748b; font-weight: 600;">(Chỉ thư mục 'out' mới chứa mã nguồn đã được xử lý sạch lỗi bảo mật CSP)</p>
+        <p style="font-size: 0.75rem; color: #64748b;">(Thư mục 'out' chứa mã nguồn đã xử lý sạch lỗi CSP)</p>
     </div>
 </body>
 </html>

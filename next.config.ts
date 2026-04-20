@@ -15,8 +15,10 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: true,
   assetPrefix: './',
-  // Tắt các tính năng có thể chèn inline script không cần thiết
+  // Tắt React Strict Mode để giảm thiểu script inline phát sinh trong bản build
   reactStrictMode: false,
+  // Đảm bảo không có mã HMR/Dev server nào lọt vào bản build out
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;
