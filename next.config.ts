@@ -15,7 +15,6 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: true,
   assetPrefix: './',
-  // Tắt React Strict Mode để giảm thiểu các script tự động chèn của Next.js
   reactStrictMode: false,
 };
 

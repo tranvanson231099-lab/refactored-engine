@@ -3,64 +3,55 @@ import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
 
+const outDir = path.resolve('out');
+
 async function fixExtension() {
-  const outDir = path.resolve('out');
+  console.log('Fixing extension for Chrome (IME & CSP focus)...');
 
-  console.log('--- Đang tối ưu hóa Extension cho Chrome OS ---');
-
-  // 1. Đổi tên thư mục _next (Chrome cấm thư mục bắt đầu bằng _)
-  const oldPath = path.join(outDir, '_next');
-  const newPath = path.join(outDir, 'nextAssets');
-  if (fs.existsSync(oldPath)) {
-    if (fs.existsSync(newPath)) fs.rmSync(newPath, { recursive: true });
-    fs.renameSync(oldPath, newPath);
-    console.log('[OK] Đã đổi tên _next thành nextAssets');
+  // 1. Đổi tên thư mục _next vì Chrome cấm tên bắt đầu bằng "_"
+  const oldNextDir = path.join(outDir, '_next');
+  const newNextDir = path.join(outDir, 'nextAssets');
+  if (fs.existsSync(oldNextDir)) {
+    if (fs.existsSync(newNextDir)) {
+      fs.rmSync(newNextDir, { recursive: true, force: true });
+    }
+    fs.renameSync(oldNextDir, newNextDir);
+    console.log('Renamed _next to nextAssets');
   }
 
-  // 2. Quét và sửa lỗi CSP trong tất cả các file HTML
+  // 2. Tìm tất cả các tệp HTML
   const htmlFiles = await glob('out/**/*.html');
+
   for (const file of htmlFiles) {
     let content = fs.readFileSync(file, 'utf8');
 
-    // Sửa đường dẫn dẫn đến nextAssets
+    // Thay thế đường dẫn _next thành nextAssets
     content = content.replace(/\/_next\//g, './nextAssets/');
     content = content.replace(/_next\//g, './nextAssets/');
 
-    // Bốc script inline ra file riêng (Sửa lỗi CSP)
-    const scriptRegex = /<script(?![^>]*src)([^>]*)>([\s\S]*?)<\/script>/g;
-    let match;
-    let scriptCount = 0;
-    const scriptsToReplace = [];
+    // 3. QUAN TRỌNG: Bốc toàn bộ inline scripts ra tệp .js riêng để sửa lỗi CSP
+    let scriptCounter = 0;
+    content = content.replace(/<script(?![^>]*src)([^>]*)>([\s\S]*?)<\/script>/gi, (match, attrs, scriptBody) => {
+      const trimmedBody = scriptBody.trim();
+      if (trimmedBody.length === 0) return match;
 
-    while ((match = scriptRegex.exec(content)) !== null) {
-      const attributes = match[1];
-      const inlineCode = match[2].trim();
-      
-      if (inlineCode) {
-        const fileName = path.basename(file, '.html');
-        const scriptName = `js-csp-fix-${fileName}-${scriptCount}.js`;
-        const scriptPath = path.join(path.dirname(file), scriptName);
-        
-        fs.writeFileSync(scriptPath, inlineCode);
-        scriptsToReplace.push({
-          fullTag: match[0],
-          newTag: `<script src="./${scriptName}"${attributes}></script>`
-        });
-        scriptCount++;
+      // Không bốc các script JSON (như __NEXT_DATA__)
+      if (attrs.includes('type="application/json"') || attrs.includes("type='application/json'")) {
+        return match;
       }
-    }
 
-    for (const item of scriptsToReplace) {
-      content = content.replace(item.fullTag, item.newTag);
-    }
-    
+      const scriptName = `inline-js-${scriptCounter++}.js`;
+      const scriptPath = path.join(path.dirname(file), scriptName);
+      
+      fs.writeFileSync(scriptPath, trimmedBody);
+      console.log(`Extracted inline script to: ${scriptName}`);
+      return `<script${attrs} src="./${scriptName}"></script>`;
+    });
+
     fs.writeFileSync(file, content);
-    if (scriptCount > 0) {
-      console.log(`[OK] Đã gỡ ${scriptCount} đoạn inline script trong ${path.basename(file)}`);
-    }
   }
 
-  console.log('--- Hoàn tất! Hãy nạp thư mục "out" vào Chrome ---');
+  console.log('Extension fix process completed!');
 }
 
 fixExtension().catch(console.error);
