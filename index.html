@@ -1,28 +1,20 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>VietFlex Engine - Cảnh báo quan trọng</title>
-    <style>
-        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #1e293b; text-align: center; }
-        .box { padding: 2rem; background: white; border-radius: 1.5rem; border: 4px solid #ef4444; max-width: 400px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        h2 { color: #dc2626; margin-top: 0; font-weight: 900; }
-        .code { background: #f1f5f9; padding: 0.5rem; border-radius: 0.5rem; font-family: monospace; font-weight: bold; color: #2563eb; }
-        .step { margin: 1rem 0; text-align: left; font-size: 14px; font-weight: 600; }
-    </style>
+    <title>VietFlex Engine - Cảnh báo</title>
 </head>
-<body>
-    <div class="box">
-        <h2>BẠN ĐÃ CHỌN SAI THƯ MỤC!</h2>
+<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #1e293b; text-align: center;">
+    <div style="padding: 2rem; background: white; border-radius: 1.5rem; border: 4px solid #ef4444; max-width: 400px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);">
+        <h2 style="color: #dc2626; margin-top: 0; font-weight: 900;">BẠN ĐANG CHỌN SAI THƯ MỤC!</h2>
         <p>Lỗi "CSP" hoặc "ERR_FILE_NOT_FOUND" xảy ra do bạn chọn thư mục gốc <b>vietflex</b>.</p>
-        <div class="step">
-            1. Chạy lệnh: <span class="code">npm run build</span><br><br>
+        <div style="margin: 1rem 0; text-align: left; font-size: 14px; font-weight: 600;">
+            1. Chạy lệnh: <code style="background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 0.5rem; color: #2563eb;">npm run build</code><br><br>
             2. Vào Chrome Extensions, nhấn <b>Tải tiện ích đã giải nén</b>.<br><br>
             3. Tìm đến thư mục vietflex, sau đó <b>CHỌN THƯ MỤC CON</b>:<br>
-            <span class="code">/vietflex/out</span>
+            <span style="background: #f1f5f9; padding: 0.5rem; border-radius: 0.5rem; display: block; margin-top: 0.5rem; font-family: monospace; font-weight: bold; color: #2563eb;">/vietflex/out</span>
         </div>
-        <p style="font-size: 12px; color: #64748b;">(Thư mục 'out' chứa mã nguồn sạch lỗi CSP)</p>
+        <p style="font-size: 12px; color: #64748b;">(Thư mục 'out' mới là nơi chứa ứng dụng sạch lỗi CSP)</p>
     </div>
 </body>
 </html>

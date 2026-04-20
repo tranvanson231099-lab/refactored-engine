@@ -1,4 +1,3 @@
-
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -13,9 +12,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Tắt trailingSlash để tránh tạo thư mục dư thừa cho mỗi trang
-  trailingSlash: false,
-  // Cực kỳ quan trọng: Sử dụng đường dẫn tương đối để Chrome Extension tìm được file JS/CSS
+  trailingSlash: true,
   assetPrefix: './',
 };
 
