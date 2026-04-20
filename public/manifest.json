@@ -3,24 +3,16 @@
   "manifest_version": 3,
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
-  "description": "Bộ gõ tiếng Việt thông minh cho Chrome OS Flex",
-  "permissions": ["input", "notifications", "storage"],
+  "description": "Bộ gõ tiếng Việt thông minh tối ưu cho Chrome OS Flex",
+  "permissions": ["storage", "notifications"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "VietFlex Control Panel"
+    "default_title": "Bảng điều khiển VietFlex"
   },
   "options_page": "index.html",
-  "input_components": [
-    {
-      "name": "VietFlex Telex",
-      "id": "vietflex_telex",
-      "language": "vi",
-      "layouts": ["us"]
-    }
-  ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }

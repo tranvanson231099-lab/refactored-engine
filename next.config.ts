@@ -14,10 +14,9 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   trailingSlash: true,
+  // Đảm bảo đường dẫn tương đối để chạy được trong Chrome Extension
   assetPrefix: './',
-  // Tắt React Strict Mode để giảm thiểu script inline phát sinh trong bản build
   reactStrictMode: false,
-  // Đảm bảo không có mã HMR/Dev server nào lọt vào bản build out
   productionBrowserSourceMaps: false,
 };
 
