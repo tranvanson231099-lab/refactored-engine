@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -14,6 +15,8 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: true,
   assetPrefix: './',
+  // Tắt các tính năng có thể chèn inline script không cần thiết
+  reactStrictMode: false,
 };
 
 export default nextConfig;

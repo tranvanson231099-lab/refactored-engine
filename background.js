@@ -1,8 +1,7 @@
-// VietFlex Engine 2.1.6 - Background Worker
+
+// VietFlex Engine 2.1.6 - Background Worker (Clean Version)
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('VietFlex Engine 2.1.6 đã sẵn sàng.');
+  console.log('VietFlex Engine 2.1.6 đã khởi tạo thành công.');
 });
 
-chrome.action.onClicked.addListener(() => {
-  chrome.runtime.openOptionsPage();
-});
+// Không sử dụng bất kỳ mã inline nào ở đây
