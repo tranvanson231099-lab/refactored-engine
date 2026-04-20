@@ -20,7 +20,6 @@
       "layouts": ["us"]
     }
   ],
-  "options_page": "index.html",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }
