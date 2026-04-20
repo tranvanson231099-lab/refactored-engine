@@ -1,23 +1,15 @@
 
-// VietFlex Engine 2.1.6 - Background Processor
-// Chạy trong môi trường Service Worker, tuân thủ Manifest V3
-
-chrome.input.ime.onFocus.addListener((context) => {
-  console.log('VietFlex: IME Focused', context);
-});
-
-chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
-  // Logic xử lý Telex sẽ được gọi từ đây
-  return false;
-});
+// VietFlex Engine 2.1.6 - Background Proxy
+// Chuyển hướng thông minh để tránh lỗi đường dẫn
 
 chrome.action.onClicked.addListener(() => {
+  // Ưu tiên mở trang tùy chọn để có diện tích hiển thị tốt nhất
   chrome.runtime.openOptionsPage();
 });
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    chrome.runtime.openOptionsPage();
+    chrome.tabs.create({ url: "out/index.html" });
   }
-  console.log('VietFlex Engine 2.1.6 đã được cài đặt thành công.');
+  console.log('VietFlex Engine 2.1.6 đã sẵn sàng.');
 });
