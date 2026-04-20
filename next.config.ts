@@ -13,10 +13,12 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Quan trọng: Tắt trailingSlash để các tệp .html không bị cho vào thư mục con
+  // Tắt trailingSlash để tệp tin được xuất ra chuẩn index.html
   trailingSlash: false,
-  // Đảm bảo không có script inline nào được sinh ra thêm
+  // Cực kỳ quan trọng: Vô hiệu hóa mã inline của Next.js
   reactStrictMode: false,
+  // Đảm bảo đường dẫn tài nguyên là tương đối
+  assetPrefix: './',
 };
 
 export default nextConfig;

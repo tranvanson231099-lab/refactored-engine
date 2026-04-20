@@ -1,9 +1,9 @@
 
 {
   "manifest_version": 3,
-  "name": "VietFlex Engine 2.1.6 (WARNING)",
+  "name": "VietFlex Engine 2.1.6 (SAI THƯ MỤC)",
   "version": "2.1.6",
-  "description": "Bạn đang nạp sai thư mục. Hãy nạp thư mục /out",
+  "description": "CẢNH BÁO: Bạn đang nạp sai thư mục gốc. Hãy nạp thư mục /out",
   "action": {
     "default_popup": "index.html",
     "default_title": "LỖI: CHỌN SAI THƯ MỤC"
