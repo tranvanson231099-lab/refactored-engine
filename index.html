@@ -3,21 +3,26 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>VietFlex Engine - Chuyển hướng</title>
-    <!-- Sử dụng meta refresh thay vì script để tránh lỗi CSP -->
-    <meta http-equiv="refresh" content="0; url=out/index.html">
+    <title>VietFlex Engine - Cảnh báo quan trọng</title>
     <style>
-        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f1f5f9; color: #1e293b; text-align: center; }
-        .box { padding: 2rem; background: white; border-radius: 1rem; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 2px solid #3b82f6; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #1e293b; text-align: center; }
+        .box { padding: 2rem; background: white; border-radius: 1.5rem; border: 4px solid #ef4444; max-width: 400px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        h2 { color: #dc2626; margin-top: 0; font-weight: 900; }
+        .code { background: #f1f5f9; padding: 0.5rem; border-radius: 0.5rem; font-family: monospace; font-weight: bold; color: #2563eb; }
+        .step { margin: 1rem 0; text-align: left; font-size: 14px; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2>Đang khởi động VietFlex...</h2>
-        <div class="loader"></div>
-        <p>Nếu trang không tự chuyển, hãy chạy <b>npm run build</b> và nạp lại tiện ích.</p>
+        <h2>BẠN ĐÃ CHỌN SAI THƯ MỤC!</h2>
+        <p>Lỗi "CSP" hoặc "ERR_FILE_NOT_FOUND" xảy ra do bạn chọn thư mục gốc <b>vietflex</b>.</p>
+        <div class="step">
+            1. Chạy lệnh: <span class="code">npm run build</span><br><br>
+            2. Vào Chrome Extensions, nhấn <b>Tải tiện ích đã giải nén</b>.<br><br>
+            3. Tìm đến thư mục vietflex, sau đó <b>CHỌN THƯ MỤC CON</b>:<br>
+            <span class="code">/vietflex/out</span>
+        </div>
+        <p style="font-size: 12px; color: #64748b;">(Thư mục 'out' chứa mã nguồn sạch lỗi CSP)</p>
     </div>
 </body>
 </html>

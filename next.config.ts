@@ -13,8 +13,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Đảm bảo đường dẫn tương đối để chạy được trong Chrome Extension
+  // Tắt trailingSlash để tránh tạo thư mục dư thừa cho mỗi trang
   trailingSlash: false,
+  // Cực kỳ quan trọng: Sử dụng đường dẫn tương đối để Chrome Extension tìm được file JS/CSS
   assetPrefix: './',
 };
 
