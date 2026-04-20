@@ -16,9 +16,6 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   assetPrefix: './',
   reactStrictMode: false,
-  // Tắt các tính năng gây chèn mã inline script
-  productionBrowserSourceMaps: false,
-  optimizeFonts: false,
 };
 
 export default nextConfig;

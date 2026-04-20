@@ -13,8 +13,8 @@ chrome.input.ime.onFocus.addListener((context) => {
 });
 
 chrome.input.ime.onKeyEvent.addListener((engineID, keyData) => {
-  // Logic Telex hệ thống sẽ được đẩy vào đây trong các bản cập nhật tới
   if (keyData.type === 'keydown') {
+    // Logic Telex hệ thống sẽ được đẩy vào đây trong các bản cập nhật tới
     return false;
   }
   return false;

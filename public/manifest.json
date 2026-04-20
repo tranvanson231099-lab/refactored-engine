@@ -10,7 +10,7 @@
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Bảng điều khiển VietFlex"
+    "default_title": "VietFlex Panel"
   },
   "input_components": [
     {

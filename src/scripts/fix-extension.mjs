@@ -2,69 +2,62 @@
 import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
-import crypto from 'crypto';
 
-const outDir = path.resolve(process.cwd(), 'out');
+const outDir = path.resolve('out');
 
 async function fixExtension() {
-  console.log('--- ĐANG PHẪU THUẬT LỖI CSP & ĐỔI TÊN THƯ MỤC CẤM ---');
+  console.log('--- Đang phẫu thuật mã nguồn VietFlex (Gỡ lỗi CSP) ---');
 
-  // 1. Đổi tên thư mục _next thành nextAssets (Chrome cấm dấu gạch dưới)
+  // 1. Đổi tên thư mục _next (Chrome cấm dấu gạch dưới)
   const oldPath = path.join(outDir, '_next');
   const newPath = path.join(outDir, 'nextAssets');
   if (fs.existsSync(oldPath)) {
+    if (fs.existsSync(newPath)) {
+      fs.rmSync(newPath, { recursive: true });
+    }
     fs.renameSync(oldPath, newPath);
-    console.log('✓ Đã đổi tên _next thành nextAssets');
+    console.log('✔ Đã đổi tên _next thành nextAssets');
   }
 
-  // 2. Tìm tất cả file HTML để xử lý link và bóc tách inline script
-  const htmlFiles = await glob('**/*.html', { cwd: outDir });
-
+  // 2. Xử lý toàn bộ file HTML để bóc tách inline scripts
+  const htmlFiles = await glob('out/**/*.html');
+  
   for (const file of htmlFiles) {
-    const filePath = path.join(outDir, file);
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(file, 'utf8');
 
-    // Sửa đường dẫn trong HTML
+    // Cập nhật đường dẫn tệp
     content = content.replace(/\/_next\//g, './nextAssets/');
-    content = content.replace(/src="\/nextAssets\//g, 'src="./nextAssets/');
-    content = content.replace(/href="\/nextAssets\//g, 'href="./nextAssets/');
+    content = content.replace(/_next\//g, 'nextAssets/');
 
-    // BÓC TÁCH INLINE SCRIPT (Sửa lỗi CSP 100%)
-    const inlineScriptRegex = /<script\b(?![^>]*\bsrc\b)[^>]*>([\s\S]*?)<\/script>/gi;
+    // Tìm và bóc tách các đoạn script inline (thứ gây lỗi CSP)
+    const scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/g;
     let match;
     let scriptCount = 0;
+    const baseName = path.basename(file, '.html');
+    const dirName = path.dirname(file);
 
-    while ((match = inlineScriptRegex.exec(content)) !== null) {
+    while ((match = scriptRegex.exec(content)) !== null) {
       const scriptContent = match[1].trim();
-      if (scriptContent.length === 0) continue;
-
-      const hash = crypto.createHash('sha256').update(scriptContent).digest('hex').substring(0, 8);
-      const scriptFilename = `inline-${hash}.js`;
-      const scriptRelPath = `scripts/${scriptFilename}`;
-      const scriptAbsPath = path.join(outDir, scriptRelPath);
-
-      // Tạo thư mục scripts nếu chưa có
-      if (!fs.existsSync(path.dirname(scriptAbsPath))) {
-        fs.mkdirSync(path.dirname(scriptAbsPath), { recursive: true });
+      // Chỉ bóc nếu có nội dung và không phải là script nạp từ file (không có src)
+      if (scriptContent && !match[0].includes('src=')) {
+        const scriptFilename = `${baseName}-inline-${scriptCount}.js`;
+        const scriptFilePath = path.join(dirName, scriptFilename);
+        
+        fs.writeFileSync(scriptFilePath, scriptContent);
+        
+        const scriptTag = `<script src="./${scriptFilename}"></script>`;
+        content = content.replace(match[0], scriptTag);
+        scriptCount++;
       }
-
-      fs.writeFileSync(scriptAbsPath, scriptContent);
-      
-      // Thay thế thẻ script inline bằng thẻ script src
-      const fullMatch = match[0];
-      const replacement = `<script src="./${scriptRelPath}"></script>`;
-      content = content.replace(fullMatch, replacement);
-      
-      scriptCount++;
     }
 
-    fs.writeFileSync(filePath, content);
-    if (scriptCount > 0) {
-      console.log(`✓ Đã bóc tách ${scriptCount} scripts từ ${file}`);
-    }
+    fs.writeFileSync(file, content);
   }
 
-  console.log('--- HOÀN TẤT: BẢN BUILD ĐÃ SẴN SÀNG ---');
+  console.log('✔ Đã bóc tách toàn bộ mã inline scripts ra file riêng.');
+  console.log('✔ Hoàn tất! Bạn có thể nạp thư mục "out" vào Chrome ngay bây giờ.');
 }
 
-fixExtension().catch(console.error);
+fixExtension().catch(err => {
+  console.error('✘ Lỗi khi xử lý extension:', err);
+});
