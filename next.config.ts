@@ -14,10 +14,11 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   trailingSlash: true,
-  // Đảm bảo đường dẫn tương đối để chạy được trong Chrome Extension
   assetPrefix: './',
   reactStrictMode: false,
+  // Tắt các tính năng gây lỗi trong môi trường extension
   productionBrowserSourceMaps: false,
+  devIndicators: false,
 };
 
 export default nextConfig;
