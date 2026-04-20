@@ -4,7 +4,7 @@
   "name": "VietFlex Engine 2.1.6",
   "version": "2.1.6",
   "description": "Bộ gõ tiếng Việt thông minh tối ưu cho Chrome OS Flex",
-  "permissions": ["storage", "notifications", "input"],
+  "permissions": ["storage", "input"],
   "background": {
     "service_worker": "background.js"
   },
