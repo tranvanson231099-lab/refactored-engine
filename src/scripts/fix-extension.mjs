@@ -3,64 +3,61 @@ import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
 
-const outDir = path.resolve('out');
-
 async function fixExtension() {
-  console.log('--- Đang tối ưu hóa thư mục "out" cho Chrome Extension ---');
+  const outDir = path.resolve('out');
 
-  // 1. Đổi tên thư mục _next thành nextAssets (Chrome cấm dấu gạch dưới ở đầu tên thư mục)
+  console.log('--- Đang tối ưu hóa Extension cho Chrome OS ---');
+
+  // 1. Đổi tên thư mục _next (Chrome cấm thư mục bắt đầu bằng _)
   const oldPath = path.join(outDir, '_next');
   const newPath = path.join(outDir, 'nextAssets');
-
   if (fs.existsSync(oldPath)) {
-    if (fs.existsSync(newPath)) {
-      fs.rmSync(newPath, { recursive: true });
-    }
+    if (fs.existsSync(newPath)) fs.rmSync(newPath, { recursive: true });
     fs.renameSync(oldPath, newPath);
-    console.log('✓ Đã đổi tên _next thành nextAssets');
+    console.log('[OK] Đã đổi tên _next thành nextAssets');
   }
 
-  // 2. Xử lý tất cả các tệp HTML để loại bỏ Inline Scripts (Lỗi CSP)
+  // 2. Quét và sửa lỗi CSP trong tất cả các file HTML
   const htmlFiles = await glob('out/**/*.html');
-
   for (const file of htmlFiles) {
     let content = fs.readFileSync(file, 'utf8');
-    
-    // Đổi link _next thành nextAssets
-    content = content.replace(/\/_next\//g, './nextAssets/');
-    content = content.replace(/_next\//g, 'nextAssets/');
 
-    // Tìm và bốc tất cả inline scripts ra file riêng
-    const scriptRegex = /<script(?![^>]*src)([^>]*)>([\s\S]*?)<\/script>/gi;
+    // Sửa đường dẫn dẫn đến nextAssets
+    content = content.replace(/\/_next\//g, './nextAssets/');
+    content = content.replace(/_next\//g, './nextAssets/');
+
+    // Bốc script inline ra file riêng (Sửa lỗi CSP)
+    const scriptRegex = /<script(?![^>]*src)([^>]*)>([\s\S]*?)<\/script>/g;
     let match;
     let scriptCount = 0;
-    const fileBase = path.basename(file, '.html');
-    const fileDir = path.dirname(file);
+    const scriptsToReplace = [];
 
     while ((match = scriptRegex.exec(content)) !== null) {
       const attributes = match[1];
-      const scriptContent = match[2].trim();
+      const inlineCode = match[2].trim();
       
-      if (scriptContent) {
-        scriptCount++;
-        const scriptName = `${fileBase}-inline-${scriptCount}.js`;
-        const scriptPath = path.join(fileDir, scriptName);
-        const relativePath = `./${scriptName}`;
-
-        // Ghi nội dung script ra file .js
-        fs.writeFileSync(scriptPath, scriptContent);
+      if (inlineCode) {
+        const fileName = path.basename(file, '.html');
+        const scriptName = `js-csp-fix-${fileName}-${scriptCount}.js`;
+        const scriptPath = path.join(path.dirname(file), scriptName);
         
-        // Thay thế thẻ script inline bằng thẻ script src
-        const newTag = `<script src="${relativePath}"${attributes}></script>`;
-        content = content.replace(match[0], newTag);
+        fs.writeFileSync(scriptPath, inlineCode);
+        scriptsToReplace.push({
+          fullTag: match[0],
+          newTag: `<script src="./${scriptName}"${attributes}></script>`
+        });
+        scriptCount++;
       }
     }
 
-    if (scriptCount > 0) {
-      console.log(`✓ Đã ngoại vi hóa ${scriptCount} scripts trong ${path.relative(outDir, file)}`);
+    for (const item of scriptsToReplace) {
+      content = content.replace(item.fullTag, item.newTag);
     }
-
+    
     fs.writeFileSync(file, content);
+    if (scriptCount > 0) {
+      console.log(`[OK] Đã gỡ ${scriptCount} đoạn inline script trong ${path.basename(file)}`);
+    }
   }
 
   console.log('--- Hoàn tất! Hãy nạp thư mục "out" vào Chrome ---');
